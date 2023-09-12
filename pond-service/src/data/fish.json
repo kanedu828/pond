@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1000,
+    "name": "Blue Tilapia",
+    "description": "",
+    "lengthRangeInCm": [9, 17],
+    "secondsFishable": 400,
+    "expRewarded": 10,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1001,
+    "name": "Lake Trout",
+    "description": "",
+    "lengthRangeInCm": [39, 140],
+    "secondsFishable": 400,
+    "expRewarded": 10,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1002,
+    "name": "Common Carp",
+    "description": "",
+    "lengthRangeInCm": [27, 43],
+    "secondsFishable": 400,
+    "expRewarded": 7,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1003,
+    "name": "Largemouth Bass",
+    "description": "",
+    "lengthRangeInCm": [40, 100],
+    "secondsFishable": 400,
+    "expRewarded": 10,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1004,
+    "name": "Blue Catfish",
+    "description": "",
+    "lengthRangeInCm": [5, 450],
+    "secondsFishable": 400,
+    "expRewarded": 15,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1005,
+    "name": "Northern Largemouth",
+    "description": "",
+    "lengthRangeInCm": [33, 60],
+    "secondsFishable": 400,
+    "expRewarded": 6,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1006,
+    "name": "Musky Fish",
+    "description": "",
+    "lengthRangeInCm": [71, 122],
+    "secondsFishable": 400,
+    "expRewarded": 6,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1007,
+    "name": "Bluegill",
+    "description": "",
+    "lengthRangeInCm": [11, 20],
+    "secondsFishable": 400,
+    "expRewarded": 6,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 2000,
+    "name": "Goldfish",
+    "description": "",
+    "lengthRangeInCm": [20, 30],
+    "secondsFishable": 200,
+    "expRewarded": 20,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2001,
+    "name": "Spotted Sunfish",
+    "description": "",
+    "lengthRangeInCm": [5, 30],
+    "secondsFishable": 200,
+    "expRewarded": 20,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2002,
+    "name": "Oscar",
+    "description": "",
+    "lengthRangeInCm": [20, 40],
+    "secondsFishable": 200,
+    "expRewarded": 18,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2003,
+    "name": "Florida Gar",
+    "description": "",
+    "lengthRangeInCm": [250, 320],
+    "secondsFishable": 200,
+    "expRewarded": 18,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2004,
+    "name": "Midas Cichlid",
+    "description": "",
+    "lengthRangeInCm": [4, 90],
+    "secondsFishable": 200,
+    "expRewarded": 18,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2005,
+    "name": "American Sturgeon",
+    "description": "",
+    "lengthRangeInCm": [250, 480],
+    "secondsFishable": 200,
+    "expRewarded": 18,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 3000,
+    "name": "American Eel",
+    "description": "",
+    "lengthRangeInCm": [54, 77],
+    "secondsFishable": 60,
+    "expRewarded": 70,
+    "rarity": "epic",
+    "active": true
+  },
+  {
+    "id": 3001,
+    "name": "Zebra Pleco",
+    "description": "",
+    "lengthRangeInCm": [7, 12],
+    "secondsFishable": 60,
+    "expRewarded": 70,
+    "rarity": "epic",
+    "active": true
+  },
+  {
+    "id": 3002,
+    "name": "Imperial Flower Loach",
+    "description": "",
+    "lengthRangeInCm": [40, 60],
+    "secondsFishable": 60,
+    "expRewarded": 70,
+    "rarity": "epic",
+    "active": true
+  },
+  {
+    "id": 3003,
+    "name": "Polka-dot Stingray",
+    "description": "",
+    "lengthRangeInCm": [32, 46],
+    "secondsFishable": 60,
+    "expRewarded": 70,
+    "rarity": "epic",
+    "active": true
+  },
+  {
+    "id": 4000,
+    "name": "Bull Shark",
+    "description": "",
+    "lengthRangeInCm": [213, 366],
+    "secondsFishable": 5,
+    "expRewarded": 1000,
+    "rarity": "legendary",
+    "active": true
+  },
+  {
+    "id": 4001,
+    "name": "Golden Gar",
+    "description": "",
+    "lengthRangeInCm": [40, 120],
+    "secondsFishable": 10,
+    "expRewarded": 70,
+    "rarity": "legendary",
+    "active": true
+  }
+]
