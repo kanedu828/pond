@@ -1,3 +1,5 @@
+import { LogoutResponse, StatusResponse } from '../../../shared/types/AuthTypes';
+
 export class PondAuthClient {
     
     private apiUrl: string;
@@ -9,8 +11,19 @@ export class PondAuthClient {
         }
     }
 
-    async status() {
+    async status(): Promise<StatusResponse> {
         const response = await fetch(`${this.apiUrl}/auth/status`, {
+            method: 'get',
+            credentials: 'include'
+        })
+            .then((res: Response) => res.json())
+            .catch((_err: Error) => {
+        });
+        return response;
+    }
+
+    async logout(): Promise<LogoutResponse> {
+        const response = await fetch(`${this.apiUrl}/auth/logout`, {
             method: 'get',
             credentials: 'include'
         })

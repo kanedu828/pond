@@ -1,3 +1,3 @@
-export interface VerifyAuthResponse {
+export interface StatusResponse {
     authenticated: boolean;
 }
