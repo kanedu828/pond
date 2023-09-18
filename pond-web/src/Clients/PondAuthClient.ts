@@ -1,5 +1,3 @@
-import { VerifyAuthResponse } from '../../../shared/types/AuthTypes'
-
 export class PondAuthClient {
     
     private apiUrl: string;
@@ -11,15 +9,14 @@ export class PondAuthClient {
         }
     }
 
-    async verifyAuth(): Promise<VerifyAuthResponse> {
-        const response = await fetch(`${this.apiUrl}/auth/verifyAuth`, {
+    async status() {
+        const response = await fetch(`${this.apiUrl}/auth/status`, {
             method: 'get',
             credentials: 'include'
         })
             .then((res: Response) => res.json())
             .catch((_err: Error) => {
         });
-
         return response;
     }
 }
