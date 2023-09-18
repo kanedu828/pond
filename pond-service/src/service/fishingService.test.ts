@@ -60,7 +60,7 @@ beforeEach(() => {
 describe('Test pollFish', () => {
   it('user already has a fish', async () => {
     const mockFishInstance = {
-      ...mockFish,
+      fish: mockFish,
       length: 2,
       expirationDate: 1000
     };
@@ -80,7 +80,7 @@ describe('Test pollFish', () => {
     fishingService.nextFishDue.set(1, -1);
     const result = await fishingService.pollFish(1, 1, 2);
     const mockFishInstance = {
-      ...mockFish,
+      fish: mockFish,
       length: 2,
       expirationDate: 1000
     };
@@ -91,7 +91,7 @@ describe('Test pollFish', () => {
 describe('Test getFish', () => {
   it('user does not have current fish', async () => {
     const expectedResult = {
-      ...mockFish,
+      fish: mockFish,
       expirationDate: 1000,
       length: 2
     };
@@ -101,7 +101,7 @@ describe('Test getFish', () => {
 
   it('user does have current fish', async () => {
     const mockFishInstance = {
-      ...mockFish,
+      fish: mockFish,
       length: 2,
       expirationDate: 1000
     };
@@ -118,7 +118,7 @@ describe('Test getFish', () => {
       location: 'asdfasdf'
     });
     const expectedResult = {
-      ...mockFish,
+      fish: mockFish,
       expirationDate: 1000,
       length: 2
     };
@@ -131,7 +131,7 @@ describe('Test collectFish', () => {
   it('user has current fish but no collected fish', async () => {
     mockFishDao.getFish = jest.fn().mockResolvedValueOnce([]);
     const mockFishInstance = {
-      ...mockFish,
+      fish: mockFish,
       length: 2,
       expirationDate: 1000
     };
@@ -153,7 +153,7 @@ describe('Test collectFish', () => {
       }
     ]);
     const mockFishInstance = {
-      ...mockFish,
+      fish: mockFish,
       length: 2,
       expirationDate: 1000
     };
@@ -174,7 +174,7 @@ describe('Test collectFish', () => {
 describe('Test getCurrentFish', () => {
   it('user has non expired fish', () => {
     const mockFishInstance = {
-      ...mockFish,
+      fish: mockFish,
       length: 2,
       expirationDate: 1000
     };
@@ -185,7 +185,7 @@ describe('Test getCurrentFish', () => {
 
   it('user has expired fish', () => {
     const mockFishInstance = {
-      ...mockFish,
+      fish: mockFish,
       length: 2,
       expirationDate: -1000
     };

@@ -22,3 +22,9 @@ export interface Fish {
     secondsFishable: number;
     active: boolean;
 }
+
+export interface FishInstance {
+    fish: Fish;
+    length: number;
+    expirationDate: number;
+}

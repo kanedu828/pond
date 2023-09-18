@@ -1,4 +1,4 @@
-import { Fish } from '../data/fishTypes';
+import { Fish, FishInstance } from '../../../shared/types/types';
 import {
   binarySearch,
   getRandomArrayElement,
@@ -11,18 +11,6 @@ import fishJson from '../data/fish.json';
 import pondJson from '../data/ponds.json';
 import PondUserDao from '../dao/pondUserDao';
 import FishDao from '../dao/fishDao';
-
-interface FishInstance {
-  id: number;
-  name: string;
-  description: string;
-  lengthRangeInCm: number[];
-  expRewarded: number;
-  rarity: string;
-  secondsFishable: number;
-  length: number;
-  expirationDate: number;
-}
 
 export default class FishingService {
   readonly userCurrentFish = new Map<number, FishInstance>();
@@ -64,7 +52,7 @@ export default class FishingService {
 
     const expirationDate = Date.now() + fish.secondsFishable * 1000;
     const fishInstance: FishInstance = {
-      ...fish,
+      fish,
       length,
       expirationDate
     };
@@ -159,14 +147,14 @@ export default class FishingService {
     const collectedFish: FishInstance | null = this.getCurrentFish(userId);
     if (collectedFish) {
       const fishQuery = await this.fishDao.getFish({
-        fish_id: collectedFish.id,
+        fish_id: collectedFish.fish.id,
         pond_user_id: userId
       });
       if (fishQuery.length > 0) {
         const sameFish = fishQuery[0];
         await this.fishDao.updateFish(
           {
-            fish_id: collectedFish.id,
+            fish_id: collectedFish.fish.id,
             pond_user_id: userId
           },
           {
@@ -176,13 +164,13 @@ export default class FishingService {
         );
       } else {
         await this.fishDao.insertFish({
-          fish_id: collectedFish.id,
+          fish_id: collectedFish.fish.id,
           pond_user_id: userId,
           max_length: collectedFish.length,
           count: 1
         });
       }
-      await this.pondUserDao.incrementPondUserExp(userId, collectedFish.expRewarded);
+      await this.pondUserDao.incrementPondUserExp(userId, collectedFish.fish.expRewarded);
 
       this.userCurrentFish.delete(userId);
       return collectedFish;

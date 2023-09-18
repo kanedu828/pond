@@ -1,11 +1,18 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStatus } from "./UseAuthClient";
 
 export const useCheckAuthentication = () => {
-    const { data } = useStatus();
+    const { isLoading, data } = useStatus();
     const navigate = useNavigate();
 
-    if (!data?.authenticated) {
-        navigate('/login');
-    }
+    useEffect(() => {
+        if (!isLoading && !data?.authenticated) {
+            navigate('/login');
+        }
+        if (!isLoading && data?.authenticated) {
+            navigate('/');
+        }
+    }, [data, isLoading])
+    
 }
