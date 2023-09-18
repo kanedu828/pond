@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import PondUserController from '../controller/pondUserController';
 import { isLoggedIn } from '../util/middleware';
 
-const getUserRouter = (pondUserController: PondUserController) => {
+export const getUserRouter = (pondUserController: PondUserController) => {
   const router: any = Router();
 
   router.use(isLoggedIn);
@@ -11,19 +11,11 @@ const getUserRouter = (pondUserController: PondUserController) => {
     res.json(req.user);
   });
 
-  router.get('/fish', async (req: Request, res: Response) => {
-    await pondUserController.getUserFish(req, res);
-  });
+  router.get('/fish', pondUserController.getUserFish);
 
-  router.post('/update-location/:location', async (req: Request, res: Response) => {
-    await pondUserController.updateUserLocation(req, res);
-  });
+  router.post('/update-location/:location', pondUserController.updateUserLocation);
 
-  router.get('/leaderboard', async (req: Request, res: Response) => {
-    await pondUserController.getTopHundredPondUsersByExp(req, res);
-  });
+  router.get('/leaderboard', pondUserController.getTopHundredPondUsersByExp);
 
   return router;
 };
-
-export default getUserRouter;

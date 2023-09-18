@@ -35,7 +35,7 @@ const getAuthenticationRouter = () => {
     res.status(200);
   });
 
-  router.get('/good', (req: Request, res: Response) => {
+  router.get('/verifyAuth', (req: Request, res: Response) => {
     if (req.user) {
       res.json({ authenticated: true });
     } else {

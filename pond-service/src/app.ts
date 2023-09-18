@@ -13,7 +13,7 @@ import PondUserController from './controller/pondUserController';
 import FishingController from './controller/fishingController';
 import PondUserDao from './dao/pondUserDao';
 import FishDao from './dao/fishDao';
-import getUserRouter from './routers/user';
+import { getUserRouter } from './routers/user';
 import { pondUserLogger } from './util/logger';
 
 // ----------- Env Variables ----------------

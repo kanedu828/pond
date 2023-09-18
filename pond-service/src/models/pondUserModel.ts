@@ -9,6 +9,7 @@
 //     }
 // }
 
+// TODO: Refactor this out to a shared type
 interface PondUser extends Express.User {
   id: number;
   username: string;

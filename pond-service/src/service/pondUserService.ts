@@ -2,7 +2,9 @@ import { randomBytes } from 'crypto';
 import FishDao from '../dao/fishDao';
 import PondUserDao from '../dao/pondUserDao';
 import PondUser from '../models/pondUserModel';
-import UserFish from '../models/userFishModel';
+import fishJson from '../data/fish.json';
+import { Fish, UserFish } from '../../../shared/types/types';
+import { binarySearch } from '../util/util';
 
 class PondUserService {
   readonly pondUserDao: PondUserDao;
@@ -62,8 +64,10 @@ class PondUserService {
   async getUserFish(id: number): Promise<UserFish[]> {
     const result = await this.fishDao.getFish({ pond_user_id: id });
     const userFishArr = result.map((element: any) => {
+      const fishIndex = binarySearch<Fish>(fishJson, element.fish_id, (element: Fish) => element.id);
+      const fishData: Fish = fishJson[fishIndex];
       const userFish: UserFish = {
-        fishId: element.fish_id,
+        fish: fishData,
         maxLength: element.max_length,
         count: element.count,
         pondUserId: element.pond_user_id

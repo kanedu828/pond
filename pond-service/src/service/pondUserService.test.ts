@@ -79,15 +79,15 @@ describe('test getUserFish', () => {
   it('user has fish', async () => {
     const fishArray = [
       {
-        id: 1,
-        fish_id: 1,
+        id: 1000,
+        fish_id: 1000,
         pond_user_id: 1,
         max_length: 10,
         count: 5
       },
       {
-        id: 2,
-        fish_id: 2,
+        id: 1001,
+        fish_id: 1001,
         pond_user_id: 1,
         max_length: 5,
         count: 2
@@ -95,13 +95,31 @@ describe('test getUserFish', () => {
     ];
     const expectedFishArray = [
       {
-        fishId: 1,
+        fish: {
+          "id": 1000,
+          "name": "Blue Tilapia",
+          "description": "",
+          "lengthRangeInCm": [9, 17],
+          "secondsFishable": 400,
+          "expRewarded": 10,
+          "rarity": "common",
+          "active": true
+        },
         pondUserId: 1,
         maxLength: 10,
         count: 5
       },
       {
-        fishId: 2,
+        fish: {
+          "id": 1001,
+          "name": "Lake Trout",
+          "description": "",
+          "lengthRangeInCm": [39, 140],
+          "secondsFishable": 400,
+          "expRewarded": 10,
+          "rarity": "common",
+          "active": true
+        },
         pondUserId: 1,
         maxLength: 5,
         count: 2

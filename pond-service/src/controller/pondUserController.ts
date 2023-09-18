@@ -9,7 +9,7 @@ import fishJson from '../data/fish.json';
 import { binarySearch } from '../util/util';
 import { pondUserLogger } from '../util/logger';
 
-class PondUserController {
+export default class PondUserController {
   pondUserService: PondUserService;
 
   constructor(pondUserDao: PondUserDao, fishDao: FishDao) {
@@ -89,15 +89,7 @@ class PondUserController {
     }
     try {
       const userFish = await this.pondUserService.getUserFish(user.id);
-      const userFishRes = userFish.map((fish) => {
-        const fishIndex = binarySearch<Fish>(fishJson, fish.fishId, (element: Fish) => element.id);
-        const fishData: Fish = fishJson[fishIndex];
-        return {
-          ...fish,
-          ...fishData
-        };
-      });
-      res.json(userFishRes);
+      res.json(userFish);
     } catch (err) {
       pondUserLogger.error(err);
       res.status(400).json(err);
@@ -114,5 +106,3 @@ class PondUserController {
     }
   }
 }
-
-export default PondUserController;
