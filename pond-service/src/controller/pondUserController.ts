@@ -2,11 +2,8 @@ import { Request, Response } from 'express';
 import { Profile } from 'passport-google-oauth20';
 import FishDao from '../dao/fishDao';
 import PondUserDao from '../dao/pondUserDao';
-import { Fish } from '../data/fishTypes';
 import PondUser from '../models/pondUserModel';
 import PondUserService from '../service/pondUserService';
-import fishJson from '../data/fish.json';
-import { binarySearch } from '../util/util';
 import { pondUserLogger } from '../util/logger';
 
 export default class PondUserController {

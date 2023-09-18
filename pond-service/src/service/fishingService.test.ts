@@ -1,5 +1,5 @@
 import FishingService from './fishingService';
-import { Fish } from '../data/fishTypes';
+import { Fish } from '../../../shared/types/types';
 import * as util from '../util/util';
 import PondUserDao from '../dao/pondUserDao';
 import FishDao from '../dao/fishDao';

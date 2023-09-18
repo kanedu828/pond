@@ -28,3 +28,9 @@ export interface FishInstance {
     length: number;
     expirationDate: number;
 }
+
+export interface Pond {
+    name: string;
+    requiredLevel: number;
+}
+  
