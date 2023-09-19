@@ -1,18 +1,22 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PondClientSingleton from "../Clients/PondClientSingleton";
 
 const pondAuthClient = PondClientSingleton.getInstance().getPondAuthClient();
 
 export const useStatus = () => {
     const result = useQuery({
-        queryKey: ['isAuthenticated'], queryFn: () => pondAuthClient.status()
+        queryKey: ['auth', 'status'], queryFn: async () => await pondAuthClient.status()
     });
     return result;
 }
 
 export const useLogout = () => {
+    const queryClient = useQueryClient();
     const mutation = useMutation({
-        mutationFn: () => pondAuthClient.logout()
+        mutationFn: async () => await pondAuthClient.logout(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['auth', 'status'] });
+        }
     });
     return mutation;
 }

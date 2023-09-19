@@ -1,20 +1,19 @@
-import { Button, Container } from "@mantine/core";
+import { AppShell, Button, Container, Flex } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FishInstance } from "../../../shared/types/types";
-import { useLogout } from "../Hooks/UseAuthClient";
+import { useStatus } from "../Hooks/UseAuthClient";
 import { useCheckAuthentication } from "../Hooks/UseCheckAuthentication";
 import FishingSocketSingleton from "../Websockets/FishingSocketSingleton";
+import { Login } from "./Login";
+import { Navbar } from "./Navbar";
 
 export const Fishing = () => {
 
     const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
     const [isConnected, setIsConnected] = useState<boolean>(fishingSocket.connected);
-    const logout = useLogout();
-
-    const navigate = useNavigate();
-
-    useCheckAuthentication();
+    const { data } = useStatus();
+    // useCheckAuthentication();
 
     // Initialize socket
     useEffect(() => {
@@ -36,14 +35,21 @@ export const Fishing = () => {
 
 
     return (
-        <Container>
-            Connected: {String(isConnected)}
-            <Button onClick={async () => {
-                await logout.mutate();
-                navigate('/login')
-            }}>
-                Logout
-            </Button>
-        </Container>
+        <>
+            <AppShell>
+                <Navbar/>
+                <Flex style={{ height: '100%' }}direction='column' justify='space-around'>
+                        <Container>
+                        {String(data?.authenticated)}
+                            Connected: {String(isConnected)}
+                            Hello
+                        </Container>
+                </Flex>
+            
+        
+            </AppShell>
+            <Login/>
+        </>
+        
     )
 };

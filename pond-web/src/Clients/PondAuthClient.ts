@@ -15,21 +15,15 @@ export class PondAuthClient {
         const response = await fetch(`${this.apiUrl}/auth/status`, {
             method: 'get',
             credentials: 'include'
-        })
-            .then((res: Response) => res.json())
-            .catch((_err: Error) => {
         });
-        return response;
+        return await response.json();
     }
 
     async logout(): Promise<LogoutResponse> {
         const response = await fetch(`${this.apiUrl}/auth/logout`, {
             method: 'get',
             credentials: 'include'
-        })
-            .then((res: Response) => res.json())
-            .catch((_err: Error) => {
         });
-        return response;
+        return await response.json();
     }
 }

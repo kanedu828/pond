@@ -15,23 +15,17 @@ export class PondUserClient {
         const user = await fetch(`${this.apiUrl}/user`, {
             method: 'get',
             credentials: 'include'
-        })
-            .then((res: Response) => res.json())
-            .catch((_err: Error) => {
         });
 
-        return user;
+        return await user.json();
     }
 
     async getUserFish(): Promise<Fish> {
         const fish = await fetch(`${this.apiUrl}/user/fish`, {
             method: 'get',
             credentials: 'include'
-        })
-            .then((res: Response) => res.json())
-            .catch((_err: Error) => {
         });
 
-        return fish;
+        return await fish.json();
     }
 }
