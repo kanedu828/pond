@@ -11,11 +11,11 @@ export const getUserRouter = (pondUserController: PondUserController) => {
     res.json(req.user);
   });
 
-  router.get('/fish', pondUserController.getUserFish);
+  router.get('/fish', pondUserController.getUserFish.bind(pondUserController));
 
-  router.post('/update-location/:location', pondUserController.updateUserLocation);
+  router.post('/update-location/:location', pondUserController.updateUserLocation.bind(pondUserController));
 
-  router.get('/leaderboard', pondUserController.getTopHundredPondUsersByExp);
+  router.get('/leaderboard', pondUserController.getTopHundredPondUsersByExp.bind(pondUserController));
 
   return router;
 };

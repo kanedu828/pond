@@ -63,14 +63,14 @@ class PondUserService {
    */
   async getUserFish(id: number): Promise<UserFish[]> {
     const result = await this.fishDao.getFish({ pond_user_id: id });
-    const userFishArr = result.map((element: any) => {
-      const fishIndex = binarySearch<Fish>(fishJson, element.fish_id, (element: Fish) => element.id);
+    const userFishArr = result.map((fishResult: any) => {
+      const fishIndex = binarySearch<Fish>(fishJson, fishResult.fish_id, (fish: Fish) => fish.id);
       const fishData: Fish = fishJson[fishIndex];
       const userFish: UserFish = {
         fish: fishData,
-        maxLength: element.max_length,
-        count: element.count,
-        pondUserId: element.pond_user_id
+        maxLength: fishResult.max_length,
+        count: fishResult.count,
+        pondUserId: fishResult.pond_user_id
       };
       return userFish;
     });
