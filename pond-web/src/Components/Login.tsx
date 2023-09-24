@@ -1,4 +1,4 @@
-import { Anchor, Container, Flex, Modal, Stack, Title } from "@mantine/core";
+import { Anchor, Modal, Stack, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect } from "react";
 import { useStatus } from "../Hooks/UseAuthClient";

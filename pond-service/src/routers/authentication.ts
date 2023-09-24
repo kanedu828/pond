@@ -21,10 +21,11 @@ const getAuthenticationRouter = () => {
     })
   );
 
-  router.get('/logout', (req: Request, res: Response) => {
+  router.post('/logout', (req: Request, res: Response) => {
     req.session.destroy((err) => {
       if (err) {
         res.status(400).json(err);
+        res.json({success: false})
       }
     });
     req.logout((err) => {
@@ -32,7 +33,7 @@ const getAuthenticationRouter = () => {
         res.status(400).json(err);
       }
     });
-    res.status(200);
+    res.status(200).json({});
   });
 
   router.get('/status', (req: Request, res: Response) => {

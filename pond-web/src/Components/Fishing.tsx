@@ -1,9 +1,7 @@
-import { AppShell, Button, Container, Flex } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { AppShell, Container, Flex } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { FishInstance } from "../../../shared/types/types";
 import { useStatus } from "../Hooks/UseAuthClient";
-import { useCheckAuthentication } from "../Hooks/UseCheckAuthentication";
 import FishingSocketSingleton from "../Websockets/FishingSocketSingleton";
 import { Login } from "./Login";
 import { Navbar } from "./Navbar";
@@ -13,7 +11,6 @@ export const Fishing = () => {
     const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
     const [isConnected, setIsConnected] = useState<boolean>(fishingSocket.connected);
     const { data } = useStatus();
-    // useCheckAuthentication();
 
     // Initialize socket
     useEffect(() => {

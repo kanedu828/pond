@@ -1,23 +1,21 @@
-import { Button, Container, Flex, UnstyledButton } from "@mantine/core";
-import { useQueryClient } from "@tanstack/react-query";
+import { Button, Container, Flex } from "@mantine/core";
 import { useLogout } from "../Hooks/UseAuthClient";
-import { useCheckAuthentication } from "../Hooks/UseCheckAuthentication";
 
 export const Navbar = () => {
 
     const logout = useLogout();
-    const queryClient = useQueryClient();
 
-    // useCheckAuthentication();
+
+    const onClickLogout = async () => {
+        logout.mutate();
+    }
 
     return (
         <Container p={15}>
             <Flex gap='xl' justify='center'>
                 <Button>Collection</Button>
                 <Button>Leaderboard</Button>
-                <Button onClick={async () => {
-                    await logout.mutate();
-                }}>
+                <Button onClick={onClickLogout}>
                     Logout
                 </Button>
             </Flex>

@@ -37,7 +37,7 @@ class FishingController {
       // How often to poll for fish
       await sleep(10000);
       const userId = socket.request.user.id;
-      const currentFish = await this.fishingService.pollFish(userId, 10 * 60, 60 * 60);
+      const currentFish = await this.fishingService.pollFish(userId, 10, 20);
       if (currentFish) {
         socket.emit('new-fish', currentFish);
       }

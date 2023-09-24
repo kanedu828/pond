@@ -13,10 +13,12 @@ export const useStatus = () => {
 export const useLogout = () => {
     const queryClient = useQueryClient();
     const mutation = useMutation({
-        mutationFn: async () => await pondAuthClient.logout(),
+        mutationFn: async () => {
+            return await pondAuthClient.logout();
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['auth', 'status'] });
-        }
+        },
     });
     return mutation;
 }
