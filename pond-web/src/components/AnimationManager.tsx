@@ -7,7 +7,6 @@ import { FishingAnimationState } from '../types/types';
 
 interface AnimationManagerProps {
     state: FishingAnimationState;
-    setState: any;
     onClick: any;
 }
 
@@ -25,21 +24,9 @@ export const AnimationManager = (props: AnimationManagerProps) => {
         }
     }
 
-    function onClick() {
-        const FISH_APPEARING_ANIMATION_MS = 800;
-        const FISH_CATCH_ANIMATION_MS = 1600;
-        if (props.state === FishingAnimationState.Idle) {
-            props.setState(FishingAnimationState.Appearing);
-            setTimeout(() => props.setState(FishingAnimationState.IdleWithFish), FISH_APPEARING_ANIMATION_MS);
-        } else if (props.state === FishingAnimationState.IdleWithFish) {
-            props.setState(FishingAnimationState.Catch);
-            setTimeout(() => props.setState(FishingAnimationState.Idle), FISH_CATCH_ANIMATION_MS);
-        }
-    }
-
     return (
         <>
-            <Image onClick={onClick} src={getCurrentAnimation(props.state)}/>
+            <Image onClick={props.onClick} src={getCurrentAnimation(props.state)}/>
         </>
     );
 

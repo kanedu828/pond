@@ -6,7 +6,6 @@ export default class FishingSocketSingleton {
 
   private constructor() {
     const url = import.meta.env.VITE_POND_FISHING_WS_URL;
-    console.log(url)
     if (!url) {
         throw new Error('Could not find pond web fishing websocket url');
     }
