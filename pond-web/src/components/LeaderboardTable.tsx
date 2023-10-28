@@ -3,7 +3,7 @@ import { Grid, Paper, Text } from "@mantine/core"
 export const LeaderboardTable = () => {
     return (
         <> 
-            <Paper radius='lg' shadow='sm' style={{padding: '3px', width: '80%'}} withBorder>
+            <Paper radius='lg' shadow='xs' style={{padding: '3px', width: '80%'}} withBorder>
                 <Grid justify='center'>
                     <Grid.Col span={3}><Text ta='center' size='xl'>Rank</Text></Grid.Col>
                     <Grid.Col span={3}><Text ta='center' size='xl'>Username</Text></Grid.Col>
@@ -35,7 +35,7 @@ interface LeaderboardTableRowProps {
 
 const LeaderboardTableRow = (props: LeaderboardTableRowProps) => {
     return (
-        <Paper radius='lg' shadow='sm' style={{padding: '10px', width: '80%', backgroundColor: props.alternate ? '#f3f3f3' : 'white '}}>
+        <Paper radius='lg' shadow='xs' style={{padding: '10px', width: '80%', backgroundColor: props.alternate ? '#f3f3f3' : 'white '}}>
             <Grid justify='center'>
                 <Grid.Col span={3}><Text ta='center' size='xl'>{props.rank}</Text></Grid.Col>
                 <Grid.Col span={3}><Text ta='center' size='xl'>{props.username}</Text></Grid.Col>
