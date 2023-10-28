@@ -1,6 +1,6 @@
 import { Button, Container, Flex } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useLogout } from "../Hooks/UseAuthClient";
+import { useLogout } from "../hooks/UseAuthClient";
 import { Collection } from "./Collection";
 import { Leaderboard } from "./Leaderboard";
 

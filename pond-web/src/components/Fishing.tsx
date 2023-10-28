@@ -1,7 +1,9 @@
-import { AppShell, Container, Flex, Image } from "@mantine/core";
+import { AppShell, Container, Flex } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { FishInstance } from "../../../shared/types/types";
-import FishingSocketSingleton from "../Websockets/FishingSocketSingleton";
+import { FishingAnimationState } from "../types/types";
+import FishingSocketSingleton from "../websockets/FishingSocketSingleton";
+import { AnimationManager } from "./AnimationManager";
 import { Login } from "./Login";
 import { Navbar } from "./Navbar";
 
@@ -9,6 +11,7 @@ export const Fishing = () => {
 
     const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
     const [isConnected, setIsConnected] = useState<boolean>(fishingSocket.connected);
+    const [fishingAnimationState, setFishingAnimationState] = useState<FishingAnimationState>(FishingAnimationState.Idle);
 
     // Initialize socket
     useEffect(() => {
@@ -28,6 +31,14 @@ export const Fishing = () => {
         }
     }, [])
 
+    function collectFish() {
+        const FISH_APPEARING_ANIMATION_MS = 800;
+        if (fishingAnimationState === FishingAnimationState.Idle) {
+            setFishingAnimationState(FishingAnimationState.Appearing);
+            setTimeout(() => setFishingAnimationState(FishingAnimationState.IdleWithFish), FISH_APPEARING_ANIMATION_MS);
+        }
+    }
+
 
     return (
         <>
@@ -36,10 +47,7 @@ export const Fishing = () => {
                 <Flex style={{ height: '100%' }}direction='column' justify='space-around'>
                         <Container>
                                 Connected: {String(isConnected)}
-                                <Image
-                                    radius="md"
-                                    src="https://images.unsplash.com/photo-1688920556232-321bd176d0b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2370&q=80"
-                                />
+                               <AnimationManager state={fishingAnimationState} setState={setFishingAnimationState} onClick={collectFish}/>
                         </Container>
                 </Flex>
             

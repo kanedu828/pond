@@ -1,5 +1,5 @@
 import { LoadingOverlay, Modal, Stack } from "@mantine/core"
-import { useGetUserFish } from "../Hooks/UseUserClient";
+import { useGetUserFish } from "../hooks/UseUserClient";
 
 interface CollectionProps {
     isOpen: boolean;

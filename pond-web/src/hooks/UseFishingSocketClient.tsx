@@ -1,4 +1,4 @@
-import FishingSocketSingleton from "../Websockets/FishingSocketSingleton"
+import FishingSocketSingleton from "../websockets/FishingSocketSingleton"
 
 export const useFishingSocketClient = () => {
     const client = FishingSocketSingleton.getInstance();

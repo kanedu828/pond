@@ -1,7 +1,7 @@
 import { Anchor, Modal, Stack, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect } from "react";
-import { useStatus } from "../Hooks/UseAuthClient";
+import { useStatus } from "../hooks/UseAuthClient";
 
 export const Login = () => {
     document.title = 'Pond'

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import PondClientSingleton from "../Clients/PondClientSingleton";
+import PondClientSingleton from "../clients/PondClientSingleton";
 
 const pondAuthClient = PondClientSingleton.getInstance().getPondAuthClient();
 
