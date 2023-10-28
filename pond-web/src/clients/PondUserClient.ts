@@ -1,4 +1,4 @@
-import { Fish, PondUser } from '../../../shared/types/types';
+import { PondUser, UserFish } from '../../../shared/types/types';
 
 export class PondUserClient {
     
@@ -20,7 +20,7 @@ export class PondUserClient {
         return await user.json();
     }
 
-    async getUserFish(): Promise<Fish> {
+    async getUserFish(): Promise<[UserFish]> {
         const fish = await fetch(`${this.apiUrl}/user/fish`, {
             method: 'get',
             credentials: 'include'

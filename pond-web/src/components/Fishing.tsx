@@ -54,6 +54,7 @@ export const Fishing = () => {
         }
         clearTimeout(fishTimeout);
         fishingSocket.emit('collect-fish');
+        setFish(null);
     }
 
     return (
