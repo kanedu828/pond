@@ -42,7 +42,6 @@ export const Collection = (props: CollectionProps) => {
                     placeholder='Sort By'
                     data={['Name', 'Amount Caught', 'Largest Caught', 'Rarity', 'ID']}
                     defaultValue='Name'
-                    clearable
                     value={sortValue}
                     onChange={(value) => {
                         setSortValue(value ?? 'Name')
@@ -51,7 +50,7 @@ export const Collection = (props: CollectionProps) => {
                 </Group>
                 <Group justify='center' gap='lg'>
                 {filteredFish?.map(e => 
-                    <FishCard fish={e.fish} largestCaught={e.maxLength} amountCaught={e.count}/>
+                    <FishCard key={e.fish.id} fish={e.fish} largestCaught={e.maxLength} amountCaught={e.count}/>
                 )}
                 </Group>
             </Stack>

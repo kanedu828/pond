@@ -1,9 +1,11 @@
 import { AppShell, Container, Flex } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { FishInstance } from "../../../shared/types/types";
 import { FishingAnimationState } from "../types/types";
 import FishingSocketSingleton from "../websockets/FishingSocketSingleton";
 import { AnimationManager } from "./AnimationManager";
+import { CatchFishModal } from "./CatchFishModal";
 import { Login } from "./Login";
 import { Navbar } from "./Navbar";
 
@@ -15,6 +17,7 @@ export const Fishing = () => {
     const [fish, setFish] = useState<FishInstance | null>(null);
     // This is used to clear timeouts when fish are caught
     const [fishTimeout, setFishTimeout] = useState<number>(0);
+    const [isCatchFishOpen, { open: openCatchFish, close: closeCatchFish }] = useDisclosure(false);
 
     // Initialize socket
     useEffect(() => {
@@ -22,7 +25,7 @@ export const Fishing = () => {
             const FISH_APPEARING_ANIMATION_MS = 800;
             const millisecondsFishable = newFish.expirationDate - Date.now();
             if (fishingAnimationState === FishingAnimationState.Idle && millisecondsFishable > 0) {
-                setFish(fish);
+                setFish(newFish);
                 setFishingAnimationState(FishingAnimationState.Appearing);
                 setTimeout(() => setFishingAnimationState(FishingAnimationState.IdleWithFish), FISH_APPEARING_ANIMATION_MS);
                 const newFishTimeout = window.setTimeout(() => {
@@ -54,7 +57,7 @@ export const Fishing = () => {
         }
         clearTimeout(fishTimeout);
         fishingSocket.emit('collect-fish');
-        setFish(null);
+        openCatchFish();
     }
 
     return (
@@ -71,6 +74,7 @@ export const Fishing = () => {
         
             </AppShell>
             <Login/>
+            <CatchFishModal fishInstance={fish} isOpen={isCatchFishOpen} close={closeCatchFish}/>
         </>
         
     )

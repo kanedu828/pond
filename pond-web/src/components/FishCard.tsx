@@ -5,6 +5,7 @@ interface FishCardProps {
     fish: Fish;
     largestCaught: number;
     amountCaught: number;
+    excludeCatchData?: boolean;
 }
 
 export const FishCard = (props: FishCardProps) => {
@@ -45,14 +46,14 @@ export const FishCard = (props: FishCardProps) => {
                 <Text size="sm" c="dimmed" h={75}>
                     {props.fish.description}
                 </Text>
-                <Group justify="space-between" mt="md" mb="xs" align='center' gap='xs'>
+                {!props.excludeCatchData && <Group justify="space-between" mt="md" mb="xs" align='center' gap='xs'>
                     <Text size="xs" c="dimmed">
                         Largest Caught: {props.largestCaught}cm
                     </Text>
                     <Text size="xs" c="dimmed">
                         Amount Caught: {props.amountCaught}
                     </Text>
-                </Group>
+                </Group>}
             </SimpleGrid>
         </Card>
     )
