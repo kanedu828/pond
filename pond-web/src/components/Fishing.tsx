@@ -2,10 +2,12 @@ import { AppShell, Container, Flex } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { FishInstance } from "../../../shared/types/types";
+import { useGetUser } from "../hooks/UseUserClient";
 import { FishingAnimationState } from "../types/types";
 import FishingSocketSingleton from "../websockets/FishingSocketSingleton";
 import { AnimationManager } from "./AnimationManager";
 import { CatchFishModal } from "./CatchFishModal";
+import { ExpBar } from "./ExpBar";
 import { Login } from "./Login";
 import { Navbar } from "./Navbar";
 
@@ -18,6 +20,16 @@ export const Fishing = () => {
     // This is used to clear timeouts when fish are caught
     const [fishTimeout, setFishTimeout] = useState<number>(0);
     const [isCatchFishOpen, { open: openCatchFish, close: closeCatchFish }] = useDisclosure(false);
+
+    const { data: userData, isLoading: userIsLoading } = useGetUser();
+    const [exp, setExp] = useState(0);
+
+    // Set Exp
+    useEffect(() => {
+        if (!userIsLoading) {
+            setExp(userData?.exp ?? 0);
+        }
+    }, [userData, userIsLoading]);
 
     // Initialize socket
     useEffect(() => {
@@ -53,11 +65,14 @@ export const Fishing = () => {
         const ANIMATION_DELAY_BUFFER = 50;
         if (fishingAnimationState === FishingAnimationState.IdleWithFish) {
             setFishingAnimationState(FishingAnimationState.Catch);
-            setTimeout(() => setFishingAnimationState(FishingAnimationState.Idle), FISH_CATCH_ANIMATION_MS - ANIMATION_DELAY_BUFFER);
+            setTimeout(() => {
+                setFishingAnimationState(FishingAnimationState.Idle);
+                openCatchFish();
+                setExp(exp + (fish?.fish.expRewarded ?? 0));
+            }, FISH_CATCH_ANIMATION_MS - ANIMATION_DELAY_BUFFER);
+            clearTimeout(fishTimeout);
+            fishingSocket.emit('collect-fish');   
         }
-        clearTimeout(fishTimeout);
-        fishingSocket.emit('collect-fish');
-        openCatchFish();
     }
 
     return (
@@ -68,6 +83,7 @@ export const Fishing = () => {
                         <Container>
                                 Connected: {String(isConnected)}
                                <AnimationManager state={fishingAnimationState} onClick={collectFish}/>
+                               <ExpBar exp={exp}/>
                         </Container>
                 </Flex>
             
