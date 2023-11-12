@@ -19,7 +19,7 @@ const expBarFillerStyle: MantineStyleProp = {
     transition: 'width 1s ease-in-out',
     backgroundColor: '#66b4e9',
     margin: '0',
-    padding: '0'
+    padding: '0',
 }
 
 export const ExpBar = (props: ExpBarProps) => {
