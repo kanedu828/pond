@@ -17,7 +17,7 @@ export const Collection = (props: CollectionProps) => {
 
     const filteredFish = data?.sort((a, b) => sortComparator(a, b, sortValue)).filter(e => {
         return e.fish.name.toLowerCase().includes(searchInput.toLowerCase());
-    })
+    });
 
     return (
         <Modal

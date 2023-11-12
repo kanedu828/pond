@@ -18,8 +18,7 @@ export const Login = () => {
         } else {
             close();
         }
-    }, [data])
-
+    }, [data]);
 
     return (
         <Modal

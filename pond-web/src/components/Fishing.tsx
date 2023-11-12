@@ -59,9 +59,9 @@ export const Fishing = () => {
             fishingSocket.off('disconnect');
             fishingSocket.off('new-fish');
         };
-    }, [fishingSocket, setIsConnected, fishingAnimationState, setFishingAnimationState, fish, setFish, setFishTimeout])
+    }, [fishingSocket, setIsConnected, fishingAnimationState, setFishingAnimationState, fish, setFish, setFishTimeout]);
 
-    function collectFish() {
+    const collectFish = () => {
         const FISH_CATCH_ANIMATION_MS = 1600;
         const ANIMATION_DELAY_BUFFER = 50;
         if (fishingAnimationState === FishingAnimationState.IdleWithFish) {
