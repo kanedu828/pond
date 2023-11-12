@@ -1,4 +1,4 @@
-import { AppShell, Container, Flex } from "@mantine/core";
+import { AppShell, AppShellFooter, Container, Flex, Group, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { FishInstance } from "../../../shared/types/types";
@@ -10,10 +10,11 @@ import { CatchFishModal } from "./CatchFishModal";
 import { ExpBar } from "./ExpBar";
 import { Login } from "./Login";
 import { Navbar } from "./Navbar";
+import { IconPlugConnected, IconPlugConnectedX } from '@tabler/icons-react';
+
+const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
 
 export const Fishing = () => {
-
-    const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
     const [isConnected, setIsConnected] = useState<boolean>(fishingSocket.connected);
     const [fishingAnimationState, setFishingAnimationState] = useState<FishingAnimationState>(FishingAnimationState.Idle);
     const [fish, setFish] = useState<FishInstance | null>(null);
@@ -81,11 +82,19 @@ export const Fishing = () => {
                 <Navbar/>
                 <Flex style={{ height: '100%' }}direction='column' justify='space-around'>
                         <Container>
-                                Connected: {String(isConnected)}
                                <AnimationManager state={fishingAnimationState} onClick={collectFish}/>
                                <ExpBar exp={exp}/>
                         </Container>
                 </Flex>
+                <AppShellFooter>
+                    <Group justify='flex-end' style={{padding:'5px'}} align='center'>
+                        <Text>
+                            v0.0.1
+                        </Text>   
+                        {isConnected ? <IconPlugConnected/> : <IconPlugConnectedX/>}       
+                    </Group>
+                    
+                </AppShellFooter>
             
         
             </AppShell>

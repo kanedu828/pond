@@ -3,11 +3,11 @@ import { useDisclosure } from "@mantine/hooks";
 import { useEffect } from "react";
 import { useStatus } from "../hooks/UseAuthClient";
 
+const API_URL = import.meta.env.VITE_POND_API_URL;
+
 export const Login = () => {
     document.title = 'Pond'
     
-    const apiUrl = import.meta.env.VITE_POND_API_URL;
-
     const { data } = useStatus();
 
     const [opened, { open, close }] = useDisclosure(data?.authenticated);
@@ -32,7 +32,7 @@ export const Login = () => {
         >
             <Stack justify='space-between' align='center'>
                 <Title>Welcome to Pond!</Title>
-                <Anchor href={`${apiUrl}/auth/google`}>
+                <Anchor href={`${API_URL}/auth/google`}>
                     Login
                 </Anchor>
             </Stack>

@@ -8,28 +8,27 @@ interface FishCardProps {
     excludeCatchData?: boolean;
 }
 
-export const FishCard = (props: FishCardProps) => {
-
-    function getRarityColor(rarity: string) {
-        switch(rarity) {
-            case 'common':
-                return '#7ff59f'; // Green
-                break;
-            case 'rare':
-                return '#7fd5f5'; // Blue
-                break;
-            case 'epic':
-                return '#b67ff5'; // Purple
-                break;
-            case 'legendary':
-                return '#f7e968'; // Yellow
-                break;
-            default:
-                return '#787878'; // Gray
-                break;
-        }
+function getRarityColor(rarity: string) {
+    switch(rarity) {
+        case 'common':
+            return '#7ff59f'; // Green
+            break;
+        case 'rare':
+            return '#7fd5f5'; // Blue
+            break;
+        case 'epic':
+            return '#b67ff5'; // Purple
+            break;
+        case 'legendary':
+            return '#f7e968'; // Yellow
+            break;
+        default:
+            return '#787878'; // Gray
+            break;
     }
+}
 
+export const FishCard = (props: FishCardProps) => {
     return (
         <Card style={{borderTop: `1rem solid ${getRarityColor(props.fish.rarity)}`, borderTopRightRadius: '1rem', borderTopLeftRadius: '1rem'}} withBorder padding='md' w='300px' h='520px'>
             <Card.Section>
