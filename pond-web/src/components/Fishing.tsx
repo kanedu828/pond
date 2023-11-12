@@ -23,7 +23,7 @@ export const Fishing = () => {
 
     const { data: userData, isLoading: userIsLoading } = useGetUser();
     const [exp, setExp] = useState(0);
-
+    
     // Set Exp
     useEffect(() => {
         if (!userIsLoading) {

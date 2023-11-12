@@ -20,12 +20,21 @@ export class PondUserClient {
         return await user.json();
     }
 
-    async getUserFish(): Promise<[UserFish]> {
+    async getUserFish(): Promise<UserFish[]> {
         const fish = await fetch(`${this.apiUrl}/user/fish`, {
             method: 'get',
             credentials: 'include'
         });
 
         return await fish.json();
+    }
+
+    async getTopHundredUsersByExp(): Promise<PondUser[]> {
+        const users = await fetch(`${this.apiUrl}/user/leaderboard`, {
+            method: 'get',
+            credentials: 'include'
+        });
+
+        return await users.json();
     }
 }

@@ -1,4 +1,5 @@
 import { Modal, Stack, Title } from "@mantine/core"
+import { useGetTopHundredUsersByExp } from "../hooks/UseUserClient";
 import { LeaderboardTable } from "./LeaderboardTable";
 
 interface LeaderboardProps {
@@ -7,6 +8,9 @@ interface LeaderboardProps {
 }
 
 export const Leaderboard = (props: LeaderboardProps) => {
+
+    const { data } = useGetTopHundredUsersByExp();
+    
     return (
         <Modal
             opened={props.isOpen}
@@ -18,7 +22,7 @@ export const Leaderboard = (props: LeaderboardProps) => {
         >
             <Stack justify='space-between' align='center' style={{paddingBottom: '3%'}}>
                 <Title>Leaderboard</Title>
-                <LeaderboardTable/>
+                <LeaderboardTable users={data ?? []}/>
             </Stack>
         </Modal>   
     )

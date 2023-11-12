@@ -1,6 +1,12 @@
 import { Grid, Paper, Text } from "@mantine/core"
+import { PondUser } from "../../../shared/types/types"
+import { expToLevel } from "../util/exp"
 
-export const LeaderboardTable = () => {
+interface LeaderboardTableProps {
+    users: PondUser[]
+}
+
+export const LeaderboardTable = (props: LeaderboardTableProps) => {
     return (
         <> 
             <Paper radius='lg' shadow='xs' style={{padding: '3px', width: '80%'}} withBorder>
@@ -11,16 +17,9 @@ export const LeaderboardTable = () => {
                     <Grid.Col span={3}><Text ta='center' size='xl'>Exp</Text></Grid.Col>
                 </Grid>
             </Paper>
-            <LeaderboardTableRow rank={1} username='kanelooc' level={102} exp={5121231341}/>
-            <LeaderboardTableRow rank={1} username='tim' level={67} exp={512123341} alternate/>
-            <LeaderboardTableRow rank={1} username='asasasasdina' level={42} exp={51221341}/>
-            <LeaderboardTableRow rank={1} username='al' level={9} exp={512312341} alternate/>
-            <LeaderboardTableRow rank={1} username='timmy' level={9} exp={511232341}/>
-            <LeaderboardTableRow rank={1} username='boat' level={9} exp={51221341} alternate/>
-            <LeaderboardTableRow rank={1} username='asda' level={9} exp={51231241}/>
-            <LeaderboardTableRow rank={1} username='kanelasdasdaooc' level={9} exp={5112341} alternate/>
-            <LeaderboardTableRow rank={1} username='asdasdasdasda' level={9} exp={51222341}/>
-            <LeaderboardTableRow rank={1} username='asdad' level={9} exp={5212341} alternate/>
+            {props.users.map((u, i) => {
+                return <LeaderboardTableRow rank={i + 1} username={u.username} level={expToLevel(u.exp)} exp={u.exp} alternate={i % 2 === 1}/>
+            })}
         </>
     )
 }
@@ -38,16 +37,10 @@ const LeaderboardTableRow = (props: LeaderboardTableRowProps) => {
         <Paper radius='lg' shadow='xs' style={{padding: '10px', width: '80%', backgroundColor: props.alternate ? '#f3f3f3' : 'white '}}>
             <Grid justify='center'>
                 <Grid.Col span={3}><Text ta='center' size='xl'>{props.rank}</Text></Grid.Col>
-                <Grid.Col span={3}><Text ta='center' size='xl'>{props.username}</Text></Grid.Col>
-                <Grid.Col span={3}><Text ta='center' size='xl'>Lv. {props.level}</Text></Grid.Col>
-                <Grid.Col span={3}><Text ta='center' size='xl'>{props.exp} EXP</Text></Grid.Col>
+                <Grid.Col span={3}><Text truncate='end' ta='center' size='xl'>{props.username}</Text></Grid.Col>
+                <Grid.Col span={3}><Text ta='center' size='xl'>{props.level}</Text></Grid.Col>
+                <Grid.Col span={3}><Text ta='center' size='xl'>{props.exp}</Text></Grid.Col>
             </Grid>
-            {/* <Flex align='center' gap='xl' justify='space-around'>
-                
-                
-                
-                
-            </Flex> */}
         </Paper>
     )
 }

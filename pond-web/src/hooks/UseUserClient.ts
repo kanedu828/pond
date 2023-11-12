@@ -16,3 +16,10 @@ export const useGetUser = () => {
     });
     return result;
 }
+
+export const useGetTopHundredUsersByExp = () => {
+    const result = useQuery({
+        queryKey: ['topHundredUsersByExp'], queryFn: async () => await pondUserClient.getTopHundredUsersByExp()
+    });
+    return result;
+}
