@@ -1,7 +1,7 @@
 [
   {
     "id": 1000,
-    "name": "Blue Tilapia",
+    "name": "Tilapia",
     "description": "",
     "lengthRangeInCm": [9, 17],
     "secondsFishable": 400,
@@ -11,7 +11,7 @@
   },
   {
     "id": 1001,
-    "name": "Lake Trout",
+    "name": "Trout",
     "description": "",
     "lengthRangeInCm": [39, 140],
     "secondsFishable": 400,
@@ -21,7 +21,7 @@
   },
   {
     "id": 1002,
-    "name": "Common Carp",
+    "name": "Carp",
     "description": "",
     "lengthRangeInCm": [27, 43],
     "secondsFishable": 400,
@@ -31,7 +31,7 @@
   },
   {
     "id": 1003,
-    "name": "Largemouth Bass",
+    "name": "Bass",
     "description": "",
     "lengthRangeInCm": [40, 100],
     "secondsFishable": 400,
@@ -41,7 +41,7 @@
   },
   {
     "id": 1004,
-    "name": "Blue Catfish",
+    "name": "Catfish",
     "description": "",
     "lengthRangeInCm": [5, 450],
     "secondsFishable": 400,
@@ -51,11 +51,11 @@
   },
   {
     "id": 1005,
-    "name": "Northern Largemouth",
+    "name": "Spotted Sunfish",
     "description": "",
-    "lengthRangeInCm": [33, 60],
-    "secondsFishable": 400,
-    "expRewarded": 6,
+    "lengthRangeInCm": [5, 30],
+    "secondsFishable": 200,
+    "expRewarded": 20,
     "rarity": "common",
     "active": true
   },
@@ -91,9 +91,9 @@
   },
   {
     "id": 2001,
-    "name": "Spotted Sunfish",
+    "name": "Sterlet",
     "description": "",
-    "lengthRangeInCm": [5, 30],
+    "lengthRangeInCm": [30, 125],
     "secondsFishable": 200,
     "expRewarded": 20,
     "rarity": "rare",
@@ -111,7 +111,7 @@
   },
   {
     "id": 2003,
-    "name": "Florida Gar",
+    "name": "Gar",
     "description": "",
     "lengthRangeInCm": [250, 320],
     "secondsFishable": 200,
@@ -131,7 +131,7 @@
   },
   {
     "id": 2005,
-    "name": "American Sturgeon",
+    "name": "Sturgeon",
     "description": "",
     "lengthRangeInCm": [250, 480],
     "secondsFishable": 200,
@@ -141,7 +141,7 @@
   },
   {
     "id": 3000,
-    "name": "American Eel",
+    "name": "Eel",
     "description": "",
     "lengthRangeInCm": [54, 77],
     "secondsFishable": 60,
