@@ -11,8 +11,12 @@ import { ExpBar } from "./ExpBar";
 import { Login } from "./Login";
 import { Navbar } from "./Navbar";
 import { IconPlugConnected, IconPlugConnectedX } from '@tabler/icons-react';
+import SplashAudio from '../assets/audio/splash.mp3';
+import AlertAudio from '../assets/audio/alert.mp3';
 
 const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
+const splashAudio = new Audio(SplashAudio);
+const alertAudio = new Audio(AlertAudio);
 
 export const Fishing = () => {
     const [isConnected, setIsConnected] = useState<boolean>(fishingSocket.connected);
@@ -37,6 +41,7 @@ export const Fishing = () => {
         const newFish = (newFish: FishInstance) => {
             const FISH_APPEARING_ANIMATION_MS = 800;
             const millisecondsFishable = newFish.expirationDate - Date.now();
+            alertAudio.play();
             if (fishingAnimationState === FishingAnimationState.Idle && millisecondsFishable > 0) {
                 setFish(newFish);
                 setFishingAnimationState(FishingAnimationState.Appearing);
@@ -46,7 +51,6 @@ export const Fishing = () => {
                     setFish(null);
                 }, millisecondsFishable);
                 setFishTimeout(newFishTimeout);
-                console.log(newFish);
             }
         }
 
@@ -65,6 +69,7 @@ export const Fishing = () => {
         const FISH_CATCH_ANIMATION_MS = 1600;
         const ANIMATION_DELAY_BUFFER = 50;
         if (fishingAnimationState === FishingAnimationState.IdleWithFish) {
+            splashAudio.play();
             setFishingAnimationState(FishingAnimationState.Catch);
             setTimeout(() => {
                 setFishingAnimationState(FishingAnimationState.Idle);
