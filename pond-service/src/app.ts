@@ -72,6 +72,7 @@ const sessionMiddleware = session(sessionConfig);
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.json());
 
 // ----------- Dao and controller setup ---------------
 const pondUserDao = new PondUserDao(db);

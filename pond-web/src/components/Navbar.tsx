@@ -6,13 +6,13 @@ import { Leaderboard } from "./Leaderboard";
 
 export const Navbar = () => {
 
-    const logout = useLogout();
+    const { mutateAsync: logout } = useLogout();
 
     const [isCollectionOpen, { open: openCollection, close: closeCollection }] = useDisclosure(false);
     const [isLeaderboardOpen, { open: openLeaderboard, close: closeLeaderboard }] = useDisclosure(false);
 
     const onClickLogout = async () => {
-        logout.mutate();
+        await logout();
     };
 
     return (

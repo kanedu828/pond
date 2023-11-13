@@ -1,4 +1,4 @@
-import { AppShell, AppShellFooter, Container, Flex, Group, Text } from "@mantine/core";
+import { AppShell, AppShellFooter, Container, Flex, Group, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { FishInstance } from "../../../shared/types/types";
@@ -13,6 +13,7 @@ import { Navbar } from "./Navbar";
 import { IconPlugConnected, IconPlugConnectedX } from '@tabler/icons-react';
 import SplashAudio from '../assets/audio/splash.mp3';
 import AlertAudio from '../assets/audio/alert.mp3';
+import { UpdateUsernameModal } from "./UpdateUsernameModal";
 
 const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
 const splashAudio = new Audio(SplashAudio);
@@ -28,12 +29,18 @@ export const Fishing = () => {
 
     const { data: userData, isLoading: userIsLoading } = useGetUser();
     const [exp, setExp] = useState(0);
-    
-    // Set Exp
+
+    const [isUpdateUsernameOpen, { open: openUpdateUsername, close: closeUpdateUsername }] = useDisclosure(false);
+
+    // User Data
     useEffect(() => {
         if (!userIsLoading) {
             setExp(userData?.exp ?? 0);
-        }
+
+            if (userData?.username.startsWith('guest-')) {
+                openUpdateUsername();
+            }
+        }   
     }, [userData, userIsLoading]);
 
     // Initialize socket
@@ -89,6 +96,7 @@ export const Fishing = () => {
             <AppShell>
                 <Navbar/>
                 <Flex style={{ height: '100%' }}direction='column' justify='space-around'>
+                        <Title order={3}>Welcome {userData?.username}</Title>
                         <Container>
                                <AnimationManager state={fishingAnimationState} onClick={collectFish}/>
                                <ExpBar exp={exp}/>
@@ -108,6 +116,7 @@ export const Fishing = () => {
             </AppShell>
             <Login/>
             <CatchFishModal fishInstance={fish} isOpen={isCatchFishOpen} close={closeCatchFish}/>
+            <UpdateUsernameModal isOpen={isUpdateUsernameOpen} close={closeUpdateUsername}/>
         </>
         
     )

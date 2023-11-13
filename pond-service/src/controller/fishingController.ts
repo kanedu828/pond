@@ -22,8 +22,8 @@ class FishingController {
   async getFish(userId: number, socketId: number) {
     try {
       return await this.fishingService.getFish(userId, socketId, 10, 30);
-    } catch (err) {
-      fishingLogger.error(err);
+    } catch (err: any) {
+      fishingLogger.error(err.message);
     }
     return null;
   }
@@ -41,8 +41,8 @@ class FishingController {
       if (currentFish) {
         socket.emit('new-fish', currentFish);
       }
-    } catch (err) {
-      fishingLogger.error(err);
+    } catch (err: any) {
+      fishingLogger.error(err.message);
     }
   }
 
@@ -56,8 +56,8 @@ class FishingController {
       const userId = socket.request.user.id;
       const collectedFish = await this.fishingService.collectFish(userId);
       socket.emit('caught-fish', collectedFish);
-    } catch (err) {
-      fishingLogger.error(err);
+    } catch (err: any) {
+      fishingLogger.error(err.message);
     }
   }
 
@@ -68,8 +68,8 @@ class FishingController {
       if (currentFish) {
         socket.emit('new-fish', currentFish);
       }
-    } catch (err) {
-      fishingLogger.error(err);
+    } catch (err: any) {
+      fishingLogger.error(err.message);
     }
   }
 
@@ -78,8 +78,8 @@ class FishingController {
       const userId = socket.request.user.id;
       const socketId = socket.id;
       return this.fishingService.updateConnectedSocketId(userId, socketId);
-    } catch (err) {
-      fishingLogger.error(err);
+    } catch (err: any) {
+      fishingLogger.error(err.message);
     }
     return null;
   }
@@ -88,8 +88,8 @@ class FishingController {
     try {
       const userId = socket.request.user.id;
       return this.fishingService.getConnectSocketId(userId);
-    } catch (err) {
-      fishingLogger.error(err);
+    } catch (err: any) {
+      fishingLogger.error(err.message);
     }
     return null;
   }

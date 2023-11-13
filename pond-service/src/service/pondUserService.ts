@@ -88,6 +88,17 @@ class PondUserService {
     return result;
   }
 
+   /**
+   * Updates the user username
+   * @param id user's id
+   * @param newUsername User's new username
+   * @returns the updated user
+   */
+    async updateUsername(id: number, newUsername: string): Promise<PondUser> {
+      const result = await this.pondUserDao.updatePondUser({ id }, { username: newUsername });
+      return result;
+    }
+
   /**
    * Returns the top users based on a column
    * @param column

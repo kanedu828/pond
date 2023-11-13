@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PondClientSingleton from "../clients/PondClientSingleton";
 
 const pondUserClient = PondClientSingleton.getInstance().getPondUserClient();
@@ -22,4 +22,17 @@ export const useGetTopHundredUsersByExp = () => {
         queryKey: ['topHundredUsersByExp'], queryFn: async () => await pondUserClient.getTopHundredUsersByExp()
     });
     return result;
+}
+
+export const useUpdateUsername = () => {
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: async (newUsername: string) => {
+            return await pondUserClient.updateUsername(newUsername);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+        }
+    });
+    return mutation;
 }

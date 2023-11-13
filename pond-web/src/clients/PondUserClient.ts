@@ -1,4 +1,5 @@
 import { PondUser, UserFish } from '../../../shared/types/types';
+import { UpdateUsernameRequest, UpdateUsernameResponse } from '../../../shared/types/UserTypes';
 
 export class PondUserClient {
     
@@ -36,5 +37,21 @@ export class PondUserClient {
         });
 
         return await users.json();
+    }
+
+    async updateUsername(newUsername: string): Promise<UpdateUsernameResponse> {
+
+        const updateUsernameRequest: UpdateUsernameRequest = { newUsername }
+        
+        const response = await fetch(`${this.apiUrl}/user/update-username`, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json', // Indicates the content 
+            },
+            credentials: 'include',
+            body: JSON.stringify(updateUsernameRequest)
+        });
+
+        return await response.json();
     }
 }
