@@ -51,7 +51,7 @@
     "passport": "^0.5.3",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.7.3",
-    "socket.io": "^4.5.1",
+    "socket.io": "^4.7.2",
     "winston": "^3.8.1"
   }
 }

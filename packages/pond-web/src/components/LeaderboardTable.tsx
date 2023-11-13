@@ -24,7 +24,8 @@ export const LeaderboardTable = (props: LeaderboardTableProps) => {
                 </Grid>
             </Paper>
             {paginatedUsers[activePage - 1].map((u, i) => {
-                return <LeaderboardTableRow key={i + 1} rank={i + 1} username={u.username} level={u.exp && expToLevel(u.exp)} exp={u.exp} alternate={i % 2 === 1}/>
+                const rank = activePage * 10 + i + 1;
+                return <LeaderboardTableRow key={rank} rank={rank} username={u.username} level={u.exp && expToLevel(u.exp)} exp={u.exp} alternate={i % 2 === 1}/>
             })}
             <Pagination value={activePage} onChange={setPage} total={paginatedUsers.length} />
         </>
