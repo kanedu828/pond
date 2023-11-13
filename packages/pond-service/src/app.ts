@@ -24,18 +24,17 @@ const SESSION_SECRET: string = process.env.SESSION_SECRET ?? '';
 const app: Application = express();
 app.use(
   cors({
-    origin: [POND_WEB_URL],
+    origin: '*',
     credentials: true,
-    allowedHeaders: ['Access-Control-Allow-Origin', 'Access-Control-Allow-Credentials']
   })
 );
 
 // CORS Headers
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', POND_WEB_URL);
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', POND_WEB_URL);
+//   res.setHeader('Access-Control-Allow-Credentials', 'true');
+//   next();
+// });
 
 // -------DB Initialization-------
 const db = knex({
@@ -86,10 +85,9 @@ setupAuth(pondUserController);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: [POND_WEB_URL],
+    origin: '*',
     credentials: true,
     methods: ['GET', 'POST'],
-    allowedHeaders: ['Access-Control-Allow-Origin', 'Access-Control-Allow-Credentials']
   }
 });
 
