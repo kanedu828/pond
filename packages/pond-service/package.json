@@ -6,7 +6,7 @@
   "version": "0.0.1",
   "description": "Backend service for pond",
   "scripts": {
-    "start": "node dist/src/app.js",
+    "start": "node dist/pond-service/src/app.js",
     "dev": "nodemon -r dotenv/config src/app.ts",
     "build": "npm install --only=dev && tsc -p .",
     "test": "jest",
