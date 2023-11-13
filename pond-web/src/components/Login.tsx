@@ -5,9 +5,7 @@ import { useStatus } from "../hooks/UseAuthClient";
 
 const API_URL = import.meta.env.VITE_POND_API_URL;
 
-export const Login = () => {
-    document.title = 'Pond'
-    
+export const Login = () => {    
     const { data } = useStatus();
 
     const [opened, { open, close }] = useDisclosure(data?.authenticated);

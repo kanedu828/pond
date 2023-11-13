@@ -1,6 +1,5 @@
-import { Button, Modal, Stack, Title } from "@mantine/core";
+import { Button, Modal, Image, Stack, Title, Text, Group } from "@mantine/core";
 import { FishInstance } from "../../../shared/types/types";
-import { FishCard } from "./FishCard";
 
 interface CatchFishModalProps {
     fishInstance: FishInstance | null;
@@ -16,13 +15,22 @@ export const CatchFishModal = (props: CatchFishModalProps) => {
                 props.close();
             }}
             radius={30}
-            size='30rem'
+            size='60rem'
             transitionProps={{ transition: 'fade', duration: 500 }}
         >
             <Stack align='center' justify='center'>
-                <Title>New Fish!</Title>
-                {props.fishInstance && <FishCard fish={props.fishInstance.fish} largestCaught={0} amountCaught={0} excludeCatchData/>}
-                <Button color='teal' size='md' radius='xl' onClick={props.close}>
+                <Title>You caught a {props.fishInstance?.fish.rarity} fish!</Title>
+                <Image h='300px' w='300px' src='https://dummyimage.com/500x500/000/ffffff.png'/>
+                <Group justify='space-between'>
+                    <Title>{props.fishInstance?.fish.name}</Title>
+                    <Text size="sm" c="dimmed">
+                        #{props.fishInstance?.fish.id}
+                    </Text>
+                </Group>
+                
+                <Text style={{width: '50%'}}>{props.fishInstance?.fish.description}</Text>
+                <Text c='dimmed'>Length: {props.fishInstance?.length}cm</Text>
+                <Button color='teal' size='md' radius='xl' onClick={props.close} style={{marginBottom: '20px'}}>
                     Close
                 </Button>
             </Stack>

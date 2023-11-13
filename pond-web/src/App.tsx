@@ -14,6 +14,7 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  document.title = 'Pond';
 
   return (
     <MantineProvider>

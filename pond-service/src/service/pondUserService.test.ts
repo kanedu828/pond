@@ -1,6 +1,9 @@
 import PondUserService from './pondUserService';
 import PondUserDao from '../dao/pondUserDao';
 import FishDao from '../dao/fishDao';
+import { binarySearch } from '../util/util';
+import { Fish } from '../../../shared/types/types';
+import fishJson from '../data/fish.json';
 
 const mockUser = {
   id: 123,
@@ -95,31 +98,13 @@ describe('test getUserFish', () => {
     ];
     const expectedFishArray = [
       {
-        fish: {
-          "id": 1000,
-          "name": "Blue Tilapia",
-          "description": "",
-          "lengthRangeInCm": [9, 17],
-          "secondsFishable": 400,
-          "expRewarded": 10,
-          "rarity": "common",
-          "active": true
-        },
+        fish: fishJson[binarySearch(fishJson, 1000, (element: Fish) => element.id)],
         pondUserId: 1,
         maxLength: 10,
         count: 5
       },
       {
-        fish: {
-          "id": 1001,
-          "name": "Lake Trout",
-          "description": "",
-          "lengthRangeInCm": [39, 140],
-          "secondsFishable": 400,
-          "expRewarded": 10,
-          "rarity": "common",
-          "active": true
-        },
+        fish: fishJson[binarySearch(fishJson, 1001, (element: Fish) => element.id)],
         pondUserId: 1,
         maxLength: 5,
         count: 2

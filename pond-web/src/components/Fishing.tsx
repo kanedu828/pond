@@ -43,12 +43,14 @@ export const Fishing = () => {
             const millisecondsFishable = newFish.expirationDate - Date.now();
             alertAudio.play();
             if (fishingAnimationState === FishingAnimationState.Idle && millisecondsFishable > 0) {
+                document.title = 'New Fish!';
                 setFish(newFish);
                 setFishingAnimationState(FishingAnimationState.Appearing);
                 setTimeout(() => setFishingAnimationState(FishingAnimationState.IdleWithFish), FISH_APPEARING_ANIMATION_MS);
                 const newFishTimeout = window.setTimeout(() => {
                     setFishingAnimationState(FishingAnimationState.Idle);
                     setFish(null);
+                    document.title = 'Pond';
                 }, millisecondsFishable);
                 setFishTimeout(newFishTimeout);
             }
@@ -68,6 +70,7 @@ export const Fishing = () => {
     const collectFish = () => {
         const FISH_CATCH_ANIMATION_MS = 1600;
         const ANIMATION_DELAY_BUFFER = 50;
+        document.title = 'Pond';
         if (fishingAnimationState === FishingAnimationState.IdleWithFish) {
             splashAudio.play();
             setFishingAnimationState(FishingAnimationState.Catch);

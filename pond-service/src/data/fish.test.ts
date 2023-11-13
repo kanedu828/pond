@@ -45,6 +45,10 @@ test('validate fish json data', () => {
       throw new Error(`Fish id ${element.id} does not have a valid rarity`);
     }
 
+    if (element.description.length > 210) {
+      throw new Error(`Fish id ${element.id} description exceeds 210 characters`);
+    } 
+
     fishSet.add(element.id);
     return element.id;
   };

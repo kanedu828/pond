@@ -5,7 +5,6 @@ interface FishCardProps {
     fish: Fish;
     largestCaught: number;
     amountCaught: number;
-    excludeCatchData?: boolean;
 }
 
 function getRarityColor(rarity: string) {
@@ -36,7 +35,7 @@ export const FishCard = (props: FishCardProps) => {
             </Card.Section>
             
             <SimpleGrid cols={1}>
-                <Group justify="space-between" mt="md" mb="xs">
+                <Group justify="space-between" mt="md">
                     <Text fw={500}>{props.fish.name}</Text>
                     <Text size="sm" c="dimmed">
                         #{props.fish.id}
@@ -45,14 +44,14 @@ export const FishCard = (props: FishCardProps) => {
                 <Text size="sm" c="dimmed" h={75}>
                     {props.fish.description}
                 </Text>
-                {!props.excludeCatchData && <Group justify="space-between" mt="md" mb="xs" align='center' gap='xs'>
+                <Group justify="space-between" mt="md" mb="xs" align='center' gap='xs'>
                     <Text size="xs" c="dimmed">
                         Largest Caught: {props.largestCaught}cm
                     </Text>
                     <Text size="xs" c="dimmed">
                         Amount Caught: {props.amountCaught}
                     </Text>
-                </Group>}
+                </Group>
             </SimpleGrid>
         </Card>
     )
