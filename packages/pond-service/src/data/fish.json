@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1000,
+    "name": "Tilapia",
+    "description": "Native to Africa and the Middle East, is a hardy freshwater fish widely farmed for its mild-flavored, firm flesh. While nutritious, it can impact non-native ecosystems when introduced.",
+    "lengthRangeInCm": [9, 17],
+    "secondsFishable": 400,
+    "expRewarded": 10,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1001,
+    "name": "Trout",
+    "description": "Primarily freshwater fish, are known for their vibrant markings and lean, flavorful flesh. Popular among anglers, they play a vital role in aquatic ecosystems and sport fishing.",
+    "lengthRangeInCm": [39, 140],
+    "secondsFishable": 400,
+    "expRewarded": 10,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1002,
+    "name": "Carp",
+    "description": "A freshwater fish, is valued for its size and adaptability. Common in global cuisines and sport fishing, it thrives in varied habitats but can disrupt local ecosystems.",
+    "lengthRangeInCm": [27, 43],
+    "secondsFishable": 400,
+    "expRewarded": 7,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1003,
+    "name": "Bass",
+    "description": "A versatile freshwater and marine fish, is prized for sport fishing and its firm, white flesh. Known for their fighting spirit, bass species vary widely in size and habitat.",
+    "lengthRangeInCm": [40, 100],
+    "secondsFishable": 400,
+    "expRewarded": 10,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1004,
+    "name": "Catfish",
+    "description": "With their distinctive whisker-like barbels, inhabit diverse freshwater environments. Valued for their meat and in sport fishing, they're known for their bottom-feeding habits.",
+    "lengthRangeInCm": [5, 450],
+    "secondsFishable": 400,
+    "expRewarded": 15,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1005,
+    "name": "Spotted Sunfish",
+    "description": "SA small, vibrant freshwater fish, is known for its distinctive spots and pan-shaped body. Popular in recreational fishing, it thrives in slow-moving, vegetated waters.",
+    "lengthRangeInCm": [5, 30],
+    "secondsFishable": 200,
+    "expRewarded": 20,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1006,
+    "name": "Musky Fish",
+    "description": "A large freshwater fish, is revered in sport fishing for its size and elusive nature. With a torpedo-shaped body and sharp teeth, it's a top predator in North American waters.",
+    "lengthRangeInCm": [71, 122],
+    "secondsFishable": 400,
+    "expRewarded": 6,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 1007,
+    "name": "Bluegill",
+    "description": "A common freshwater fish, is recognized by its deep, round body and dark gill cover flap. Popular in sport fishing, it's small but feisty and a favorite among anglers.",
+    "lengthRangeInCm": [11, 20],
+    "secondsFishable": 400,
+    "expRewarded": 6,
+    "rarity": "common",
+    "active": true
+  },
+  {
+    "id": 2000,
+    "name": "Goldfish",
+    "description": "Renowned for their vibrant gold coloration, are popular ornamental fish. Native to East Asia, they're a staple in aquariums and ponds, known for their peaceful demeanor and varied sizes.",
+    "lengthRangeInCm": [20, 30],
+    "secondsFishable": 200,
+    "expRewarded": 20,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2001,
+    "name": "Sterlet",
+    "description": "A small sturgeon variety, valued for its caviar and meat. Adaptable to cold freshwater habitats, it's recognized by a slender body and distinctive, downward-turned mouth.",
+    "lengthRangeInCm": [30, 125],
+    "secondsFishable": 200,
+    "expRewarded": 20,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2002,
+    "name": "Oscar",
+    "description": "Popular in aquariums for their striking colors and patterns, these are large, intelligent, and often aggressive, requiring ample space and specific care in captive environments.",
+    "lengthRangeInCm": [20, 40],
+    "secondsFishable": 200,
+    "expRewarded": 18,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2003,
+    "name": "Gar",
+    "description": "Known for their long, slender bodies and tooth-filled, elongated snouts, these ancient fish are skilled predators, often inhabiting slow-moving, freshwater environments.",
+    "lengthRangeInCm": [250, 320],
+    "secondsFishable": 200,
+    "expRewarded": 18,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2004,
+    "name": "Midas Cichlid",
+    "description": "Vibrant and aggressive, this fish is notable for its ability to change color. It prefers warm, freshwater habitats and requires spacious tanks due to its large size and territorial nature.",
+    "lengthRangeInCm": [4, 90],
+    "secondsFishable": 200,
+    "expRewarded": 18,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 2005,
+    "name": "Sturgeon",
+    "description": "Ancient and large, renowned for producing caviar. Prefers cold, freshwater and estuarine environments. Known for their elongated bodies, smooth skin, and distinctive, vacuum-like mouths.",
+    "lengthRangeInCm": [250, 480],
+    "secondsFishable": 200,
+    "expRewarded": 18,
+    "rarity": "rare",
+    "active": true
+  },
+  {
+    "id": 3000,
+    "name": "Eel",
+    "description": "Long, slender, and snake-like, known for their smooth, scaleless skin. They inhabit both freshwater and marine environments and are famous for their mysterious migration and breeding habits.",
+    "lengthRangeInCm": [54, 77],
+    "secondsFishable": 60,
+    "expRewarded": 70,
+    "rarity": "epic",
+    "active": true
+  },
+  {
+    "id": 3001,
+    "name": "Zebra Pleco",
+    "description": "Distinct for their striking black and white stripes, they are small, peaceful, and bottom-dwelling. Thriving in fast-flowing, warm waters, they are a sought-after species in the aquarium trade.",
+    "lengthRangeInCm": [7, 12],
+    "secondsFishable": 60,
+    "expRewarded": 70,
+    "rarity": "epic",
+    "active": true
+  },
+  {
+    "id": 3002,
+    "name": "Imperial Flower Loach",
+    "description": "Admired for their vibrant colors and playful behavior, these bottom dwellers are a rarity in aquariums. They prefer clean, fast-flowing waters and are known for their unique, undulating swimming style.",
+    "lengthRangeInCm": [40, 60],
+    "secondsFishable": 60,
+    "expRewarded": 70,
+    "rarity": "epic",
+    "active": true
+  },
+  {
+    "id": 3003,
+    "name": "Polka-dot Stingray",
+    "description": "This freshwater ray stands out with its striking polka-dot pattern and flattened body. It's a sensitive species requiring specialized care, often found in South American rivers.",
+    "lengthRangeInCm": [32, 46],
+    "secondsFishable": 60,
+    "expRewarded": 70,
+    "rarity": "epic",
+    "active": true
+  },
+  {
+    "id": 4000,
+    "name": "Bull Shark",
+    "description": "Notorious for their ability to thrive in both salt and fresh waters, these robust predators are recognized by their stocky shape and aggressive behavior, often venturing into shallow coastal areas.",
+    "lengthRangeInCm": [213, 366],
+    "secondsFishable": 5,
+    "expRewarded": 1000,
+    "rarity": "legendary",
+    "active": true
+  },
+  {
+    "id": 4001,
+    "name": "Golden Gar",
+    "description": "This rare variant displays a unique golden hue on its elongated body. Like other gars, it's a freshwater predator with a toothy snout, often kept by experienced aquarists due to its size and needs.",
+    "lengthRangeInCm": [40, 120],
+    "secondsFishable": 10,
+    "expRewarded": 70,
+    "rarity": "legendary",
+    "active": true
+  }
+]
