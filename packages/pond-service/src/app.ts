@@ -24,17 +24,17 @@ const SESSION_SECRET: string = process.env.SESSION_SECRET ?? '';
 const app: Application = express();
 app.use(
   cors({
-    origin: '*',
+    origin: POND_WEB_URL,
     credentials: true,
   })
 );
 
 // CORS Headers
-// app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Origin', POND_WEB_URL);
-//   res.setHeader('Access-Control-Allow-Credentials', 'true');
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', POND_WEB_URL);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
 // -------DB Initialization-------
 const db = knex({
@@ -64,6 +64,7 @@ const sessionConfig = {
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1); // trust first proxy
   sessionConfig.cookie.secure = true; // serve secure cookies
+  pondUserLogger.info('Pond Service Start Env: Production');
 }
 
 const sessionMiddleware = session(sessionConfig);
@@ -85,7 +86,7 @@ setupAuth(pondUserController);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: POND_WEB_URL,
     credentials: true,
     methods: ['GET', 'POST'],
   }
