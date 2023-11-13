@@ -45,13 +45,13 @@ export const Login = () => {
             padding={0}
         >
             <BackgroundImage src={LilyPadBackground}>
-                <Stack justify='center' style={{height: '100vh'}} alignItems='center'>
+                <Stack justify='center' style={{height: '100vh'}}>
                 <Group justify='center'>
                     <Image w='auto' src={IdleWithFishAnimation}/>
                     <Stack justify='space-between' align='center'>
                     <Title size='5rem'>Welcome to Pond!</Title>
                     <Anchor href={`${API_URL}/auth/google`} style={loginButtonStyle}>
-                        <Group spacing="sm" align='center'>
+                        <Group align='center'>
                             <IconBrandGoogleFilled size={24} />
                             <Text size="md" style={{ color: '#757575' }}>Sign in with Google</Text>
                         </Group>
