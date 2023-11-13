@@ -12,8 +12,8 @@ export default class FishingSocketSingleton {
     this.socket = io(url, {   
         withCredentials: true,
         secure: true, 
-        transports: ['websocket'],
-        rejectUnauthorized: false 
+        // transports: ['websocket'],
+        // rejectUnauthorized: false 
     });
   }
 

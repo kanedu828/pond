@@ -66,6 +66,9 @@ export const Fishing = () => {
         fishingSocket.on('connect', () => { setIsConnected(true) });
         fishingSocket.on('disconnect', () => { setIsConnected(false) });
         fishingSocket.on('new-fish', newFish);
+        fishingSocket.on('connect_error', (error: any) => {
+            console.error('Connection Error:', error);
+          });
 
         return () => {
             fishingSocket.off('connect');
