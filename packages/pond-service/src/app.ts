@@ -18,13 +18,14 @@ import { pondUserLogger } from './util/logger';
 
 // ----------- Env Variables ----------------
 const POND_WEB_URL: string = process.env.POND_WEB_URL ?? '';
+const POND_WEB_PORT: string = process.env.POND_WEB_PORT ?? '';
 const POND_SERVICE_PORT: string = process.env.POND_SERVICE_PORT ?? '';
 const SESSION_SECRET: string = process.env.SESSION_SECRET ?? '';
 
 const app: Application = express();
 app.use(
   cors({
-    origin: [POND_WEB_URL],
+    origin: [`${POND_WEB_URL}:${POND_WEB_PORT}`],
     credentials: true,
     allowedHeaders: ['Access-Control-Allow-Origin', 'Access-Control-Allow-Credentials']
   })
@@ -32,7 +33,7 @@ app.use(
 
 // CORS Headers
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', POND_WEB_URL);
+  res.setHeader('Access-Control-Allow-Origin', `${POND_WEB_URL}:${POND_WEB_PORT}`);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
@@ -86,7 +87,7 @@ setupAuth(pondUserController);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: [POND_WEB_URL],
+    origin: [`${POND_WEB_URL}:${POND_WEB_PORT}`],
     credentials: true,
     methods: ['GET', 'POST'],
     allowedHeaders: ['Access-Control-Allow-Origin', 'Access-Control-Allow-Credentials']
