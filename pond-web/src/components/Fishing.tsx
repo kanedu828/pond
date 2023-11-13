@@ -95,7 +95,7 @@ export const Fishing = () => {
         <>
             <AppShell>
                 <Navbar/>
-                <Flex style={{ height: '100%' }}direction='column' justify='space-around'>
+                <Flex style={{ height: '100%', marginBottom: '3em' }}direction='column' justify='space-around'>
                         <Title order={3}>Welcome {userData?.username}</Title>
                         <Container>
                                <AnimationManager state={fishingAnimationState} onClick={collectFish}/>
