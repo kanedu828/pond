@@ -18,8 +18,6 @@ const fishingSocket = (io: any, fishingController: FishingController) => {
     while (socket.id === fishingController.getConnectedSocketId(socket)) {
       await fishingController.pollFish(socket);
     }
-  }).on("error", (error: any) => {
-    console.error("Socket.IO Error", error)
   });
 };
 
