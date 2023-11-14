@@ -20,7 +20,7 @@ import { pondUserLogger } from './util/logger';
 const POND_WEB_URL: string = process.env.POND_WEB_URL ?? '';
 const POND_SERVICE_PORT: string = process.env.POND_SERVICE_PORT ?? '';
 const SESSION_SECRET: string = process.env.SESSION_SECRET ?? '';
-const CA_CERT: string = process.env.CA_CERT ?? '';
+const CA_CERT: string = Buffer.from(process.env.CA_CERT_BASE_64 ?? '').toString('utf-8');
 
 const app: Application = express();
 app.use(
