@@ -12,9 +12,8 @@ export default class FishingSocketSingleton {
     this.socket = io(url, {   
         withCredentials: true,
         secure: true, 
-        // transports: ['websocket'],
+        transports: ['websocket', 'polling'],
         // rejectUnauthorized: false 
-        path: import.meta.env.VITE_SOCKET_IO_PATH ?? '/socket.io'
     });
   }
 
