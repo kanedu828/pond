@@ -9,7 +9,7 @@ export default class FishingSocketSingleton {
     if (!url) {
         throw new Error('Could not find pond web fishing websocket url');
     }
-    this.socket = io(url, {   
+    this.socket = io(url + '/api', {   
         withCredentials: true,
         secure: true, 
         // transports: ['websocket'],
