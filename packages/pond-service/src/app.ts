@@ -20,7 +20,6 @@ import { pondUserLogger } from './util/logger';
 const POND_WEB_URL: string = process.env.POND_WEB_URL ?? '';
 const POND_SERVICE_PORT: string = process.env.POND_SERVICE_PORT ?? '';
 const SESSION_SECRET: string = process.env.SESSION_SECRET ?? '';
-const CA_CERT: string = process.env.CA_CERT ?? '';
 
 const app: Application = express();
 app.use(
@@ -42,9 +41,6 @@ const db = knex({
   client: 'pg',
   connection: {
     connectionString: process.env.PSQL_CONNECTION_STRING,
-    ssl: {
-      ca: CA_CERT
-    }
   },
   pool: { min: 0, max: 7 }
 });
