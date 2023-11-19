@@ -21,6 +21,7 @@ const POND_WEB_URL: string = process.env.POND_WEB_URL ?? '';
 const POND_SERVICE_PORT: string = process.env.POND_SERVICE_PORT ?? '';
 const SESSION_SECRET: string = process.env.SESSION_SECRET ?? '';
 const CA_CERT: string = Buffer.from(process.env.CA_CERT_BASE_64 ?? '').toString('utf-8');
+const SOCKET_IO_PATH: string = process.env.SOCKET_IO_PATH ?? '/socket.io';
 
 const app: Application = express();
 app.use(
@@ -86,7 +87,8 @@ const io = new Server(server, {
     origin: POND_WEB_URL,
     credentials: true,
     methods: ['GET', 'POST'],
-  }
+  },
+  path: SOCKET_IO_PATH
 });
 
 // Socket io middleware
