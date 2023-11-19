@@ -14,7 +14,7 @@ export default class FishingSocketSingleton {
         secure: true, 
         // transports: ['websocket'],
         // rejectUnauthorized: false 
-        path: import.meta.env.VITE_SOCKET_IO_PATH
+        path: import.meta.env.VITE_SOCKET_IO_PATH ?? '/socket.io'
     });
   }
 
