@@ -1,4 +1,5 @@
 import { AppShell, AppShellFooter, Container, Flex, Group, Text, Title } from "@mantine/core";
+import { notifications } from '@mantine/notifications';
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { FishInstance } from "../../../shared/types/types";
@@ -64,10 +65,20 @@ export const Fishing = () => {
         }
 
         fishingSocket.on('connect', () => { setIsConnected(true) });
-        fishingSocket.on('disconnect', () => { setIsConnected(false) });
+        fishingSocket.on('disconnect', () => { 
+            setIsConnected(false);
+            notifications.show({
+                title: 'Disconnected from the server!',
+                message: 'You cannot have more than one client connected to the server at a time. (e.g multiple browser tabs/windows)',
+                autoClose: false,
+                icon: <IconPlugConnectedX/>,
+                color: 'red'
+            });
+        });
         fishingSocket.on('new-fish', newFish);
         fishingSocket.on('connect_error', (error: any) => {
             console.error('Connection Error:', error);
+            
           });
 
         return () => {
@@ -121,6 +132,5 @@ export const Fishing = () => {
             <CatchFishModal fishInstance={fish} isOpen={isCatchFishOpen} close={closeCatchFish}/>
             <UpdateUsernameModal isOpen={isUpdateUsernameOpen} close={closeUpdateUsername}/>
         </>
-        
     )
 };

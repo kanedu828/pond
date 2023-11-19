@@ -3,6 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Fishing } from './components/Fishing';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import { Notifications } from '@mantine/notifications';
 
 const queryClient = new QueryClient();
 
@@ -18,10 +20,10 @@ const App = () => {
 
   return (
     <MantineProvider>
-      <QueryClientProvider client={queryClient}>
+      <Notifications/>
+      <QueryClientProvider client={queryClient}> 
         <RouterProvider router={router}/>
       </QueryClientProvider>
-      
     </MantineProvider>
   )
 }
