@@ -33,7 +33,7 @@ const config: { [key: string]: Knex.Config } = {
     connection: {
       connectionString: process.env.PSQL_CONNECTION_STRING,
       ssl: {
-        ca: Buffer.from(process.env.CA_CERT_BASE_64 ?? '').toString('utf-8')
+        ca: process.env.CA_CERT
       }
     },
     pool: {
