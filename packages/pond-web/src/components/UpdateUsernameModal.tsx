@@ -41,7 +41,7 @@ export const UpdateUsernameModal = (props: UpdateUsernameModalProps) => {
                 <Title>Choose a name!</Title>
                 
                 <TextInput label='Your Username' onChange={(event: any) => setUsernameInput(event.currentTarget.value)} error={inputError}/>
-                <Button color='teal' size='md' radius='xl' onClick={onClick} style={{marginBottom: '20px'}}>
+                <Button color='pondTeal' size='md' radius='md' onClick={onClick} style={{marginBottom: '20px'}}>
                     Use This Name!
                 </Button>
             </Stack>
