@@ -48,8 +48,8 @@ export const Login = () => {
                 <Stack justify='center' style={{height: '100vh'}}>
                 <Group justify='center'>
                     <Image w='auto' src={IdleWithFishAnimation}/>
-                    <Stack justify='space-between' align='center'>
-                    <Title size='5rem'>Welcome to Pond!</Title>
+                    <Stack justify='space-around' align='center'>
+                    <Title order={1} c='pondTeal.9'>Welcome to Pond!</Title>
                     <Anchor href={`${API_URL}/auth/google`} style={loginButtonStyle}>
                         <Group align='center'>
                             <IconBrandGoogleFilled size={24} />

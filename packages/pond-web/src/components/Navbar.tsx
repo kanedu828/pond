@@ -21,9 +21,9 @@ export const Navbar = () => {
             <Collection isOpen={isCollectionOpen} close={closeCollection}/>
             <Container p={15}>
                 <Flex gap='xl' justify='center'>
-                    <Button color='teal' size='md' radius='xl' onClick={openCollection}>Collection</Button>
-                    <Button color='teal' size='md' radius='xl' onClick={openLeaderboard}>Leaderboard</Button>
-                    <Button color='teal' size='md' radius='xl' onClick={onClickLogout}>
+                    <Button variant="subtle" color='pondTeal' size='xl' radius='md' onClick={openCollection}>Collection</Button>
+                    <Button variant="subtle" color='pondTeal' size='xl' radius='md' onClick={openLeaderboard}>Leaderboard</Button>
+                    <Button variant="subtle" color='pondTeal' size='xl' radius='md' onClick={onClickLogout}>
                         Logout
                     </Button>
                 </Flex>

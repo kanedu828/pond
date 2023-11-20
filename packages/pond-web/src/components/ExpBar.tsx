@@ -3,6 +3,7 @@ import { expToLevel, percentToNextLevel } from "../util/exp";
 
 interface ExpBarProps {
     exp: number;
+    name: string;
 }
 
 const expBarContainerStyle: MantineStyleProp = {
@@ -17,7 +18,7 @@ const expBarFillerStyle: MantineStyleProp = {
     borderBottomLeftRadius: 'inherit',
     textAlign: 'right',
     transition: 'width 1s ease-in-out',
-    backgroundColor: '#66b4e9',
+    backgroundColor: '#85BED8',
     margin: '0',
     padding: '0',
 }
@@ -29,10 +30,11 @@ export const ExpBar = (props: ExpBarProps) => {
    
   return (
         <Container style={{paddingTop: '5em'}}>
-            <Title order={2}>Level {level}</Title>
+            <Title order={4} c='pondTeal.9'>{props.name}</Title>
+            <Title order={5} c='pondTeal.9'>Level {level}</Title>
             <Container fluid style={expBarContainerStyle}>
                 <Container style={{...expBarFillerStyle, width: `${percentValueToNextLevel}%`}}>
-                    <Text size='sm'>{Math.round((percentValueToNextLevel + Number.EPSILON) * 100) / 100}%</Text>
+                    <Text color='white' size='sm'>{Math.round((percentValueToNextLevel + Number.EPSILON) * 100) / 100}%</Text>
                 </Container>
             </Container>
         </Container>

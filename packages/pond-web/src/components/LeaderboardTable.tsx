@@ -27,7 +27,7 @@ export const LeaderboardTable = (props: LeaderboardTableProps) => {
                 const rank = (activePage - 1) * 10 + i + 1;
                 return <LeaderboardTableRow key={rank} rank={rank} username={u.username} level={u.exp && expToLevel(u.exp)} exp={u.exp} alternate={i % 2 === 1}/>
             })}
-            <Pagination value={activePage} onChange={setPage} total={paginatedUsers.length} />
+            <Pagination value={activePage} onChange={setPage} total={paginatedUsers.length} radius='md' color='pondTeal'/>
         </>
     )
 }

@@ -21,7 +21,7 @@ export const Leaderboard = (props: LeaderboardProps) => {
             centered
         >
             <Stack justify='space-between' align='center' style={{paddingBottom: '3%'}}>
-                <Title>Leaderboard</Title>
+                <Title order={2} c='pondTeal.9'>Leaderboard</Title>
                 <LeaderboardTable users={data ?? []}/>
             </Stack>
         </Modal>   

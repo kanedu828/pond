@@ -1,4 +1,4 @@
-import { AppShell, AppShellFooter, Container, Flex, Group, Text, Title } from "@mantine/core";
+import { AppShell, AppShellFooter, BackgroundImage, Container, Flex, Group, Text } from "@mantine/core";
 import { notifications } from '@mantine/notifications';
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import { IconPlugConnected, IconPlugConnectedX } from '@tabler/icons-react';
 import SplashAudio from '../assets/audio/splash.mp3';
 import AlertAudio from '../assets/audio/alert.mp3';
 import { UpdateUsernameModal } from "./UpdateUsernameModal";
+import LilyPadFullBackground from '../assets/images/LilyPadBackground.png';
 
 const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
 const splashAudio = new Audio(SplashAudio);
@@ -106,14 +107,13 @@ export const Fishing = () => {
     }
 
     return (
-        <>
+        <BackgroundImage src={LilyPadFullBackground} w='100vw' h='100vh'>
             <AppShell>
                 <Navbar/>
                 <Flex style={{ height: '100%', marginBottom: '3em' }}direction='column' justify='space-around'>
-                        <Title order={3}>Welcome {userData?.username}</Title>
                         <Container>
                                <AnimationManager state={fishingAnimationState} onClick={collectFish}/>
-                               <ExpBar exp={exp}/>
+                               <ExpBar name={userData?.username ?? ''} exp={exp}/>
                         </Container>
                 </Flex>
                 <AppShellFooter>
@@ -131,6 +131,6 @@ export const Fishing = () => {
             <Login/>
             <CatchFishModal fishInstance={fish} isOpen={isCatchFishOpen} close={closeCatchFish}/>
             <UpdateUsernameModal isOpen={isUpdateUsernameOpen} close={closeUpdateUsername}/>
-        </>
+        </BackgroundImage>
     )
 };

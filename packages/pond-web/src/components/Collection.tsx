@@ -32,7 +32,7 @@ export const Collection = (props: CollectionProps) => {
         >
             <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
             <Stack justify='center' align='center' gap='xl' style={{paddingBottom:'90px', paddingLeft: '1px', paddingRight: '1px'}}>
-                <Title>Collection</Title>
+                <Title order={2} c='pondTeal.9'>Collection</Title>
                 <Group justify={'center'}>
                 <TextInput
                     placeholder='Search by Name'
