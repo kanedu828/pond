@@ -131,9 +131,9 @@
   },
   {
     "id": 2005,
-    "name": "Sturgeon",
-    "description": "Ancient and large, renowned for producing caviar. Prefers cold, freshwater and estuarine environments. Known for their elongated bodies, smooth skin, and distinctive, vacuum-like mouths.",
-    "lengthRangeInCm": [250, 480],
+    "name": "Buffalo Fish",
+    "description": "Buffalo fish, humpbacked North American natives, boast firm white flesh, captivating anglers and food lovers with their unique qualities.",
+    "lengthRangeInCm": [30, 120],
     "secondsFishable": 200,
     "expRewarded": 18,
     "rarity": "rare",
