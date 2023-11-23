@@ -23,26 +23,26 @@ const SESSION_SECRET: string = process.env.SESSION_SECRET ?? '';
 
 const app: Application = express();
 app.use(
-  cors({
-    origin: POND_WEB_URL,
-    credentials: true
-  })
+	cors({
+		origin: POND_WEB_URL,
+		credentials: true
+	})
 );
 
 // CORS Headers
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', POND_WEB_URL);
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
+	res.setHeader('Access-Control-Allow-Origin', POND_WEB_URL);
+	res.setHeader('Access-Control-Allow-Credentials', 'true');
+	next();
 });
 
 // -------DB Initialization-------
 const db = knex({
-  client: 'pg',
-  connection: {
-    connectionString: process.env.PSQL_CONNECTION_STRING
-  },
-  pool: { min: 0, max: 7 }
+	client: 'pg',
+	connection: {
+		connectionString: process.env.PSQL_CONNECTION_STRING
+	},
+	pool: { min: 0, max: 7 }
 });
 
 // --------- Knex Session Storage Setup --------------
@@ -51,20 +51,20 @@ const sessionStorage = new ExpressSessionKnexSessionStore({ knex: db });
 
 // -------- Express Session Setup -----------
 const sessionConfig = {
-  secret: SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: false,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  },
-  store: sessionStorage
+	secret: SESSION_SECRET,
+	resave: false,
+	saveUninitialized: true,
+	cookie: {
+		secure: false,
+		maxAge: 24 * 60 * 60 * 1000 // 24 hours
+	},
+	store: sessionStorage
 };
 
 if (app.get('env') === 'production') {
-  app.set('trust proxy', 1); // trust first proxy
-  sessionConfig.cookie.secure = true; // serve secure cookies
-  pondUserLogger.info('Pond Service Start Env: Production');
+	app.set('trust proxy', 1); // trust first proxy
+	sessionConfig.cookie.secure = true; // serve secure cookies
+	pondUserLogger.info('Pond Service Start Env: Production');
 }
 
 const sessionMiddleware = session(sessionConfig);
@@ -85,11 +85,11 @@ setupAuth(pondUserController);
 
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: POND_WEB_URL,
-    credentials: true,
-    methods: ['GET', 'POST']
-  }
+	cors: {
+		origin: POND_WEB_URL,
+		credentials: true,
+		methods: ['GET', 'POST']
+	}
 });
 
 // Socket io middleware

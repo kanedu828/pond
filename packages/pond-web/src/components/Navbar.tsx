@@ -1,71 +1,71 @@
-import { Button, Container, Flex } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { useLogout } from "../hooks/UseAuthClient";
-import { Collection } from "./Collection";
-import { GuideModal } from "./GuideModal";
-import { Leaderboard } from "./Leaderboard";
+import { Button, Container, Flex } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { useLogout } from '../hooks/UseAuthClient';
+import { Collection } from './Collection';
+import { GuideModal } from './GuideModal';
+import { Leaderboard } from './Leaderboard';
 
 export const Navbar = () => {
-  const { mutateAsync: logout } = useLogout();
+	const { mutateAsync: logout } = useLogout();
 
-  const [isCollectionOpen, { open: openCollection, close: closeCollection }] =
+	const [isCollectionOpen, { open: openCollection, close: closeCollection }] =
     useDisclosure(false);
-  const [
-    isLeaderboardOpen,
-    { open: openLeaderboard, close: closeLeaderboard },
-  ] = useDisclosure(false);
-  const [isGuideOpen, { open: openGuide, close: closeGuide }] =
+	const [
+		isLeaderboardOpen,
+		{ open: openLeaderboard, close: closeLeaderboard },
+	] = useDisclosure(false);
+	const [isGuideOpen, { open: openGuide, close: closeGuide }] =
     useDisclosure(false);
 
-  const onClickLogout = async () => {
-    await logout();
-  };
+	const onClickLogout = async () => {
+		await logout();
+	};
 
-  return (
-    <>
-      <Leaderboard isOpen={isLeaderboardOpen} close={closeLeaderboard} />
-      <Collection isOpen={isCollectionOpen} close={closeCollection} />
-      <GuideModal isOpen={isGuideOpen} close={closeGuide} />
-      <Container p={15}>
-        <Flex gap="xl" justify="center">
-          <Button
-            variant="subtle"
-            color="pondTeal"
-            size="xl"
-            radius="md"
-            onClick={openCollection}
-          >
+	return (
+		<>
+			<Leaderboard isOpen={isLeaderboardOpen} close={closeLeaderboard} />
+			<Collection isOpen={isCollectionOpen} close={closeCollection} />
+			<GuideModal isOpen={isGuideOpen} close={closeGuide} />
+			<Container p={15}>
+				<Flex gap="xl" justify="center">
+					<Button
+						variant="subtle"
+						color="pondTeal"
+						size="xl"
+						radius="md"
+						onClick={openCollection}
+					>
             Collection
-          </Button>
-          <Button
-            variant="subtle"
-            color="pondTeal"
-            size="xl"
-            radius="md"
-            onClick={openLeaderboard}
-          >
+					</Button>
+					<Button
+						variant="subtle"
+						color="pondTeal"
+						size="xl"
+						radius="md"
+						onClick={openLeaderboard}
+					>
             Leaderboard
-          </Button>
-          <Button
-            variant="subtle"
-            color="pondTeal"
-            size="xl"
-            radius="md"
-            onClick={openGuide}
-          >
+					</Button>
+					<Button
+						variant="subtle"
+						color="pondTeal"
+						size="xl"
+						radius="md"
+						onClick={openGuide}
+					>
             Guide
-          </Button>
-          <Button
-            variant="subtle"
-            color="pondTeal"
-            size="xl"
-            radius="md"
-            onClick={onClickLogout}
-          >
+					</Button>
+					<Button
+						variant="subtle"
+						color="pondTeal"
+						size="xl"
+						radius="md"
+						onClick={onClickLogout}
+					>
             Logout
-          </Button>
-        </Flex>
-      </Container>
-    </>
-  );
+					</Button>
+				</Flex>
+			</Container>
+		</>
+	);
 };
