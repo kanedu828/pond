@@ -25,7 +25,7 @@ const app: Application = express();
 app.use(
   cors({
     origin: POND_WEB_URL,
-    credentials: true,
+    credentials: true
   })
 );
 
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 const db = knex({
   client: 'pg',
   connection: {
-    connectionString: process.env.PSQL_CONNECTION_STRING,
+    connectionString: process.env.PSQL_CONNECTION_STRING
   },
   pool: { min: 0, max: 7 }
 });
@@ -88,8 +88,8 @@ const io = new Server(server, {
   cors: {
     origin: POND_WEB_URL,
     credentials: true,
-    methods: ['GET', 'POST'],
-  },
+    methods: ['GET', 'POST']
+  }
 });
 
 // Socket io middleware

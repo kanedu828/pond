@@ -1,4 +1,4 @@
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
 export default class FishingSocketSingleton {
   private static instance: FishingSocketSingleton;
@@ -7,13 +7,13 @@ export default class FishingSocketSingleton {
   private constructor() {
     const url = import.meta.env.VITE_POND_FISHING_WS_URL;
     if (!url) {
-        throw new Error('Could not find pond web fishing websocket url');
+      throw new Error("Could not find pond web fishing websocket url");
     }
-    this.socket = io(url, {   
-        withCredentials: true,
-        secure: true, 
-        transports: ['websocket', 'polling'],
-        // rejectUnauthorized: false 
+    this.socket = io(url, {
+      withCredentials: true,
+      secure: true,
+      transports: ["websocket", "polling"],
+      // rejectUnauthorized: false
     });
   }
 

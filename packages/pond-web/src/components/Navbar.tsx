@@ -6,33 +6,66 @@ import { GuideModal } from "./GuideModal";
 import { Leaderboard } from "./Leaderboard";
 
 export const Navbar = () => {
+  const { mutateAsync: logout } = useLogout();
 
-    const { mutateAsync: logout } = useLogout();
+  const [isCollectionOpen, { open: openCollection, close: closeCollection }] =
+    useDisclosure(false);
+  const [
+    isLeaderboardOpen,
+    { open: openLeaderboard, close: closeLeaderboard },
+  ] = useDisclosure(false);
+  const [isGuideOpen, { open: openGuide, close: closeGuide }] =
+    useDisclosure(false);
 
-    const [isCollectionOpen, { open: openCollection, close: closeCollection }] = useDisclosure(false);
-    const [isLeaderboardOpen, { open: openLeaderboard, close: closeLeaderboard }] = useDisclosure(false);
-    const [isGuideOpen, { open: openGuide, close: closeGuide }] = useDisclosure(false);
+  const onClickLogout = async () => {
+    await logout();
+  };
 
-    const onClickLogout = async () => {
-        await logout();
-    };
-
-    return (
-        <>
-            <Leaderboard isOpen={isLeaderboardOpen} close={closeLeaderboard}/>
-            <Collection isOpen={isCollectionOpen} close={closeCollection}/>
-            <GuideModal isOpen={isGuideOpen} close={closeGuide}/>
-            <Container p={15}>
-                <Flex gap='xl' justify='center'>
-                    <Button variant="subtle" color='pondTeal' size='xl' radius='md' onClick={openCollection}>Collection</Button>
-                    <Button variant="subtle" color='pondTeal' size='xl' radius='md' onClick={openLeaderboard}>Leaderboard</Button>
-                    <Button variant="subtle" color='pondTeal' size='xl' radius='md' onClick={openGuide}>Guide</Button>
-                    <Button variant="subtle" color='pondTeal' size='xl' radius='md' onClick={onClickLogout}>
-                        Logout
-                    </Button>
-                </Flex>
-            </Container>
-        </>
-        
-    );
-}
+  return (
+    <>
+      <Leaderboard isOpen={isLeaderboardOpen} close={closeLeaderboard} />
+      <Collection isOpen={isCollectionOpen} close={closeCollection} />
+      <GuideModal isOpen={isGuideOpen} close={closeGuide} />
+      <Container p={15}>
+        <Flex gap="xl" justify="center">
+          <Button
+            variant="subtle"
+            color="pondTeal"
+            size="xl"
+            radius="md"
+            onClick={openCollection}
+          >
+            Collection
+          </Button>
+          <Button
+            variant="subtle"
+            color="pondTeal"
+            size="xl"
+            radius="md"
+            onClick={openLeaderboard}
+          >
+            Leaderboard
+          </Button>
+          <Button
+            variant="subtle"
+            color="pondTeal"
+            size="xl"
+            radius="md"
+            onClick={openGuide}
+          >
+            Guide
+          </Button>
+          <Button
+            variant="subtle"
+            color="pondTeal"
+            size="xl"
+            radius="md"
+            onClick={onClickLogout}
+          >
+            Logout
+          </Button>
+        </Flex>
+      </Container>
+    </>
+  );
+};

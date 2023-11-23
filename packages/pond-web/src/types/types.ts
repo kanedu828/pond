@@ -1,6 +1,6 @@
 export enum FishingAnimationState {
-    Idle,
-    IdleWithFish,
-    Catch,
-    Appearing
+  Idle,
+  IdleWithFish,
+  Catch,
+  Appearing,
 }

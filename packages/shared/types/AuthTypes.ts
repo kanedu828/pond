@@ -1,5 +1,5 @@
 export interface StatusResponse {
-    authenticated: boolean;
+  authenticated: boolean;
 }
 
 export interface LogoutResponse {}

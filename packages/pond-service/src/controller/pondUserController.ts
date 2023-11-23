@@ -84,12 +84,18 @@ export default class PondUserController {
     const requestBody: UpdateUsernameRequest = req.body;
     const newUsername = requestBody.newUsername;
     if (newUsername.length < 3 || newUsername.length > 20) {
-      const updateUsernameResponse: UpdateUsernameResponse = { updated: false, error: 'Username length must be between 3 and 20' };
+      const updateUsernameResponse: UpdateUsernameResponse = {
+        updated: false,
+        error: 'Username length must be between 3 and 20'
+      };
       res.status(400).json(updateUsernameResponse);
       return;
     }
     if (newUsername.startsWith('guest-')) {
-      const updateUsernameResponse: UpdateUsernameResponse = { updated: false, error: 'Username cannot begin with \"guest-\"' };
+      const updateUsernameResponse: UpdateUsernameResponse = {
+        updated: false,
+        error: 'Username cannot begin with "guest-"'
+      };
       res.status(400).json(updateUsernameResponse);
       return;
     }
@@ -99,7 +105,10 @@ export default class PondUserController {
       res.status(201).json(updateUsernameResponse);
     } catch (err: any) {
       pondUserLogger.error(err.message);
-      const updateUsernameResponse: UpdateUsernameResponse = { updated: false, error: 'This name already exists' };
+      const updateUsernameResponse: UpdateUsernameResponse = {
+        updated: false,
+        error: 'This name already exists'
+      };
       res.status(400).json(updateUsernameResponse);
     }
   }

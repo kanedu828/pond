@@ -13,11 +13,17 @@ export const getUserRouter = (pondUserController: PondUserController) => {
 
   router.get('/fish', pondUserController.getUserFish.bind(pondUserController));
 
-  router.post('/update-location/:location', pondUserController.updateUserLocation.bind(pondUserController));
+  router.post(
+    '/update-location/:location',
+    pondUserController.updateUserLocation.bind(pondUserController)
+  );
 
   router.post('/update-username', pondUserController.updateUsername.bind(pondUserController));
 
-  router.get('/leaderboard', pondUserController.getTopHundredPondUsersByExp.bind(pondUserController));
+  router.get(
+    '/leaderboard',
+    pondUserController.getTopHundredPondUsersByExp.bind(pondUserController)
+  );
 
   return router;
 };

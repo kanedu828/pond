@@ -1,8 +1,8 @@
 export interface UpdateUsernameRequest {
-    newUsername: string;
+  newUsername: string;
 }
 
 export interface UpdateUsernameResponse {
-    updated: boolean;
-    error: string;
+  updated: boolean;
+  error: string;
 }

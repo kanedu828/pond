@@ -19,10 +19,10 @@ export default class PondClientSingleton {
   }
 
   public getPondAuthClient() {
-      return this.pondAuthClient;
+    return this.pondAuthClient;
   }
 
   public getPondUserClient() {
-      return this.pondUserClient;
+    return this.pondUserClient;
   }
 }

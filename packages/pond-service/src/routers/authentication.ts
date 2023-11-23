@@ -25,7 +25,7 @@ const getAuthenticationRouter = () => {
     req.session.destroy((err) => {
       if (err) {
         res.status(400).json(err);
-        res.json({success: false})
+        res.json({ success: false });
       }
     });
     req.logout((err) => {
