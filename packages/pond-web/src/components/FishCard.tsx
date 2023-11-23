@@ -1,5 +1,6 @@
 import { Card, Group, Image, SimpleGrid, Text } from "@mantine/core"
 import { Fish } from "../../../shared/types/types";
+import { getFishImagePath, getFishImageUnknownPath } from "../util/util";
 
 interface FishCardProps {
     fish: Fish;
@@ -31,7 +32,7 @@ export const FishCard = (props: FishCardProps) => {
     return (
         <Card style={{borderTop: `1rem solid ${getRarityColor(props.fish.rarity)}`, borderTopRightRadius: '1rem', borderTopLeftRadius: '1rem'}} withBorder padding='md' w='300px' h='520px'>
             <Card.Section>
-                <Image h='300px' w='300px' src='https://dummyimage.com/500x500/000/ffffff.png'/>
+                <Image h='300px' w='300px' alt={getFishImageUnknownPath()} src={getFishImagePath(props.fish.name, props.fish.id)}/>
             </Card.Section>
             
             <SimpleGrid cols={1}>

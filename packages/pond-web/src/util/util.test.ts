@@ -1,4 +1,4 @@
-import { paginateArray } from './util';
+import { getFishImagePath, paginateArray } from './util';
 
 describe('paginateArray function', () => {
     it('should paginate the array with the specified page size', () => {
@@ -46,4 +46,23 @@ describe('paginateArray function', () => {
       // The result should be an empty array
       expect(paginatedResult).toHaveLength(0);
     });
+  });
+
+  describe('getFishImagePath', () => {
+
+    test('converts fish name to lower case', () => {
+      const path = getFishImagePath('CaRp', 1001);
+      expect(path).toBe('/fishImages/carp_1001.png');
+    });
+  
+    test('replaces spaces in fish name with underscores', () => {
+      const path = getFishImagePath('Big Carp', 1001);
+      expect(path).toBe('/fishImages/big_carp_1001.png');
+    });
+  
+    test('correctly appends fish ID', () => {
+      const path = getFishImagePath('Carp', 2002);
+      expect(path).toBe('/fishImages/carp_2002.png');
+    });
+  
   });

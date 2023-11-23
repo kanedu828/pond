@@ -37,4 +37,14 @@ export function paginateArray<T extends JsonObject>(array: T[], pageSize: number
     }
   
     return paginatedArray;
-  }
+}
+
+export const getFishImagePath = (fishName: string, fishId: number): string => {
+    fishName = fishName.toLowerCase();
+    const fish_file_id = `/fishImages/${fishName.replace(/ /g, '_')}_${fishId}.png`;
+    return fish_file_id;
+};
+
+export const getFishImageUnknownPath = () => {
+    return '/fishImages/unknown.png';
+}

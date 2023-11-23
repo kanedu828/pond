@@ -65,10 +65,14 @@ export const Fishing = () => {
             }
         }
 
-        fishingSocket.on('connect', () => { setIsConnected(true) });
+        fishingSocket.on('connect', () => {
+            setIsConnected(true);
+            notifications.hide('disconnected-from-server');
+        });
         fishingSocket.on('disconnect', () => { 
             setIsConnected(false);
             notifications.show({
+                id: 'disconnected-from-server',
                 title: 'Disconnected from the server!',
                 message: 'You cannot have more than one client connected to the server at a time. (e.g multiple browser tabs/windows)',
                 autoClose: false,

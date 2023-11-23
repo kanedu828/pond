@@ -1,5 +1,6 @@
 import { Button, Modal, Image, Stack, Title, Text, Group } from "@mantine/core";
 import { FishInstance } from "../../../shared/types/types";
+import { getFishImagePath, getFishImageUnknownPath } from "../util/util";
 
 interface CatchFishModalProps {
     fishInstance: FishInstance | null;
@@ -20,7 +21,7 @@ export const CatchFishModal = (props: CatchFishModalProps) => {
         >
             <Stack align='center' justify='center'>
                 <Title order={3}>You caught a {props.fishInstance?.fish.rarity} fish!</Title>
-                <Image h='300px' w='300px' src='https://dummyimage.com/500x500/000/ffffff.png'/>
+                <Image h='300px' w='300px' alt={getFishImageUnknownPath()} src={getFishImagePath(props.fishInstance?.fish.name ?? '', props.fishInstance?.fish.id ?? -1)}/>
                 <Group justify='space-between'>
                     <Title order={4}>{props.fishInstance?.fish.name}</Title>
                     <Text size="sm" c="dimmed">
