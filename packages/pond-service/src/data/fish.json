@@ -52,7 +52,7 @@
   {
     "id": 1005,
     "name": "Spotted Sunfish",
-    "description": "SA small, vibrant freshwater fish, is known for its distinctive spots and pan-shaped body. Popular in recreational fishing, it thrives in slow-moving, vegetated waters.",
+    "description": "A small, vibrant freshwater fish, is known for its distinctive spots and pan-shaped body. Popular in recreational fishing, it thrives in slow-moving, vegetated waters.",
     "lengthRangeInCm": [5, 30],
     "secondsFishable": 200,
     "expRewarded": 20,
