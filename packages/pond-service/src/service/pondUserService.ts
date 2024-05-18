@@ -5,6 +5,7 @@ import PondUser from '../models/pondUserModel';
 import fishJson from '../data/fish.json';
 import { Fish, UserFish } from '../../../shared/types/types';
 import { binarySearch } from '../util/util';
+import bcrypt from 'bcrypt';
 
 class PondUserService {
 	readonly pondUserDao: PondUserDao;
@@ -16,6 +17,29 @@ class PondUserService {
 		this.fishDao = fishDao;
 	}
 
+	private transformToPondUser(result: any): PondUser {
+		return {
+			id: result.id,
+			username: result.username,
+			exp: result.exp,
+			location: result.location,
+			isAccount: result.is_account
+		};
+	}
+
+	private async createRandomUsername(): Promise<string> {
+		let randomUsername: string;
+		let userExists: boolean;
+
+		// Loop until a unique username is found
+		do {
+			randomUsername = `guest-${randomBytes(6).toString('hex')}`;
+			userExists = await this.pondUserDao.getPondUser({ username: randomUsername });
+		} while (userExists);
+
+		return randomUsername;
+	}
+
 	/**
    * This takes in a googleId because this is for when a user first logs in with google oauth.
    * Cannot be queried by regular id as it does not exist yet.
@@ -24,25 +48,76 @@ class PondUserService {
    * @param email
    * @returns A pond user
    */
-	async getOrCreatePondUser(googleId: string, email: string): Promise<Express.User> {
+	async getOrCreateGooglePondUser(googleId: string, email: string): Promise<Express.User> {
 		let result = await this.pondUserDao.getPondUser({
 			google_id: googleId
 		});
 		if (!result) {
-			const randomUsername = `guest-${randomBytes(48).toString('hex')}`;
+			const randomUsername = await this.createRandomUsername();
 			result = await this.pondUserDao.insertPondUser({
 				email,
 				google_id: googleId,
-				username: randomUsername
+				username: randomUsername,
+				is_account: true
 			});
 		}
 		const pondUser: PondUser = {
 			id: result.id,
 			username: result.username,
 			exp: result.exp,
-			location: result.location
+			location: result.location,
+			isAccount: result.is_account
 		};
 		return pondUser;
+	}
+
+	async getPondUserByUsername(username: string): Promise<Express.User | null> {
+		const result = await this.pondUserDao.getPondUser({ username });
+		return result ? this.transformToPondUser(result) : null;
+	}
+
+	async getAuthenticatedPondUser(username: string, password: string): Promise<Express.User | null> {
+		const pondUserPasswordHash = await this.pondUserDao.getPondUserPasswordHash(username);
+		const compareResult = await bcrypt.compare(password, pondUserPasswordHash);
+		if (compareResult === true) {
+			const result = await this.pondUserDao.getPondUser({ username });
+			return this.transformToPondUser(result);
+		} else {
+			return null;
+		}
+	}
+
+	async createPondUser(username: string, password: string): Promise<Express.User> {
+		const passwordHash = await bcrypt.hash(password, 10);
+		const result = await this.pondUserDao.insertPondUser({
+			username,
+			password_hash: passwordHash,
+			is_account: true
+		});
+		return this.transformToPondUser(result);
+	}
+
+	async getPondUserByCookie(cookie: string): Promise<Express.User | null> {
+		const result = await this.pondUserDao.getPondUser({ cookie });
+		return result ? this.transformToPondUser(result) : null;
+	}
+
+	async createCookiePondUser(cookie: string): Promise<Express.User> {
+		const randomUsername = await this.createRandomUsername();
+		const result = await this.pondUserDao.insertPondUser({
+			cookie,
+			username: randomUsername,
+			is_account: false
+		});
+		return this.transformToPondUser(result);
+	}
+
+	async getOrCreateCookiePondUser(cookie: string): Promise<Express.User> {
+		let cookiePondUser = await this.getPondUserByCookie(cookie);
+		if (!cookiePondUser) {
+			cookiePondUser = await this.createCookiePondUser(cookie);
+		}
+		return this.transformToPondUser(cookiePondUser);
 	}
 
 	/**

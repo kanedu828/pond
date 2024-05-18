@@ -5,9 +5,12 @@ interface PondUserColumns {
   username?: string;
   exp?: number;
   location?: string;
+  cookie?: string;
+  password_hash?: string;
+  is_account?: boolean;
 }
 
-const defaultReturnColumns = ['id', 'username', 'exp', 'location'];
+const defaultReturnColumns = ['id', 'username', 'exp', 'location', 'is_account'];
 
 class PondUserDao {
 	// Knex db instance
@@ -51,6 +54,14 @@ class PondUserDao {
 			.increment('exp', inc)
 			.returning(defaultReturnColumns);
 		return pondUser[0];
+	}
+
+	async getPondUserPasswordHash(username: string): Promise<string> {
+		const pondUser = await this.db('pond_user')
+			.select(defaultReturnColumns)
+			.where({ username })
+			.first();
+		return pondUser.password;
 	}
 }
 

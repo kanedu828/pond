@@ -54,7 +54,7 @@ export const Fishing = () => {
 		if (!userIsLoading) {
 			setExp(userData?.exp ?? 0);
 
-			if (userData?.username.startsWith('guest-')) {
+			if (userData?.username.startsWith('guest-') && userData.isAccount) {
 				openUpdateUsername();
 			}
 		}

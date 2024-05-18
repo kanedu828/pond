@@ -20,15 +20,104 @@ export default class PondUserController {
    * @param profile
    * @returns pondUser
    */
-	async getOrCreatePondUser(profile: Profile): Promise<Express.User | null> {
+	async getOrCreateGooglePondUser(profile: Profile): Promise<Express.User | null> {
 		try {
 			const email = profile.emails?.[0].value ?? null;
 			if (!email) {
 				throw new Error('Google Id does not have an associated email');
 			} else {
-				const pondUser = await this.pondUserService.getOrCreatePondUser(profile.id, email);
+				const pondUser = await this.pondUserService.getOrCreateGooglePondUser(profile.id, email);
 				return pondUser;
 			}
+		} catch (err: any) {
+			pondUserLogger.error(err.message);
+		}
+		return null;
+	}
+
+	/**
+   *
+   * @param req
+   * @param profile
+   * @returns pondUser
+   */
+	async getPondUserByUsername(username: string): Promise<Express.User | null> {
+		try {
+			const pondUser = await this.pondUserService.getPondUserByUsername(username);
+			return pondUser;
+		} catch (err: any) {
+			pondUserLogger.error(err.message);
+		}
+		return null;
+	}
+
+	/**
+   *
+   * @param req
+   * @param profile
+   * @returns pondUser
+   */
+	async getAuthenticatedPondUser(username: string, password: string): Promise<Express.User | null> {
+		try {
+			const pondUser = await this.pondUserService.getAuthenticatedPondUser(username, password);
+			return pondUser;
+		} catch (err: any) {
+			pondUserLogger.error(err.message);
+		}
+		return null;
+	}
+
+	/**
+   *
+   * @param req
+   * @param profile
+   * @returns pondUser
+   */
+	async createPondUserByUsername(username: string, password: string): Promise<Express.User | null> {
+		try {
+			const pondUser = await this.pondUserService.createPondUser(username, password);
+			return pondUser;
+		} catch (err: any) {
+			pondUserLogger.error(err.message);
+		}
+		return null;
+	}
+	/**
+   *
+   * @param req
+   * @param profile
+   * @returns pondUser
+   */
+	async getPondUserByCookie(cookie: string): Promise<Express.User | null> {
+		try {
+			const pondUser = await this.pondUserService.getPondUserByCookie(cookie);
+			return pondUser;
+		} catch (err: any) {
+			pondUserLogger.error(err.message);
+		}
+		return null;
+	}
+
+	/**
+   *
+   * @param req
+   * @param profile
+   * @returns pondUser
+   */
+	async createCookiePondUser(cookie: string): Promise<Express.User | null> {
+		try {
+			const pondUser = await this.pondUserService.createCookiePondUser(cookie);
+			return pondUser;
+		} catch (err: any) {
+			pondUserLogger.error(err.message);
+		}
+		return null;
+	}
+
+	async getOrCreateCookiePondUser(cookie: string): Promise<Express.User | null> {
+		try {
+			const pondUser = await this.pondUserService.getOrCreateCookiePondUser(cookie);
+			return pondUser;
 		} catch (err: any) {
 			pondUserLogger.error(err.message);
 		}

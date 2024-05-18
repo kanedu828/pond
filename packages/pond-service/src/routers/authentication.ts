@@ -6,6 +6,8 @@ const POND_WEB_URL = process.env.POND_WEB_URL ?? '';
 const getAuthenticationRouter = () => {
 	const router: any = Router();
 
+	router.post('/guest-login', passport.authenticate('cookie', {}));
+
 	router.get(
 		'/google',
 		passport.authenticate('google', {

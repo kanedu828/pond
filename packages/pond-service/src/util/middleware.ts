@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { Strategy } from 'passport-google-oauth20';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as LocalStrategy } from 'passport-local';
+import { Strategy as CookieStrategy } from 'passport-cookie';
 import passport from 'passport';
 import PondUser from '../models/pondUserModel';
 import PondUserController from '../controller/pondUserController';
@@ -28,7 +30,7 @@ export const setupAuth = (pondUserController: PondUserController) => {
 	});
 
 	passport.use(
-		new Strategy(
+		new GoogleStrategy(
 			{
 				clientID: process.env.GOOGLE_CLIENT_ID ?? '',
 				clientSecret: process?.env?.GOOGLE_CLIENT_SECRET ?? '',
@@ -36,9 +38,23 @@ export const setupAuth = (pondUserController: PondUserController) => {
 				passReqToCallback: true
 			},
 			async (_request, _accessToken, _refreshToken, profile, done) => {
-				const pondUser = await pondUserController.getOrCreatePondUser(profile);
+				const pondUser = await pondUserController.getOrCreateGooglePondUser(profile);
 				done(null, pondUser || undefined);
 			}
 		)
+	);
+
+	passport.use(
+		new LocalStrategy(async (username, password, done) => {
+			const pondUser = await pondUserController.getAuthenticatedPondUser(username, password);
+			return done(null, pondUser || undefined);
+		})
+	);
+
+	passport.use(
+		new CookieStrategy({ cookieName: 'pondAuthToken' }, async (token: string, done: any) => {
+			const pondUser = await pondUserController.getOrCreateCookiePondUser(token);
+			return done(null, pondUser || undefined);
+		})
 	);
 };

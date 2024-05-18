@@ -15,6 +15,7 @@ import PondUserDao from './dao/pondUserDao';
 import FishDao from './dao/fishDao';
 import { getUserRouter } from './routers/user';
 import { pondUserLogger } from './util/logger';
+import cookieParser from 'cookie-parser';
 
 // ----------- Env Variables ----------------
 const POND_WEB_URL: string = process.env.POND_WEB_URL ?? '';
@@ -74,6 +75,7 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
+app.use(cookieParser());
 
 // ----------- Dao and controller setup ---------------
 const pondUserDao = new PondUserDao(db);

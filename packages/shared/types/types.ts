@@ -3,6 +3,7 @@ export interface PondUser {
   username: string;
   location: string;
   exp: number;
+  isAccount: boolean;
 }
 
 export interface UserFish {
