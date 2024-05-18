@@ -80,8 +80,7 @@ export const getCookie = (name: string): string | null => {
 	date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
 	const expires = `expires=${date.toUTCString()}`;
 	const secure = import.meta.env.PROD ? 'Secure' : '';
-	const sameSite = 'SameSite=Lax';
-	document.cookie = `${name}=${value}; ${expires}; path=/; ${secure}; ${sameSite}`;
+	document.cookie = `${name}=${value}; ${expires}; path=/; ${secure}`;
   };
   
 /**
