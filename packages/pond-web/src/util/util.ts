@@ -75,12 +75,14 @@ export const getCookie = (name: string): string | null => {
    * @param name - The name of the cookie
    * @param value - The value of the cookie
    */
-export const setCookie = (name: string, value: string): void => {
+ export const setCookie = (name: string, value: string, days: number = 30): void => {
 	const date = new Date();
-	date.setFullYear(date.getFullYear() + 30); // Set the cookie to expire in 30 years
+	date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
 	const expires = `expires=${date.toUTCString()}`;
-	document.cookie = `${name}=${value}; ${expires}; path=/; SameSite=Strict; Secure`;
-};
+	const secure = import.meta.env.PROD ? 'Secure' : '';
+	const sameSite = 'SameSite=Lax';
+	document.cookie = `${name}=${value}; ${expires}; path=/; ${secure}; ${sameSite}`;
+  };
   
 /**
    * Function to ensure the pondAuthToken cookie exists, if it doesn't, create one
