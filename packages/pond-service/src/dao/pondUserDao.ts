@@ -10,7 +10,7 @@ interface PondUserColumns {
   is_account?: boolean;
 }
 
-const defaultReturnColumns = ['id', 'username', 'exp', 'location'];
+const defaultReturnColumns = ['id', 'username', 'exp', 'location', 'is_account'];
 
 class PondUserDao {
 	// Knex db instance
@@ -57,7 +57,10 @@ class PondUserDao {
 	}
 
 	async getPondUserPasswordHash(username: string): Promise<string> {
-		const pondUser = await this.db('pond_user').select(defaultReturnColumns).where({ username }).first();
+		const pondUser = await this.db('pond_user')
+			.select(defaultReturnColumns)
+			.where({ username })
+			.first();
 		return pondUser.password;
 	}
 }

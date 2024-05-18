@@ -6,7 +6,6 @@ import passport from 'passport';
 import PondUser from '../models/pondUserModel';
 import PondUserController from '../controller/pondUserController';
 import { pondUserLogger } from './logger';
-import bycrpt from 'bcrypt';
 
 export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
 	if (req.user) {
@@ -53,8 +52,8 @@ export const setupAuth = (pondUserController: PondUserController) => {
 	);
 
 	passport.use(
-		new CookieStrategy(async (token: string, done: any) => {
-			const pondUser = await pondUserController.getPondUserByCookie(token);
+		new CookieStrategy({ cookieName: 'pondAuthToken' }, async (token: string, done: any) => {
+			const pondUser = await pondUserController.getOrCreateCookiePondUser(token);
 			return done(null, pondUser || undefined);
 		})
 	);

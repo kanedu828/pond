@@ -3,3 +3,5 @@ export interface StatusResponse {
 }
 
 export interface LogoutResponse {}
+
+export interface GuestLoginResponse {}

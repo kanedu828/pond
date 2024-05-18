@@ -5,7 +5,7 @@ import PondUser from '../models/pondUserModel';
 import fishJson from '../data/fish.json';
 import { Fish, UserFish } from '../../../shared/types/types';
 import { binarySearch } from '../util/util';
-import bcrypt, { compare } from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 class PondUserService {
 	readonly pondUserDao: PondUserDao;
@@ -19,12 +19,25 @@ class PondUserService {
 
 	private transformToPondUser(result: any): PondUser {
 		return {
-		  id: result.id,
-		  username: result.username,
-		  exp: result.exp,
-		  location: result.location,
-		  isAccount: result.is_account
+			id: result.id,
+			username: result.username,
+			exp: result.exp,
+			location: result.location,
+			isAccount: result.is_account
 		};
+	}
+
+	private async createRandomUsername(): Promise<string> {
+		let randomUsername: string;
+		let userExists: boolean;
+
+		// Loop until a unique username is found
+		do {
+			randomUsername = `guest-${randomBytes(6).toString('hex')}`;
+			userExists = await this.pondUserDao.getPondUser({ username: randomUsername });
+		} while (userExists);
+
+		return randomUsername;
 	}
 
 	/**
@@ -40,7 +53,7 @@ class PondUserService {
 			google_id: googleId
 		});
 		if (!result) {
-			const randomUsername = `guest-${randomBytes(48).toString('hex')}`;
+			const randomUsername = await this.createRandomUsername();
 			result = await this.pondUserDao.insertPondUser({
 				email,
 				google_id: googleId,
@@ -88,15 +101,23 @@ class PondUserService {
 		const result = await this.pondUserDao.getPondUser({ cookie });
 		return result ? this.transformToPondUser(result) : null;
 	}
-	
+
 	async createCookiePondUser(cookie: string): Promise<Express.User> {
-		const randomUsername = `guest-${randomBytes(48).toString('hex')}`;
+		const randomUsername = await this.createRandomUsername();
 		const result = await this.pondUserDao.insertPondUser({
-		  cookie,
-		  username: randomUsername,
-		  is_account: false
+			cookie,
+			username: randomUsername,
+			is_account: false
 		});
 		return this.transformToPondUser(result);
+	}
+
+	async getOrCreateCookiePondUser(cookie: string): Promise<Express.User> {
+		let cookiePondUser = await this.getPondUserByCookie(cookie);
+		if (!cookiePondUser) {
+			cookiePondUser = await this.createCookiePondUser(cookie);
+		}
+		return this.transformToPondUser(cookiePondUser);
 	}
 
 	/**

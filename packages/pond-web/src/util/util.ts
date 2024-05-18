@@ -57,3 +57,49 @@ export const getFishImagePath = (fishName: string, fishId: number): string => {
 export const getFishImageUnknownPath = () => {
 	return '/fishImages/unknown.png';
 };
+
+/**
+ * Function to get a cookie by name
+ * @param name - The name of the cookie
+ * @returns The cookie value if it exists, otherwise null
+ */
+export const getCookie = (name: string): string | null => {
+	const value = `; ${document.cookie}`;
+	const parts = value.split(`; ${name}=`);
+	if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+	return null;
+};
+  
+/**
+   * Function to set a cookie
+   * @param name - The name of the cookie
+   * @param value - The value of the cookie
+   */
+export const setCookie = (name: string, value: string): void => {
+	const date = new Date();
+	date.setFullYear(date.getFullYear() + 30); // Set the cookie to expire in 30 years
+	const expires = `expires=${date.toUTCString()}`;
+	document.cookie = `${name}=${value}; ${expires}; path=/; SameSite=Strict; Secure`;
+};
+  
+/**
+   * Function to ensure the pondAuthToken cookie exists, if it doesn't, create one
+   */
+export const ensurePondAuthToken = (): void => {
+	const cookieName = 'pondAuthToken';
+	if (!getCookie(cookieName)) {
+		const authToken = generateRandomToken();
+		setCookie(cookieName, authToken);
+	}
+};
+  
+/**
+   * Function to generate a random token
+   * @returns A random token string
+   */
+export const generateRandomToken = (): string => {
+	const array = new Uint8Array(48);
+	window.crypto.getRandomValues(array);
+	return Array.from(array, byte => ('0' + byte.toString(16)).slice(-2)).join('');
+};
+  

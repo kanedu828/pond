@@ -1,7 +1,10 @@
 import {
+	GuestLoginResponse,
 	LogoutResponse,
 	StatusResponse,
 } from '../../../shared/types/AuthTypes';
+
+const API_PATH = 'auth';
 
 export class PondAuthClient {
 	private apiUrl: string;
@@ -14,7 +17,7 @@ export class PondAuthClient {
 	}
 
 	async status(): Promise<StatusResponse> {
-		const response = await fetch(`${this.apiUrl}/auth/status`, {
+		const response = await fetch(`${this.apiUrl}/${API_PATH}/status`, {
 			method: 'get',
 			credentials: 'include',
 		});
@@ -22,7 +25,15 @@ export class PondAuthClient {
 	}
 
 	async logout(): Promise<LogoutResponse> {
-		const response = await fetch(`${this.apiUrl}/auth/logout`, {
+		const response = await fetch(`${this.apiUrl}/${API_PATH}/logout`, {
+			method: 'post',
+			credentials: 'include',
+		});
+		return response.json();
+	}
+
+	async guestLogin(): Promise<GuestLoginResponse> {
+		const response = await fetch(`${this.apiUrl}/${API_PATH}/guest-login`, {
 			method: 'post',
 			credentials: 'include',
 		});

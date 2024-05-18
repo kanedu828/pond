@@ -18,7 +18,7 @@ jest.mock('../dao/pondUserDao');
 
 jest.mock('bcrypt', () => ({
 	hash: jest.fn(),
-	compare: jest.fn(),
+	compare: jest.fn()
 }));
 
 const mockPondUserDao: jest.Mocked<PondUserDao> = {
@@ -28,7 +28,7 @@ const mockPondUserDao: jest.Mocked<PondUserDao> = {
 	updatePondUser: jest.fn(),
 	incrementPondUserExp: jest.fn(),
 	getPondUserPasswordHash: jest.fn(),
-	getTopPondUsers: jest.fn(),
+	getTopPondUsers: jest.fn()
 };
 
 const mockFishDao: jest.Mocked<FishDao> = {
@@ -67,7 +67,10 @@ describe('Test getOrCreateGooglePondUser', () => {
 		};
 		mockPondUserDao.getPondUser.mockResolvedValueOnce(mockUser);
 		mockPondUserDao.insertPondUser.mockResolvedValueOnce(mockUser);
-		const results = await pondUserService.getOrCreateGooglePondUser('my-google-id', 'test@example.com');
+		const results = await pondUserService.getOrCreateGooglePondUser(
+			'my-google-id',
+			'test@example.com'
+		);
 		expect(results).toStrictEqual(expectedUser);
 		expect(mockPondUserDao.insertPondUser).toHaveBeenCalledTimes(0);
 	});
@@ -82,7 +85,10 @@ describe('Test getOrCreateGooglePondUser', () => {
 		};
 		mockPondUserDao.getPondUser.mockResolvedValueOnce(null);
 		mockPondUserDao.insertPondUser.mockResolvedValueOnce(mockUser);
-		const results = await pondUserService.getOrCreateGooglePondUser('my-google-id', 'test@example.com');
+		const results = await pondUserService.getOrCreateGooglePondUser(
+			'my-google-id',
+			'test@example.com'
+		);
 		expect(results).toStrictEqual(expectedUser);
 		expect(mockPondUserDao.insertPondUser).toHaveBeenCalledTimes(1);
 	});
@@ -126,112 +132,128 @@ describe('test getUserFish', () => {
 	});
 });
 
-describe('getPondUserByUsername', () => {  
+describe('getPondUserByUsername', () => {
 	it('returns existing user', async () => {
-	  const mockUser = { username: 'john', id: 1, exp: 100, location: 'pond', is_account: true };
-	  mockPondUserDao.getPondUser.mockResolvedValue(mockUser);
-  
-	  const result = await pondUserService.getPondUserByUsername('john');
-  
-	  expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ username: 'john' });
-	  expect(result).toEqual({
-		id: 1,
-		username: 'john',
-		exp: 100,
-		location: 'pond',
-		isAccount: true
-	  });
-	});
+		const mockUser = { username: 'john', id: 1, exp: 100, location: 'pond', is_account: true };
+		mockPondUserDao.getPondUser.mockResolvedValue(mockUser);
 
+		const result = await pondUserService.getPondUserByUsername('john');
+
+		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ username: 'john' });
+		expect(result).toEqual({
+			id: 1,
+			username: 'john',
+			exp: 100,
+			location: 'pond',
+			isAccount: true
+		});
+	});
 });
 
 describe('createPondUser', () => {
 	it('creates new user when not found', async () => {
 		mockPondUserDao.getPondUser.mockResolvedValue(null);
 		mockPondUserDao.insertPondUser.mockResolvedValue(mockUser);
-	
+
 		const result = await pondUserService.createPondUser('john', 'password123');
 
 		expect(result).toEqual({
-		  id: 123,
-		  username: 'test-user',
-		  exp: 1,
-		  location: 'default',
-		  isAccount: true
+			id: 123,
+			username: 'test-user',
+			exp: 1,
+			location: 'default',
+			isAccount: true
 		});
-	  });
+	});
 });
-  
+
 describe('getPondUserByCookie', () => {
 	it('returns existing user based on cookie', async () => {
-	  const mockUser = { username: 'guest-randomstring', id: 1, exp: 100, location: 'pond', is_account: true };
-	  mockPondUserDao.getPondUser.mockResolvedValue(mockUser);
-  
-	  const result = await pondUserService.getPondUserByCookie('cookie123');
-  
-	  expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ cookie: 'cookie123' });
+		const mockUser = {
+			username: 'guest-randomstring',
+			id: 1,
+			exp: 100,
+			location: 'pond',
+			is_account: true
+		};
+		mockPondUserDao.getPondUser.mockResolvedValue(mockUser);
 
-	  expect(result).toEqual({ username: 'guest-randomstring', id: 1, exp: 100, location: 'pond', isAccount: true });
+		const result = await pondUserService.getPondUserByCookie('cookie123');
+
+		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ cookie: 'cookie123' });
+
+		expect(result).toEqual({
+			username: 'guest-randomstring',
+			id: 1,
+			exp: 100,
+			location: 'pond',
+			isAccount: true
+		});
 	});
-  
+
 	it('returns null when no existing user found', async () => {
-	  mockPondUserDao.getPondUser.mockResolvedValue(null);
-  
-	  const result = await pondUserService.getPondUserByCookie('cookie123');
-  
-	  expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ cookie: 'cookie123' });
-	  expect(result).toBeNull();
-	});
-  });
+		mockPondUserDao.getPondUser.mockResolvedValue(null);
 
-  describe('createCookiePondUser', () => {
-	it('creates new user with cookie', async () => {
-	  const expectedUsername = 'guest-randomstring';
-	  mockPondUserDao.insertPondUser.mockResolvedValue({ username: expectedUsername, id: 2, exp: 100, location: 'pond', is_account: false });
-  
-	  const result = await pondUserService.createCookiePondUser('cookie123');
+		const result = await pondUserService.getPondUserByCookie('cookie123');
 
-	  expect(result).toEqual({
-		id: 2,
-		username: expectedUsername,
-		exp: 100,
-		location: 'pond',
-		isAccount: false
-	  });
-	});
-  });
-
-  describe('getAuthenticatedPondUser', () => {
-	it('authenticates and returns transformed user for correct password', async () => {
-	  const username = 'testUser';
-	  const password = 'correctPassword';
-	  const hashedPassword = 'hashedCorrectPassword';
-	  const mockUser = { id: 1, username, exp: 100, location: 'pond', is_account: true };
-	  const transformedUser = { id: 1, username, exp: 100, location: 'pond', isAccount: true };
-  
-	  mockPondUserDao.getPondUserPasswordHash.mockResolvedValue(hashedPassword);
-	  (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-	  mockPondUserDao.getPondUser.mockResolvedValue(mockUser);
-  
-	  const result = await pondUserService.getAuthenticatedPondUser(username, password);
-  
-	  expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPassword);
-	  expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ username });
-	  expect(result).toEqual(transformedUser);
-	});
-  
-	it('returns null for incorrect password', async () => {
-	  const username = 'testUser';
-	  const password = 'incorrectPassword';
-	  const hashedPassword = 'hashedCorrectPassword';
-  
-	  mockPondUserDao.getPondUserPasswordHash.mockResolvedValue(hashedPassword);
-	  (bcrypt.compare as jest.Mock).mockResolvedValue(false);
-  
-	  const result = await pondUserService.getAuthenticatedPondUser(username, password);
-  
-	  expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPassword);
-	  expect(result).toBeNull();
+		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ cookie: 'cookie123' });
+		expect(result).toBeNull();
 	});
 });
-  
+
+describe('createCookiePondUser', () => {
+	it('creates new user with cookie', async () => {
+		const expectedUsername = 'guest-randomstring';
+		mockPondUserDao.insertPondUser.mockResolvedValue({
+			username: expectedUsername,
+			id: 2,
+			exp: 100,
+			location: 'pond',
+			is_account: false
+		});
+
+		const result = await pondUserService.createCookiePondUser('cookie123');
+
+		expect(result).toEqual({
+			id: 2,
+			username: expectedUsername,
+			exp: 100,
+			location: 'pond',
+			isAccount: false
+		});
+	});
+});
+
+describe('getAuthenticatedPondUser', () => {
+	it('authenticates and returns transformed user for correct password', async () => {
+		const username = 'testUser';
+		const password = 'correctPassword';
+		const hashedPassword = 'hashedCorrectPassword';
+		const mockUser = { id: 1, username, exp: 100, location: 'pond', is_account: true };
+		const transformedUser = { id: 1, username, exp: 100, location: 'pond', isAccount: true };
+
+		mockPondUserDao.getPondUserPasswordHash.mockResolvedValue(hashedPassword);
+		(bcrypt.compare as jest.Mock).mockResolvedValue(true);
+		mockPondUserDao.getPondUser.mockResolvedValue(mockUser);
+
+		const result = await pondUserService.getAuthenticatedPondUser(username, password);
+
+		expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPassword);
+		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ username });
+		expect(result).toEqual(transformedUser);
+	});
+
+	it('returns null for incorrect password', async () => {
+		const username = 'testUser';
+		const password = 'incorrectPassword';
+		const hashedPassword = 'hashedCorrectPassword';
+
+		mockPondUserDao.getPondUserPasswordHash.mockResolvedValue(hashedPassword);
+		(bcrypt.compare as jest.Mock).mockResolvedValue(false);
+
+		const result = await pondUserService.getAuthenticatedPondUser(username, password);
+
+		expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPassword);
+		expect(result).toBeNull();
+	});
+});

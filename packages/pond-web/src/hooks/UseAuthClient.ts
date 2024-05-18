@@ -23,3 +23,16 @@ export const useLogout = () => {
 	});
 	return mutation;
 };
+
+export const useGuestLogin = () => {
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async () => {
+			return await pondAuthClient.guestLogin();
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['auth', 'status'] });
+		},
+	});
+	return mutation;
+};

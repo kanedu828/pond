@@ -19,7 +19,8 @@ const mockPondUserDao: jest.Mocked<PondUserDao> = {
 	insertPondUser: jest.fn(),
 	updatePondUser: jest.fn(),
 	incrementPondUserExp: jest.fn(),
-	getTopPondUsers: jest.fn()
+	getTopPondUsers: jest.fn(),
+	getPondUserPasswordHash: jest.fn()
 };
 
 jest.mock('../dao/fishDao');

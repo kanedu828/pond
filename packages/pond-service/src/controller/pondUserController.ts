@@ -35,13 +35,13 @@ export default class PondUserController {
 		return null;
 	}
 
-   /**
+	/**
    *
    * @param req
    * @param profile
    * @returns pondUser
    */
-	async getPondUserByUsername(username: string, password: string): Promise<Express.User | null> {
+	async getPondUserByUsername(username: string): Promise<Express.User | null> {
 		try {
 			const pondUser = await this.pondUserService.getPondUserByUsername(username);
 			return pondUser;
@@ -51,7 +51,7 @@ export default class PondUserController {
 		return null;
 	}
 
-	   /**
+	/**
    *
    * @param req
    * @param profile
@@ -67,7 +67,7 @@ export default class PondUserController {
 		return null;
 	}
 
-   /**
+	/**
    *
    * @param req
    * @param profile
@@ -98,21 +98,31 @@ export default class PondUserController {
 		return null;
 	}
 
-		/**
+	/**
    *
    * @param req
    * @param profile
    * @returns pondUser
    */
 	async createCookiePondUser(cookie: string): Promise<Express.User | null> {
-	try {
-		const pondUser = await this.pondUserService.createCookiePondUser(cookie);
-		return pondUser;
-	} catch (err: any) {
-		pondUserLogger.error(err.message);
+		try {
+			const pondUser = await this.pondUserService.createCookiePondUser(cookie);
+			return pondUser;
+		} catch (err: any) {
+			pondUserLogger.error(err.message);
+		}
+		return null;
 	}
-	return null;
-}
+
+	async getOrCreateCookiePondUser(cookie: string): Promise<Express.User | null> {
+		try {
+			const pondUser = await this.pondUserService.getOrCreateCookiePondUser(cookie);
+			return pondUser;
+		} catch (err: any) {
+			pondUserLogger.error(err.message);
+		}
+		return null;
+	}
 
 	/**
    *
