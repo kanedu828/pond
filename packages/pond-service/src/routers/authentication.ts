@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { randomBytes } from 'crypto';
 
@@ -8,7 +8,25 @@ const isProduction = process.env.NODE_ENV === 'production';
 const getAuthenticationRouter = () => {
 	const router: any = Router();
 
-	router.post('/guest-login', passport.authenticate('cookie', {}));
+	router.post('/guest-login', (req: Request, res: Response, next: NextFunction) => {
+		passport.authenticate('cookie', (err: any, user: Express.User, info: any) => {
+		  if (err) {
+			console.error('Authentication error:', err);
+			return res.status(500).json({ message: 'Internal server error' });
+		  }
+		  if (!user) {
+			console.warn('Authentication failed:', info);
+			return res.status(401).json({ message: 'Authentication failed' });
+		  }
+		  req.logIn(user, (loginErr) => {
+			if (loginErr) {
+			  console.error('Login error:', loginErr);
+			  return res.status(500).json({ message: 'Internal server error' });
+			}
+			return res.json({ message: 'Logged in as guest', user });
+		  });
+		})(req, res, next);
+	  });
 
 	router.get('/set-cookie', (req: Request, res: Response) => {
 		const name = 'pondAuthToken';
