@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect } from 'react';
-import { useGuestLogin, useStatus } from '../hooks/UseAuthClient';
+import { useGuestLogin, useSetAuthCookie, useStatus } from '../hooks/UseAuthClient';
 import IdleWithFishAnimation from '../assets/images/LoginPageImage.png';
 import LilyPadBackground from '../assets/images/LilyPadBackground.png';
 
@@ -33,6 +33,7 @@ const loginButtonStyle = {
 
 export const Login = () => {
 	ensurePondAuthToken();
+	useSetAuthCookie();
 	const { data } = useStatus();
 	const [opened, { open, close }] = useDisclosure(data?.authenticated);
 	const { mutateAsync: guestLogin } = useGuestLogin();
