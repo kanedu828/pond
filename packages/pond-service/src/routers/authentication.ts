@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import passport from 'passport';
+import { randomBytes } from 'crypto';
 
 const POND_WEB_URL = process.env.POND_WEB_URL ?? '';
 const isProduction = process.env.NODE_ENV === 'production';
@@ -10,22 +11,16 @@ const getAuthenticationRouter = () => {
 	router.post('/guest-login', passport.authenticate('cookie', {}));
 
 	router.get('/set-cookie', (req: Request, res: Response) => {
-		
-
 		const name = 'pondAuthToken';
-		const existingValue = req.cookies[name]; // Get the existing cookie value
+		const value = randomBytes(48).toString('hex')
 	
-		if (!existingValue) {
-		  return res.status(400).send('Cookie not found');
-		}
 	
 		const date = new Date();
 		date.setFullYear(date.getFullYear() + 30);
 
-		const domain = isProduction ? POND_WEB_URL.replace(/^https?:\/\//, '.') : POND_WEB_URL.replace(/:\d+$/, '').replace(/^https?:\/\//, '.');
-		console.log(domain)
+		const domain = isProduction ? POND_WEB_URL.replace(/^https?:\/\//, '.') : POND_WEB_URL.replace(/:\d+$/, '').replace(/^https?:\/\//, '');
 		// Update the cookie with HttpOnly and other attributes
-		res.cookie(name, existingValue, {
+		res.cookie(name, value, {
 		  expires: date,
 		  httpOnly: true, // Ensures the cookie is only accessible over HTTP(S), not via JavaScript
 		  secure: isProduction, // Secure cookies in production

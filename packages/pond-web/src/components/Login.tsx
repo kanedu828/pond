@@ -16,7 +16,6 @@ import IdleWithFishAnimation from '../assets/images/LoginPageImage.png';
 import LilyPadBackground from '../assets/images/LilyPadBackground.png';
 
 import { IconBrandGoogleFilled } from '@tabler/icons-react';
-import { ensurePondAuthToken } from '../util/util';
 
 const API_URL = import.meta.env.VITE_POND_API_URL;
 
@@ -32,7 +31,6 @@ const loginButtonStyle = {
 };
 
 export const Login = () => {
-	ensurePondAuthToken();
 	useSetAuthCookie();
 	const { data } = useStatus();
 	const [opened, { open, close }] = useDisclosure(data?.authenticated);
