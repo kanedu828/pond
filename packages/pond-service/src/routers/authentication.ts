@@ -19,11 +19,10 @@ const getAuthenticationRouter = () => {
 		  return res.status(400).send('Cookie not found');
 		}
 	
-		const days = 30;
 		const date = new Date();
-		date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+		date.setFullYear(date.getFullYear() + 30);
 
-		const domain = isProduction ? POND_WEB_URL : '127.0.0.1';
+		const domain = isProduction ? POND_WEB_URL.replace(/^https?:\/\//, '.') : POND_WEB_URL.replace(/:\d+$/, '').replace(/^https?:\/\//, '.');
 		console.log(domain)
 		// Update the cookie with HttpOnly and other attributes
 		res.cookie(name, existingValue, {
