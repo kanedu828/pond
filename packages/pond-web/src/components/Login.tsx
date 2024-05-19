@@ -16,7 +16,7 @@ import IdleWithFishAnimation from '../assets/images/LoginPageImage.png';
 import LilyPadBackground from '../assets/images/LilyPadBackground.png';
 
 import { IconBrandGoogleFilled } from '@tabler/icons-react';
-
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const API_URL = import.meta.env.VITE_POND_API_URL;
 
 const loginButtonStyle = {
@@ -53,6 +53,7 @@ export const Login = () => {
 			withCloseButton={false}
 			padding={0}
 		>
+			<ReactQueryDevtools initialIsOpen={false} />
 			<BackgroundImage src={LilyPadBackground}>
 				<Stack justify="center" style={{ height: '100vh' }}>
 					<Group justify="center">
