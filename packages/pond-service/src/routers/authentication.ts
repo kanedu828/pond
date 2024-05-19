@@ -30,7 +30,12 @@ const getAuthenticationRouter = () => {
 
 	router.get('/set-cookie', (req: Request, res: Response) => {
 		const name = 'pondAuthToken';
-		const value = randomBytes(48).toString('hex')
+		let value = req.cookies[name]; // Get the existing cookie value
+
+		if (!value) {
+		  // Generate a new value if the cookie doesn't exist
+		  value = randomBytes(48).toString('hex');
+		}
 	
 	
 		const date = new Date();
