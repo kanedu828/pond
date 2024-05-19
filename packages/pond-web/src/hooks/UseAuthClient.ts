@@ -11,6 +11,14 @@ export const useStatus = () => {
 	return result;
 };
 
+export const useSetAuthCookie = () => {
+	const result = useQuery({
+		queryKey: ['auth', 'setAuthCookie'],
+		queryFn: async () => await pondAuthClient.setAuthCookie()
+	});
+	return result;
+}
+
 export const useLogout = () => {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({

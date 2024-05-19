@@ -39,4 +39,12 @@ export class PondAuthClient {
 		});
 		return response.json();
 	}
+
+	async setAuthCookie(): Promise<{}> {
+		const response = await fetch(`${this.apiUrl}/${API_PATH}/set-cookie`, {
+			method: 'get',
+			credentials: 'include',
+		});
+		return await response.json();
+	}
 }
