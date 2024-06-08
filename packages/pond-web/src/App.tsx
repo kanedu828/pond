@@ -40,6 +40,8 @@ const theme = createTheme({
 });
 
 const App: React.FC = () => {
+	document.title = 'Pond';
+	
 	return (
 		<MantineProvider theme={theme}>
 			<Notifications />
