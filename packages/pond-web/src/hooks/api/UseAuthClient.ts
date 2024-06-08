@@ -17,7 +17,7 @@ export const useSetAuthCookie = () => {
 		queryFn: async () => await pondAuthClient.setAuthCookie()
 	});
 	return result;
-}
+};
 
 export const useLogout = () => {
 	const queryClient = useQueryClient();
@@ -36,11 +36,11 @@ export const useGuestLogin = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 	  mutationFn: async () => {
-		return await pondAuthClient.guestLogin();
+			return await pondAuthClient.guestLogin();
 	  },
 	  onSuccess: () => {
-		queryClient.invalidateQueries({ queryKey: ['auth', 'status'] });
-		queryClient.invalidateQueries({ queryKey: ['user'] });
+			queryClient.invalidateQueries({ queryKey: ['auth', 'status'] });
+			queryClient.invalidateQueries({ queryKey: ['user'] });
 	  },
 	});
-  };
+};
