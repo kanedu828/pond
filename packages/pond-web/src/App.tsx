@@ -1,7 +1,7 @@
 import React from 'react';
 import { createTheme, MantineProvider, rem } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Notifications } from '@mantine/notifications';
 import './styles/fonts.css';
 import '@mantine/core/styles.css';
@@ -41,13 +41,13 @@ const theme = createTheme({
 
 const App: React.FC = () => {
 	document.title = 'Pond';
-	
+
 	return (
 		<MantineProvider theme={theme}>
 			<Notifications />
 			<QueryClientProvider client={queryClient}>
 	  	<ReactQueryDevtools initialIsOpen={true} />
-				<Router>
+				<BrowserRouter>
 					<Routes>
 						<Route path="/login" element={<Login />} />
 						<Route
@@ -57,7 +57,7 @@ const App: React.FC = () => {
 							}
 						/>
 					</Routes>
-				</Router>
+				</BrowserRouter>
 			</QueryClientProvider>
 		</MantineProvider>
 	);
