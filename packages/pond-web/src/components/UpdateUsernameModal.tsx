@@ -1,6 +1,6 @@
 import { Button, Modal, Stack, Title, TextInput } from '@mantine/core';
 import { useState } from 'react';
-import { useUpdateUsername } from '../hooks/UseUserClient';
+import { useUpdateUsername } from '../hooks/api/UseUserClient';
 
 interface UpdateUsernameModalProps {
   isOpen: boolean;

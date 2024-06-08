@@ -5,19 +5,19 @@ import {
 	Container,
 	Flex,
 	Group,
+	LoadingOverlay,
 	Text,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { FishInstance } from '../../../shared/types/types';
-import { useGetUser } from '../hooks/UseUserClient';
+import { useGetUser } from '../hooks/api/UseUserClient';
 import { FishingAnimationState } from '../types/types';
 import FishingSocketSingleton from '../websockets/FishingSocketSingleton';
 import { AnimationManager } from './AnimationManager';
 import { CatchFishModal } from './CatchFishModal';
 import { ExpBar } from './ExpBar';
-import { Login } from './Login';
 import { Navbar } from './Navbar';
 import { IconPlugConnected, IconPlugConnectedX } from '@tabler/icons-react';
 import SplashAudio from '../assets/audio/splash.mp3';
@@ -41,7 +41,7 @@ export const Fishing = () => {
 	const [isCatchFishOpen, { open: openCatchFish, close: closeCatchFish }] =
     useDisclosure(false);
 
-	const { data: userData, isLoading: userIsLoading } = useGetUser();
+	const { data: userData, isLoading: isUserLoading } = useGetUser();
 	const [exp, setExp] = useState(0);
 
 	const [
@@ -51,14 +51,14 @@ export const Fishing = () => {
 
 	// User Data
 	useEffect(() => {
-		if (!userIsLoading) {
+		if (!isUserLoading) {
 			setExp(userData?.exp ?? 0);
 
 			if (userData?.username.startsWith('guest-') && userData.isAccount) {
 				openUpdateUsername();
 			}
 		}
-	}, [userData, userIsLoading, openUpdateUsername]);
+	}, [userData, isUserLoading, openUpdateUsername]);
 
 	// Initialize socket
 	useEffect(() => {
@@ -135,6 +135,10 @@ export const Fishing = () => {
 		}
 	};
 
+	if (!userData || isUserLoading ) {
+		return <LoadingOverlay visible={true} zIndex={1000} loaderProps={{color: 'pondTeal.9', size: 'xl'}}/>;
+	}
+
 	return (
 		<BackgroundImage src={LilyPadFullBackground} w="100vw" h="100vh">
 			<AppShell>
@@ -159,7 +163,6 @@ export const Fishing = () => {
 					</Group>
 				</AppShellFooter>
 			</AppShell>
-			<Login />
 			<CatchFishModal
 				fishInstance={fish}
 				isOpen={isCatchFishOpen}

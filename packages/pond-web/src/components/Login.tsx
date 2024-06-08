@@ -1,7 +1,6 @@
 import {
 	Anchor,
 	Group,
-	Modal,
 	Stack,
 	Title,
 	Image,
@@ -9,14 +8,12 @@ import {
 	BackgroundImage,
 	Button,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { useEffect } from 'react';
-import { useGuestLogin, useSetAuthCookie, useStatus } from '../hooks/UseAuthClient';
+import { useGuestLogin, useSetAuthCookie } from '../hooks/api/UseAuthClient';
 import IdleWithFishAnimation from '../assets/images/LoginPageImage.png';
 import LilyPadBackground from '../assets/images/LilyPadBackground.png';
-
 import { IconBrandGoogleFilled } from '@tabler/icons-react';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useNavigate } from 'react-router-dom';
+
 const API_URL = import.meta.env.VITE_POND_API_URL;
 
 const loginButtonStyle = {
@@ -32,55 +29,36 @@ const loginButtonStyle = {
 
 export const Login = () => {
 	useSetAuthCookie();
-	const { data } = useStatus();
-	const [opened, { open, close }] = useDisclosure(data?.authenticated);
 	const { mutateAsync: guestLogin } = useGuestLogin();
-	useEffect(() => {
-		if (!data?.authenticated) {
-			open();
-		} else {
-			close();
-		}
-	}, [data, open, close]);
-
+	const navigate = useNavigate();
 	return (
-		<Modal
-			opened={opened}
-			onClose={close}
-			radius={0}
-			fullScreen
-			transitionProps={{ transition: 'fade', duration: 1000 }}
-			withCloseButton={false}
-			padding={0}
-		>
-			<ReactQueryDevtools initialIsOpen={false} />
-			<BackgroundImage src={LilyPadBackground}>
-				<Stack justify="center" style={{ height: '100vh' }}>
-					<Group justify="center">
-						<Image w="auto" src={IdleWithFishAnimation} />
-						<Stack justify="space-around" align="center">
-							<Title order={1} c="pondTeal.9">
-								Welcome to Pond!
-							</Title>
-							<Anchor href={`${API_URL}/auth/google`} style={loginButtonStyle}>
-								<Group align="center">
-									<IconBrandGoogleFilled size={24} />
-									<Text size="md" style={{ color: '#757575' }}>
-										Sign in with Google
-									</Text>
-								</Group>
-							</Anchor>
-							<Button color={'pondTeal.9'} variant='outline' onClick={async () => {
-								await guestLogin();
-							}}>
-								<Text size="md">
-									Sign in as a Guest
+		<BackgroundImage src={LilyPadBackground}>
+			<Stack justify="center" style={{ height: '100vh' }}>
+				<Group justify="center">
+					<Image w="auto" src={IdleWithFishAnimation} />
+					<Stack justify="space-around" align="center">
+						<Title order={1} c="pondTeal.9">
+							Welcome to Pond!
+						</Title>
+						<Anchor href={`${API_URL}/auth/google`} style={loginButtonStyle}>
+							<Group align="center">
+								<IconBrandGoogleFilled size={24} />
+								<Text size="md" style={{ color: '#757575' }}>
+									Sign in with Google
 								</Text>
-							</Button>
-						</Stack>
-					</Group>
-				</Stack>
-			</BackgroundImage>
-		</Modal>
+							</Group>
+						</Anchor>
+						<Button color={'pondTeal.9'} variant='outline' onClick={async () => {
+							await guestLogin();
+							navigate('/');
+						}}>
+							<Text size="md">
+								Sign in as a Guest
+							</Text>
+						</Button>
+					</Stack>
+				</Group>
+			</Stack>
+		</BackgroundImage>
 	);
 };

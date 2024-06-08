@@ -1,20 +1,17 @@
+import React from 'react';
 import { createTheme, MantineProvider, rem } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Fishing } from './components/Fishing';
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Notifications } from '@mantine/notifications';
 import './styles/fonts.css';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import { Fishing } from './components/Fishing';
+import { Login } from './components/Login';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import PrivateRoute from './components/PrivateRoute';
 
 const queryClient = new QueryClient();
-
-const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <Fishing />,
-	},
-]);
 
 const theme = createTheme({
 	colors: {
@@ -42,14 +39,23 @@ const theme = createTheme({
 	},
 });
 
-const App = () => {
-	document.title = 'Pond';
-
+const App: React.FC = () => {
 	return (
 		<MantineProvider theme={theme}>
 			<Notifications />
 			<QueryClientProvider client={queryClient}>
-				<RouterProvider router={router} />
+	  	<ReactQueryDevtools initialIsOpen={true} />
+				<Router>
+					<Routes>
+						<Route path="/login" element={<Login />} />
+						<Route
+							path="/"
+							element={
+								<PrivateRoute element={<Fishing />} />
+							}
+						/>
+					</Routes>
+				</Router>
 			</QueryClientProvider>
 		</MantineProvider>
 	);
