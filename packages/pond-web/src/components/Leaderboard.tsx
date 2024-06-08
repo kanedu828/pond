@@ -1,5 +1,5 @@
 import { Modal, Stack, Title } from '@mantine/core';
-import { useGetTopHundredUsersByExp } from '../hooks/UseUserClient';
+import { useGetTopHundredUsersByExp } from '../hooks/api/UseUserClient';
 import { LeaderboardTable } from './LeaderboardTable';
 
 interface LeaderboardProps {

@@ -8,7 +8,7 @@ import {
 	Title,
 } from '@mantine/core';
 import { useState } from 'react';
-import { useGetUserFish } from '../hooks/UseUserClient';
+import { useGetUserFish } from '../hooks/api/UseUserClient';
 import { sortComparator } from '../util/util';
 import { FishCard } from './FishCard';
 

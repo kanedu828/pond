@@ -1,6 +1,7 @@
 import { Button, Container, Flex } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useLogout } from '../hooks/UseAuthClient';
+import { useNavigate } from 'react-router-dom';
+import { useLogout } from '../hooks/api/UseAuthClient';
 import { Collection } from './Collection';
 import { GuideModal } from './GuideModal';
 import { Leaderboard } from './Leaderboard';
@@ -16,9 +17,11 @@ export const Navbar = () => {
 	] = useDisclosure(false);
 	const [isGuideOpen, { open: openGuide, close: closeGuide }] =
     useDisclosure(false);
+	const navigate = useNavigate();
 
 	const onClickLogout = async () => {
 		await logout();
+		navigate('/login');
 	};
 
 	return (

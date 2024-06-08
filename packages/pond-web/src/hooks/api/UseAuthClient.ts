@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import PondClientSingleton from '../clients/PondClientSingleton';
+import PondClientSingleton from '../../clients/PondClientSingleton';
 
 const pondAuthClient = PondClientSingleton.getInstance().getPondAuthClient();
 
@@ -40,6 +40,7 @@ export const useGuestLogin = () => {
 	  },
 	  onSuccess: () => {
 		queryClient.invalidateQueries({ queryKey: ['auth', 'status'] });
+		queryClient.invalidateQueries({ queryKey: ['user'] });
 	  },
 	});
   };
