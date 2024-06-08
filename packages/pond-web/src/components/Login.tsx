@@ -8,11 +8,12 @@ import {
 	BackgroundImage,
 	Button,
 } from '@mantine/core';
-import { useGuestLogin, useSetAuthCookie } from '../hooks/api/UseAuthClient';
+import { useGuestLogin, useSetAuthCookie, useStatus } from '../hooks/api/UseAuthClient';
 import IdleWithFishAnimation from '../assets/images/LoginPageImage.png';
 import LilyPadBackground from '../assets/images/LilyPadBackground.png';
 import { IconBrandGoogleFilled } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const API_URL = import.meta.env.VITE_POND_API_URL;
 
@@ -31,6 +32,14 @@ export const Login = () => {
 	useSetAuthCookie();
 	const { mutateAsync: guestLogin } = useGuestLogin();
 	const navigate = useNavigate();
+	const { data: status } = useStatus();
+
+	useEffect(() => {
+		if (status?.authenticated) {
+			navigate('/');
+		}
+	}, [status, navigate]);
+	
 	return (
 		<BackgroundImage src={LilyPadBackground}>
 			<Stack justify="center" style={{ height: '100vh' }}>
@@ -50,7 +59,6 @@ export const Login = () => {
 						</Anchor>
 						<Button color={'pondTeal.9'} variant='outline' onClick={async () => {
 							await guestLogin();
-							navigate('/');
 						}}>
 							<Text size="md">
 								Sign in as a Guest

@@ -25,8 +25,8 @@ export const useLogout = () => {
 		mutationFn: async () => {
 			return await pondAuthClient.logout();
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['auth', 'status'] });
+		onSuccess: async () => {
+			queryClient.removeQueries({ queryKey: ['auth', 'status'] });
 		},
 	});
 	return mutation;
