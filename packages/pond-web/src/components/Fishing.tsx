@@ -25,11 +25,11 @@ import AlertAudio from '../assets/audio/alert.mp3';
 import { UpdateUsernameModal } from './UpdateUsernameModal';
 import LilyPadFullBackground from '../assets/images/LilyPadBackground.png';
 
-const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
 const splashAudio = new Audio(SplashAudio);
 const alertAudio = new Audio(AlertAudio);
 
 export const Fishing = () => {
+	const fishingSocket = FishingSocketSingleton.getInstance().getSocket();
 	const [isConnected, setIsConnected] = useState<boolean>(
 		fishingSocket.connected,
 	);
@@ -116,6 +116,9 @@ export const Fishing = () => {
 		fish,
 		setFish,
 		setFishTimeout,
+		fishingSocket,
+		notifications,
+		alertAudio
 	]);
 
 	const collectFish = () => {
