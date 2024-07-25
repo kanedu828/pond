@@ -118,7 +118,7 @@ export const Fishing = () => {
 		setFishTimeout,
 		fishingSocket,
 		notifications,
-		alertAudio
+		alertAudio,
 	]);
 
 	const collectFish = () => {
@@ -138,8 +138,14 @@ export const Fishing = () => {
 		}
 	};
 
-	if (!userData || isUserLoading ) {
-		return <LoadingOverlay visible={true} zIndex={1000} loaderProps={{color: 'pondTeal.9', size: 'xl'}}/>;
+	if (!userData || isUserLoading) {
+		return (
+			<LoadingOverlay
+				visible={true}
+				zIndex={1000}
+				loaderProps={{ color: 'pondTeal.9', size: 'xl' }}
+			/>
+		);
 	}
 
 	return (

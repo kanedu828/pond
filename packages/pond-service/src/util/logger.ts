@@ -5,9 +5,9 @@ const pondUserLogger = createLogger({
 	transports: [
 		new transports.File({
 			filename: 'pondUser.log',
-			level: 'info'
-		})
-	]
+			level: 'info',
+		}),
+	],
 });
 
 const fishingLogger = createLogger({
@@ -15,9 +15,9 @@ const fishingLogger = createLogger({
 	transports: [
 		new transports.File({
 			filename: 'fishing.log',
-			level: 'info'
-		})
-	]
+			level: 'info',
+		}),
+	],
 });
 
 export { pondUserLogger, fishingLogger };

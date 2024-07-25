@@ -11,14 +11,14 @@ const mockUser = {
 	username: 'test-user',
 	exp: 1,
 	location: 'default',
-	is_account: true
+	is_account: true,
 };
 
 jest.mock('../dao/pondUserDao');
 
 jest.mock('bcrypt', () => ({
 	hash: jest.fn(),
-	compare: jest.fn()
+	compare: jest.fn(),
 }));
 
 const mockPondUserDao: jest.Mocked<PondUserDao> = {
@@ -28,14 +28,14 @@ const mockPondUserDao: jest.Mocked<PondUserDao> = {
 	updatePondUser: jest.fn(),
 	incrementPondUserExp: jest.fn(),
 	getPondUserPasswordHash: jest.fn(),
-	getTopPondUsers: jest.fn()
+	getTopPondUsers: jest.fn(),
 };
 
 const mockFishDao: jest.Mocked<FishDao> = {
 	db: jest.fn(),
 	getFish: jest.fn(),
 	updateFish: jest.fn(),
-	insertFish: jest.fn()
+	insertFish: jest.fn(),
 };
 
 const pondUserService = new PondUserService(mockPondUserDao, mockFishDao);
@@ -63,13 +63,13 @@ describe('Test getOrCreateGooglePondUser', () => {
 			username: 'test-user',
 			exp: 1,
 			location: 'default',
-			isAccount: true
+			isAccount: true,
 		};
 		mockPondUserDao.getPondUser.mockResolvedValueOnce(mockUser);
 		mockPondUserDao.insertPondUser.mockResolvedValueOnce(mockUser);
 		const results = await pondUserService.getOrCreateGooglePondUser(
 			'my-google-id',
-			'test@example.com'
+			'test@example.com',
 		);
 		expect(results).toStrictEqual(expectedUser);
 		expect(mockPondUserDao.insertPondUser).toHaveBeenCalledTimes(0);
@@ -81,13 +81,13 @@ describe('Test getOrCreateGooglePondUser', () => {
 			username: 'test-user',
 			exp: 1,
 			location: 'default',
-			isAccount: true
+			isAccount: true,
 		};
 		mockPondUserDao.getPondUser.mockResolvedValueOnce(null);
 		mockPondUserDao.insertPondUser.mockResolvedValueOnce(mockUser);
 		const results = await pondUserService.getOrCreateGooglePondUser(
 			'my-google-id',
-			'test@example.com'
+			'test@example.com',
 		);
 		expect(results).toStrictEqual(expectedUser);
 		expect(mockPondUserDao.insertPondUser).toHaveBeenCalledTimes(1);
@@ -102,29 +102,33 @@ describe('test getUserFish', () => {
 				fish_id: 1000,
 				pond_user_id: 1,
 				max_length: 10,
-				count: 5
+				count: 5,
 			},
 			{
 				id: 1001,
 				fish_id: 1001,
 				pond_user_id: 1,
 				max_length: 5,
-				count: 2
-			}
+				count: 2,
+			},
 		];
 		const expectedFishArray = [
 			{
-				fish: fishJson[binarySearch(fishJson, 1000, (element: Fish) => element.id)],
+				fish: fishJson[
+					binarySearch(fishJson, 1000, (element: Fish) => element.id)
+				],
 				pondUserId: 1,
 				maxLength: 10,
-				count: 5
+				count: 5,
 			},
 			{
-				fish: fishJson[binarySearch(fishJson, 1001, (element: Fish) => element.id)],
+				fish: fishJson[
+					binarySearch(fishJson, 1001, (element: Fish) => element.id)
+				],
 				pondUserId: 1,
 				maxLength: 5,
-				count: 2
-			}
+				count: 2,
+			},
 		];
 		mockFishDao.getFish.mockResolvedValueOnce(fishArray);
 		const results = await pondUserService.getUserFish(1);
@@ -134,18 +138,26 @@ describe('test getUserFish', () => {
 
 describe('getPondUserByUsername', () => {
 	it('returns existing user', async () => {
-		const mockUser = { username: 'john', id: 1, exp: 100, location: 'pond', is_account: true };
+		const mockUser = {
+			username: 'john',
+			id: 1,
+			exp: 100,
+			location: 'pond',
+			is_account: true,
+		};
 		mockPondUserDao.getPondUser.mockResolvedValue(mockUser);
 
 		const result = await pondUserService.getPondUserByUsername('john');
 
-		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ username: 'john' });
+		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({
+			username: 'john',
+		});
 		expect(result).toEqual({
 			id: 1,
 			username: 'john',
 			exp: 100,
 			location: 'pond',
-			isAccount: true
+			isAccount: true,
 		});
 	});
 });
@@ -162,7 +174,7 @@ describe('createPondUser', () => {
 			username: 'test-user',
 			exp: 1,
 			location: 'default',
-			isAccount: true
+			isAccount: true,
 		});
 	});
 });
@@ -174,20 +186,22 @@ describe('getPondUserByCookie', () => {
 			id: 1,
 			exp: 100,
 			location: 'pond',
-			is_account: true
+			is_account: true,
 		};
 		mockPondUserDao.getPondUser.mockResolvedValue(mockUser);
 
 		const result = await pondUserService.getPondUserByCookie('cookie123');
 
-		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ cookie: 'cookie123' });
+		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({
+			cookie: 'cookie123',
+		});
 
 		expect(result).toEqual({
 			username: 'guest-randomstring',
 			id: 1,
 			exp: 100,
 			location: 'pond',
-			isAccount: true
+			isAccount: true,
 		});
 	});
 
@@ -196,7 +210,9 @@ describe('getPondUserByCookie', () => {
 
 		const result = await pondUserService.getPondUserByCookie('cookie123');
 
-		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ cookie: 'cookie123' });
+		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({
+			cookie: 'cookie123',
+		});
 		expect(result).toBeNull();
 	});
 });
@@ -209,7 +225,7 @@ describe('createCookiePondUser', () => {
 			id: 2,
 			exp: 100,
 			location: 'pond',
-			is_account: false
+			is_account: false,
 		});
 
 		const result = await pondUserService.createCookiePondUser('cookie123');
@@ -219,7 +235,7 @@ describe('createCookiePondUser', () => {
 			username: expectedUsername,
 			exp: 100,
 			location: 'pond',
-			isAccount: false
+			isAccount: false,
 		});
 	});
 });
@@ -229,14 +245,29 @@ describe('getAuthenticatedPondUser', () => {
 		const username = 'testUser';
 		const password = 'correctPassword';
 		const hashedPassword = 'hashedCorrectPassword';
-		const mockUser = { id: 1, username, exp: 100, location: 'pond', is_account: true };
-		const transformedUser = { id: 1, username, exp: 100, location: 'pond', isAccount: true };
+		const mockUser = {
+			id: 1,
+			username,
+			exp: 100,
+			location: 'pond',
+			is_account: true,
+		};
+		const transformedUser = {
+			id: 1,
+			username,
+			exp: 100,
+			location: 'pond',
+			isAccount: true,
+		};
 
 		mockPondUserDao.getPondUserPasswordHash.mockResolvedValue(hashedPassword);
 		(bcrypt.compare as jest.Mock).mockResolvedValue(true);
 		mockPondUserDao.getPondUser.mockResolvedValue(mockUser);
 
-		const result = await pondUserService.getAuthenticatedPondUser(username, password);
+		const result = await pondUserService.getAuthenticatedPondUser(
+			username,
+			password,
+		);
 
 		expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPassword);
 		expect(mockPondUserDao.getPondUser).toHaveBeenCalledWith({ username });
@@ -251,7 +282,10 @@ describe('getAuthenticatedPondUser', () => {
 		mockPondUserDao.getPondUserPasswordHash.mockResolvedValue(hashedPassword);
 		(bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
-		const result = await pondUserService.getAuthenticatedPondUser(username, password);
+		const result = await pondUserService.getAuthenticatedPondUser(
+			username,
+			password,
+		);
 
 		expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPassword);
 		expect(result).toBeNull();

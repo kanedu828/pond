@@ -14,7 +14,8 @@ export const randomNormal = (min: number, max: number) => {
 	let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 
 	num = num / 10.0 + 0.5; // Translate to 0 -> 1
-	if (num > 1 || num < 0) num = randomNormal(min, max); // resample between 0 and 1 if out of range
+	if (num > 1 || num < 0)
+		num = randomNormal(min, max); // resample between 0 and 1 if out of range
 	else {
 		num *= max - min; // Stretch to fill range
 		num += min; // offset to min
@@ -44,7 +45,7 @@ export const binarySearch = <Type>(
 	arr: Type[],
 	target: any,
 	// eslint-disable-next-line no-unused-vars
-	func: (element: Type) => any
+	func: (element: Type) => any,
 ): number => {
 	let low = 0;
 	let high = arr.length - 1;

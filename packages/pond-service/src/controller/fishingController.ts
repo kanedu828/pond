@@ -39,7 +39,11 @@ class FishingController {
 			const userId = socket.request.user.id;
 			const LOW_BOUND = 600;
 			const HIGH_BOUND = 3600;
-			const currentFish = await this.fishingService.pollFish(userId, LOW_BOUND, HIGH_BOUND);
+			const currentFish = await this.fishingService.pollFish(
+				userId,
+				LOW_BOUND,
+				HIGH_BOUND,
+			);
 			if (currentFish) {
 				socket.emit('new-fish', currentFish);
 			}

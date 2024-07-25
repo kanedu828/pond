@@ -1,6 +1,5 @@
 import { getFishImagePath, paginateArray } from './util';
 
-
 describe('paginateArray function', () => {
 	it('should paginate the array with the specified page size', () => {
 		const jsonData = [

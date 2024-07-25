@@ -5,7 +5,14 @@ import PondUserDao from '../dao/pondUserDao';
 import PondUser from '../models/pondUserModel';
 import PondUserService from '../service/pondUserService';
 import { pondUserLogger } from '../util/logger';
-import { UpdateUsernameRequest, UpdateUsernameResponse } from '../../../shared/types/UserTypes';
+import {
+	UpdateUsernameRequest,
+	UpdateUsernameResponse,
+} from '../../../shared/types/UserTypes';
+import {
+	RegisterRequest,
+	RegisterResponse,
+} from '../../../shared/types/AuthTypes';
 
 export default class PondUserController {
 	pondUserService: PondUserService;
@@ -20,13 +27,18 @@ export default class PondUserController {
    * @param profile
    * @returns pondUser
    */
-	async getOrCreateGooglePondUser(profile: Profile): Promise<Express.User | null> {
+	async getOrCreateGooglePondUser(
+		profile: Profile,
+	): Promise<Express.User | null> {
 		try {
 			const email = profile.emails?.[0].value ?? null;
 			if (!email) {
 				throw new Error('Google Id does not have an associated email');
 			} else {
-				const pondUser = await this.pondUserService.getOrCreateGooglePondUser(profile.id, email);
+				const pondUser = await this.pondUserService.getOrCreateGooglePondUser(
+					profile.id,
+					email,
+				);
 				return pondUser;
 			}
 		} catch (err: any) {
@@ -43,7 +55,8 @@ export default class PondUserController {
    */
 	async getPondUserByUsername(username: string): Promise<Express.User | null> {
 		try {
-			const pondUser = await this.pondUserService.getPondUserByUsername(username);
+			const pondUser =
+        await this.pondUserService.getPondUserByUsername(username);
 			return pondUser;
 		} catch (err: any) {
 			pondUserLogger.error(err.message);
@@ -57,9 +70,15 @@ export default class PondUserController {
    * @param profile
    * @returns pondUser
    */
-	async getAuthenticatedPondUser(username: string, password: string): Promise<Express.User | null> {
+	async getAuthenticatedPondUser(
+		username: string,
+		password: string,
+	): Promise<Express.User | null> {
 		try {
-			const pondUser = await this.pondUserService.getAuthenticatedPondUser(username, password);
+			const pondUser = await this.pondUserService.getAuthenticatedPondUser(
+				username,
+				password,
+			);
 			return pondUser;
 		} catch (err: any) {
 			pondUserLogger.error(err.message);
@@ -68,19 +87,47 @@ export default class PondUserController {
 	}
 
 	/**
-   *
    * @param req
-   * @param profile
-   * @returns pondUser
+   * @param res
    */
-	async createPondUserByUsername(username: string, password: string): Promise<Express.User | null> {
+	async registerUserLocal(req: Request, res: Response): Promise<void> {
+		const requestBody: RegisterRequest = req.body;
+		if (requestBody.username.length < 3) {
+			const response: RegisterResponse = {
+				success: false,
+				message: 'Your username must be atleast 3 characters long.',
+			};
+			res.status(400).json(response);
+			return;
+		}
+
+		if (requestBody.password.length < 8) {
+			const response: RegisterResponse = {
+				success: false,
+				message: 'Your password must be atleast 8 characters long.',
+			};
+			res.status(400).json(response);
+			return;
+		}
+
 		try {
-			const pondUser = await this.pondUserService.createPondUser(username, password);
-			return pondUser;
+			await this.pondUserService.createPondUser(
+				requestBody.username,
+				requestBody.password,
+			);
+			const response: RegisterResponse = {
+				success: true,
+				message: '',
+			};
+			res.status(200).json(response);
 		} catch (err: any) {
 			pondUserLogger.error(err.message);
+			const response: RegisterResponse = {
+				success: false,
+				message: 'This username is taken!',
+			};
+			res.status(400).json(response);
 		}
-		return null;
 	}
 	/**
    *
@@ -114,9 +161,12 @@ export default class PondUserController {
 		return null;
 	}
 
-	async getOrCreateCookiePondUser(cookie: string): Promise<Express.User | null> {
+	async getOrCreateCookiePondUser(
+		cookie: string,
+	): Promise<Express.User | null> {
 		try {
-			const pondUser = await this.pondUserService.getOrCreateCookiePondUser(cookie);
+			const pondUser =
+        await this.pondUserService.getOrCreateCookiePondUser(cookie);
 			return pondUser;
 		} catch (err: any) {
 			pondUserLogger.error(err.message);
@@ -160,7 +210,10 @@ export default class PondUserController {
 			if (!req.params.location) {
 				throw new Error('No location paramter in request');
 			}
-			const pondUser = await this.pondUserService.updateUserLocation(user.id, req.params.location);
+			const pondUser = await this.pondUserService.updateUserLocation(
+				user.id,
+				req.params.location,
+			);
 			res.status(201).json(pondUser);
 		} catch (err: any) {
 			pondUserLogger.error(err.message);
@@ -175,7 +228,7 @@ export default class PondUserController {
 		if (newUsername.length < 3 || newUsername.length > 20) {
 			const updateUsernameResponse: UpdateUsernameResponse = {
 				updated: false,
-				error: 'Username length must be between 3 and 20'
+				error: 'Username length must be between 3 and 20',
 			};
 			res.status(400).json(updateUsernameResponse);
 			return;
@@ -183,20 +236,26 @@ export default class PondUserController {
 		if (newUsername.startsWith('guest-')) {
 			const updateUsernameResponse: UpdateUsernameResponse = {
 				updated: false,
-				error: 'Username cannot begin with "guest-"'
+				error: 'Username cannot begin with "guest-"',
 			};
 			res.status(400).json(updateUsernameResponse);
 			return;
 		}
 		try {
-			await this.pondUserService.updateUsername(user.id, requestBody.newUsername);
-			const updateUsernameResponse: UpdateUsernameResponse = { updated: true, error: '' };
+			await this.pondUserService.updateUsername(
+				user.id,
+				requestBody.newUsername,
+			);
+			const updateUsernameResponse: UpdateUsernameResponse = {
+				updated: true,
+				error: '',
+			};
 			res.status(201).json(updateUsernameResponse);
 		} catch (err: any) {
 			pondUserLogger.error(err.message);
 			const updateUsernameResponse: UpdateUsernameResponse = {
 				updated: false,
-				error: 'This name already exists'
+				error: 'This name already exists',
 			};
 			res.status(400).json(updateUsernameResponse);
 		}
@@ -217,9 +276,16 @@ export default class PondUserController {
 		}
 	}
 
-	async getTopHundredPondUsersByExp(req: Request, res: Response): Promise<void> {
+	async getTopHundredPondUsersByExp(
+		req: Request,
+		res: Response,
+	): Promise<void> {
 		try {
-			const pondUsers = await this.pondUserService.getTopPondUsers('exp', 'desc', 100);
+			const pondUsers = await this.pondUserService.getTopPondUsers(
+				'exp',
+				'desc',
+				100,
+			);
 			res.status(200).json(pondUsers);
 		} catch (err: any) {
 			pondUserLogger.error(err.message);

@@ -6,7 +6,13 @@ interface FishColumns {
   count?: number;
 }
 
-const allColumns = ['max_length', 'fish_id', 'pond_user_id', 'created_at', 'updated_at'];
+const allColumns = [
+	'max_length',
+	'fish_id',
+	'pond_user_id',
+	'created_at',
+	'updated_at',
+];
 
 class FishDao {
 	// Knex db instance
@@ -27,7 +33,10 @@ class FishDao {
 	}
 
 	async updateFish(key: FishColumns, columns: FishColumns) {
-		const fish = await this.db('fish').returning(allColumns).where(key).update(columns);
+		const fish = await this.db('fish')
+			.returning(allColumns)
+			.where(key)
+			.update(columns);
 		return fish[0];
 	}
 }

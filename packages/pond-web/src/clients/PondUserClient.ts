@@ -41,6 +41,7 @@ export class PondUserClient {
 		return await users.json();
 	}
 
+	// TODO: REFACTOR PARAMS INTO REQ OBJ
 	async updateUsername(newUsername: string): Promise<UpdateUsernameResponse> {
 		const updateUsernameRequest: UpdateUsernameRequest = { newUsername };
 

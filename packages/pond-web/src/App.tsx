@@ -46,16 +46,11 @@ const App: React.FC = () => {
 		<MantineProvider theme={theme}>
 			<Notifications />
 			<QueryClientProvider client={queryClient}>
-	  	<ReactQueryDevtools initialIsOpen={true} />
+				<ReactQueryDevtools initialIsOpen={true} />
 				<BrowserRouter>
 					<Routes>
 						<Route path="/login" element={<Login />} />
-						<Route
-							path="/"
-							element={
-								<PrivateRoute element={<Fishing />} />
-							}
-						/>
+						<Route path="/" element={<PrivateRoute element={<Fishing />} />} />
 					</Routes>
 				</BrowserRouter>
 			</QueryClientProvider>

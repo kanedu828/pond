@@ -12,7 +12,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
 	const location = useLocation();
 
 	if (isLoading) {
-		return <LoadingPage/>;
+		return <LoadingPage />;
 	}
 
 	if (status?.authenticated) {

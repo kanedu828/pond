@@ -34,7 +34,9 @@ test('validate fish json data', () => {
 			throw new Error(`Fish id ${element.id} does not have an active property`);
 		}
 		if (element.lengthRangeInCm.length !== 2) {
-			throw new Error(`Fish id ${element.id} lengthRangeInCm array is not of length 2`);
+			throw new Error(
+				`Fish id ${element.id} lengthRangeInCm array is not of length 2`,
+			);
 		}
 		if (
 			element.rarity !== 'common' &&
@@ -46,7 +48,9 @@ test('validate fish json data', () => {
 		}
 
 		if (element.description.length > 210) {
-			throw new Error(`Fish id ${element.id} description exceeds 210 characters`);
+			throw new Error(
+				`Fish id ${element.id} description exceeds 210 characters`,
+			);
 		}
 
 		fishSet.add(element.id);

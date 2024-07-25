@@ -2,7 +2,8 @@ import FishingController from '../controller/fishingController';
 
 const fishingSocket = (io: any, fishingController: FishingController) => {
 	io.on('connection', async (socket: any) => {
-		const lastConnectedSocketId = fishingController.updateConnectedSocketId(socket);
+		const lastConnectedSocketId =
+      fishingController.updateConnectedSocketId(socket);
 		if (lastConnectedSocketId) {
 			io.sockets.sockets.get(lastConnectedSocketId)?.disconnect();
 		}

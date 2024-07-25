@@ -23,7 +23,7 @@ class PondUserService {
 			username: result.username,
 			exp: result.exp,
 			location: result.location,
-			isAccount: result.is_account
+			isAccount: result.is_account,
 		};
 	}
 
@@ -34,7 +34,9 @@ class PondUserService {
 		// Loop until a unique username is found
 		do {
 			randomUsername = `guest-${randomBytes(6).toString('hex')}`;
-			userExists = await this.pondUserDao.getPondUser({ username: randomUsername });
+			userExists = await this.pondUserDao.getPondUser({
+				username: randomUsername,
+			});
 		} while (userExists);
 
 		return randomUsername;
@@ -48,9 +50,12 @@ class PondUserService {
    * @param email
    * @returns A pond user
    */
-	async getOrCreateGooglePondUser(googleId: string, email: string): Promise<Express.User> {
+	async getOrCreateGooglePondUser(
+		googleId: string,
+		email: string,
+	): Promise<Express.User> {
 		let result = await this.pondUserDao.getPondUser({
-			google_id: googleId
+			google_id: googleId,
 		});
 		if (!result) {
 			const randomUsername = await this.createRandomUsername();
@@ -58,7 +63,7 @@ class PondUserService {
 				email,
 				google_id: googleId,
 				username: randomUsername,
-				is_account: true
+				is_account: true,
 			});
 		}
 		const pondUser: PondUser = {
@@ -66,7 +71,7 @@ class PondUserService {
 			username: result.username,
 			exp: result.exp,
 			location: result.location,
-			isAccount: result.is_account
+			isAccount: result.is_account,
 		};
 		return pondUser;
 	}
@@ -76,8 +81,12 @@ class PondUserService {
 		return result ? this.transformToPondUser(result) : null;
 	}
 
-	async getAuthenticatedPondUser(username: string, password: string): Promise<Express.User | null> {
-		const pondUserPasswordHash = await this.pondUserDao.getPondUserPasswordHash(username);
+	async getAuthenticatedPondUser(
+		username: string,
+		password: string,
+	): Promise<Express.User | null> {
+		const pondUserPasswordHash =
+      await this.pondUserDao.getPondUserPasswordHash(username);
 		const compareResult = await bcrypt.compare(password, pondUserPasswordHash);
 		if (compareResult === true) {
 			const result = await this.pondUserDao.getPondUser({ username });
@@ -87,12 +96,12 @@ class PondUserService {
 		}
 	}
 
-	async createPondUser(username: string, password: string): Promise<Express.User> {
+	async createPondUser(username: string, password: string): Promise<PondUser> {
 		const passwordHash = await bcrypt.hash(password, 10);
 		const result = await this.pondUserDao.insertPondUser({
 			username,
 			password_hash: passwordHash,
-			is_account: true
+			is_account: true,
 		});
 		return this.transformToPondUser(result);
 	}
@@ -107,7 +116,7 @@ class PondUserService {
 		const result = await this.pondUserDao.insertPondUser({
 			cookie,
 			username: randomUsername,
-			is_account: false
+			is_account: false,
 		});
 		return this.transformToPondUser(result);
 	}
@@ -139,13 +148,17 @@ class PondUserService {
 	async getUserFish(id: number): Promise<UserFish[]> {
 		const result = await this.fishDao.getFish({ pond_user_id: id });
 		const userFishArr = result.map((fishResult: any) => {
-			const fishIndex = binarySearch<Fish>(fishJson, fishResult.fish_id, (fish: Fish) => fish.id);
+			const fishIndex = binarySearch<Fish>(
+				fishJson,
+				fishResult.fish_id,
+				(fish: Fish) => fish.id,
+			);
 			const fishData: Fish = fishJson[fishIndex];
 			const userFish: UserFish = {
 				fish: fishData,
 				maxLength: fishResult.max_length,
 				count: fishResult.count,
-				pondUserId: fishResult.pond_user_id
+				pondUserId: fishResult.pond_user_id,
 			};
 			return userFish;
 		});
@@ -159,7 +172,10 @@ class PondUserService {
    * @returns the updated user
    */
 	async updateUserLocation(id: number, pond: string): Promise<PondUser> {
-		const result = await this.pondUserDao.updatePondUser({ id }, { location: pond });
+		const result = await this.pondUserDao.updatePondUser(
+			{ id },
+			{ location: pond },
+		);
 		return result;
 	}
 
@@ -170,7 +186,10 @@ class PondUserService {
    * @returns the updated user
    */
 	async updateUsername(id: number, newUsername: string): Promise<PondUser> {
-		const result = await this.pondUserDao.updatePondUser({ id }, { username: newUsername });
+		const result = await this.pondUserDao.updatePondUser(
+			{ id },
+			{ username: newUsername },
+		);
 		return result;
 	}
 
@@ -181,7 +200,11 @@ class PondUserService {
    * @param limit
    * @returns list of pond users
    */
-	async getTopPondUsers(column: string, order: 'asc' | 'desc', limit: number): Promise<PondUser[]> {
+	async getTopPondUsers(
+		column: string,
+		order: 'asc' | 'desc',
+		limit: number,
+	): Promise<PondUser[]> {
 		const result = await this.pondUserDao.getTopPondUsers(column, order, limit);
 		return result;
 	}

@@ -35,26 +35,34 @@ export const setupAuth = (pondUserController: PondUserController) => {
 				clientID: process.env.GOOGLE_CLIENT_ID ?? '',
 				clientSecret: process?.env?.GOOGLE_CLIENT_SECRET ?? '',
 				callbackURL: `${process?.env?.POND_SERVICE_URL ?? ''}/auth/google/callback`,
-				passReqToCallback: true
+				passReqToCallback: true,
 			},
 			async (_request, _accessToken, _refreshToken, profile, done) => {
-				const pondUser = await pondUserController.getOrCreateGooglePondUser(profile);
+				const pondUser =
+          await pondUserController.getOrCreateGooglePondUser(profile);
 				done(null, pondUser || undefined);
-			}
-		)
+			},
+		),
 	);
 
 	passport.use(
 		new LocalStrategy(async (username, password, done) => {
-			const pondUser = await pondUserController.getAuthenticatedPondUser(username, password);
+			const pondUser = await pondUserController.getAuthenticatedPondUser(
+				username,
+				password,
+			);
 			return done(null, pondUser || undefined);
-		})
+		}),
 	);
 
 	passport.use(
-		new CookieStrategy({ cookieName: 'pondAuthToken' }, async (token: string, done: any) => {
-			const pondUser = await pondUserController.getOrCreateCookiePondUser(token);
-			return done(null, pondUser || undefined);
-		})
+		new CookieStrategy(
+			{ cookieName: 'pondAuthToken' },
+			async (token: string, done: any) => {
+				const pondUser =
+          await pondUserController.getOrCreateCookiePondUser(token);
+				return done(null, pondUser || undefined);
+			},
+		),
 	);
 };
