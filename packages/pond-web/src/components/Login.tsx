@@ -72,7 +72,7 @@ export const Login = () => {
               Welcome to Pond!
             </Title>
 
-            <Box w="45%">
+            <Box w="50%">
 			{error !== '' && <Alert variant="light" color="red" radius="lg" title={error} mb='md' icon={<IconInfoCircle/>}
 			styles={(theme) => ({
 				wrapper: { 
@@ -137,7 +137,7 @@ export const Login = () => {
               </Group>
             </Box>
             <Divider
-              w="45%"
+              w="50%"
               my="md"
               labelPosition="center"
               label="or login with"
