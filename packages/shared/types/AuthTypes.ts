@@ -1,5 +1,3 @@
-import { PondUser } from "./types";
-
 export interface StatusResponse {
   authenticated: boolean;
 }
