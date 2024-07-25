@@ -58,10 +58,10 @@ class PondUserDao {
 
 	async getPondUserPasswordHash(username: string): Promise<string> {
 		const pondUser = await this.db('pond_user')
-			.select(defaultReturnColumns)
+			.select(['password_hash'])
 			.where({ username })
 			.first();
-		return pondUser.password;
+		return pondUser.password_hash;
 	}
 }
 

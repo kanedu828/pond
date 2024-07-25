@@ -1,32 +1,56 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { randomBytes } from 'crypto';
+import PondUserController from '../controller/pondUserController';
 
 const POND_WEB_URL = process.env.POND_WEB_URL ?? '';
 const isProduction = process.env.NODE_ENV === 'production';
 
-const getAuthenticationRouter = () => {
+const getAuthenticationRouter = (pondUserController: PondUserController) => {
 	const router: any = Router();
 
 	router.post('/guest-login', (req: Request, res: Response, next: NextFunction) => {
 		passport.authenticate('cookie', (err: any, user: Express.User, info: any) => {
-		  if (err) {
+			if (err) {
+				console.error('Authentication error:', err);
+				return res.status(500).json({ message: 'Internal server error' });
+				}
+				if (!user) {
+				console.warn('Authentication failed:', info);
+				return res.status(401).json({ message: 'Authentication failed' });
+				}
+				req.logIn(user, (loginErr) => {
+				if (loginErr) {
+					console.error('Login error:', loginErr);
+					return res.status(500).json({ message: 'Internal server error' });
+				}
+				return res.json({ message: 'Logged in as an user' });
+		  });
+		})(req, res, next);
+	  });
+	
+	router.post('/login', (req: Request, res: Response, next: NextFunction) => {
+	passport.authenticate('local', (err: any, user: Express.User, info: any) => {
+
+		if (err) {
 			console.error('Authentication error:', err);
-			return res.status(500).json({ message: 'Internal server error' });
+			return res.status(500).json({ message: 'Internal server error', incorrectCredentials: false });
 		  }
 		  if (!user) {
 			console.warn('Authentication failed:', info);
-			return res.status(401).json({ message: 'Authentication failed' });
+			return res.status(401).json({ message: 'Incorrect username or password', incorrectCredentials: true });
 		  }
 		  req.logIn(user, (loginErr) => {
 			if (loginErr) {
 			  console.error('Login error:', loginErr);
-			  return res.status(500).json({ message: 'Internal server error' });
+			  return res.status(500).json({ message: 'Internal server error', incorrectCredentials: false });
 			}
-			return res.json({ message: 'Logged in as guest', user });
-		  });
-		})(req, res, next);
-	  });
+			return res.json({ message: 'Success', incorrectCredentials: false });
+		});
+	})(req, res, next);
+	});
+	
+	router.post('/register', pondUserController.registerUserLocal.bind(pondUserController));
 
 	router.get('/set-cookie', (req: Request, res: Response) => {
 		const name = 'pondAuthToken';

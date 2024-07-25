@@ -105,7 +105,7 @@ io.use(wrap(isLoggedIn));
 
 fishingSocket(io, fishingController);
 
-app.use('/auth', getAuthenticationRouter());
+app.use('/auth', getAuthenticationRouter(pondUserController));
 app.use('/user', getUserRouter(pondUserController));
 
 server.listen(POND_SERVICE_PORT, () => console.log('Server Running'));

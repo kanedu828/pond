@@ -10,33 +10,57 @@ import {
   PasswordInput,
   Box,
   Divider,
+  Alert,
 } from "@mantine/core";
 import {
   useGuestLogin,
+  useLogin,
+  useRegister,
   useSetAuthCookie,
   useStatus,
 } from "../hooks/api/UseAuthClient";
 import IdleWithFishAnimation from "../assets/images/LoginPageImage.png";
 import LilyPadBackground from "../assets/images/LilyPadBackground.png";
-import { IconBrandGoogleFilled } from "@tabler/icons-react";
+import { IconBrandGoogleFilled, IconInfoCircle } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { LoginResponse, RegisterResponse } from "../../../shared/types/AuthTypes";
 
 const API_URL = import.meta.env.VITE_POND_API_URL;
 
 export const Login = () => {
   useSetAuthCookie();
   const { mutateAsync: guestLogin } = useGuestLogin();
+  const { mutateAsync: login } = useLogin();
+  const { mutateAsync: register } = useRegister();
+
   const navigate = useNavigate();
   const { data: status } = useStatus();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (status?.authenticated) {
       navigate("/");
     }
   }, [status, navigate]);
+
+  const handleRegister = async () => {
+		const res: RegisterResponse = await register({username, password});
+		if (!res.success) {
+			setError(res.message);
+		} else {
+			handleLogin();
+		}
+  } 
+
+  const handleLogin = async () => {
+	  const res: LoginResponse = await login({ username, password });
+	  if (res.incorrectCredentials) {
+		  setError(res.message);
+	  }
+  }
 
   return (
     <BackgroundImage src={LilyPadBackground}>
@@ -48,7 +72,33 @@ export const Login = () => {
               Welcome to Pond!
             </Title>
 
-            <Box component="form" onSubmit={() => {}} w="45%">
+            <Box w="45%">
+			{error !== '' && <Alert variant="light" color="red" radius="lg" title={error} mb='md' icon={<IconInfoCircle/>}
+			styles={(theme) => ({
+				wrapper: { 
+				  justifyContent: 'center', 
+				  alignItems: 'center',
+				  minHeight: 'unset' // Remove minimum height if any
+				},
+				body: { 
+				  textAlign: 'center',
+				  padding: 0 // Remove padding from body
+				},
+				title: { 
+				  textAlign: 'center', 
+				  width: '100%',
+				  margin: 0, // Remove margin from title
+				  padding: 0 // Add some padding to title for spacing
+				},
+				icon: { 
+				  marginRight: theme.spacing.sm, // Add some space between icon and text
+				  marginTop: 0 // Ensure icon is vertically centered
+				},
+			  })}
+			
+			/>}
+			
+      
               <TextInput
                 label={
                   <Text fw={700} c="pondTeal.9">
@@ -72,7 +122,7 @@ export const Login = () => {
                 radius="md"
               />
               <Group grow mb="md">
-                <Button type="submit" color="pondTeal.9" radius="md">
+                <Button color="pondTeal.9" radius="md" onClick={handleLogin}>
                   Log In
                 </Button>
                 <Button
@@ -80,9 +130,7 @@ export const Login = () => {
                   color="pondTeal.9"
                   variant="outline"
                   radius="md"
-                  onClick={() => {
-                    /* Handle registration */
-                  }}
+                  onClick={handleRegister}
                 >
                   Register
                 </Button>

@@ -6,6 +6,8 @@ import PondUser from '../models/pondUserModel';
 import PondUserService from '../service/pondUserService';
 import { pondUserLogger } from '../util/logger';
 import { UpdateUsernameRequest, UpdateUsernameResponse } from '../../../shared/types/UserTypes';
+import { RegisterRequest, RegisterResponse } from '../../../shared/types/AuthTypes';
+
 
 export default class PondUserController {
 	pondUserService: PondUserService;
@@ -67,20 +69,46 @@ export default class PondUserController {
 		return null;
 	}
 
+
 	/**
-   *
-   * @param req
-   * @param profile
-   * @returns pondUser
-   */
-	async createPondUserByUsername(username: string, password: string): Promise<Express.User | null> {
+	 * @param req 
+	 * @param res 
+	 */
+	async registerUserLocal(req: Request, res: Response): Promise<void> {
+		const requestBody: RegisterRequest = req.body;
+		if (requestBody.username.length < 3) {
+			const response: RegisterResponse = {
+				success: false,
+				message: 'Your username must be atleast 3 characters long.'
+			};
+			res.status(400).json(response)
+			return
+		}
+
+		if (requestBody.password.length < 8) {
+			const response: RegisterResponse = {
+				success: false,
+				message: 'Your password must be atleast 8 characters long.'
+			};
+			res.status(400).json(response)
+			return
+		}
+
 		try {
-			const pondUser = await this.pondUserService.createPondUser(username, password);
-			return pondUser;
+			const pondUser = await this.pondUserService.createPondUser(requestBody.username, requestBody.password);
+			const response: RegisterResponse = {
+				success: true,
+				message: ''
+			};
+			res.status(200).json(response);
 		} catch (err: any) {
 			pondUserLogger.error(err.message);
+			const response: RegisterResponse = {
+				success: false,
+				message: 'This username is taken!'
+			};
+			res.status(400).json(response);
 		}
-		return null;
 	}
 	/**
    *

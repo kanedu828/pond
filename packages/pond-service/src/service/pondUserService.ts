@@ -87,7 +87,7 @@ class PondUserService {
 		}
 	}
 
-	async createPondUser(username: string, password: string): Promise<Express.User> {
+	async createPondUser(username: string, password: string): Promise<PondUser> {
 		const passwordHash = await bcrypt.hash(password, 10);
 		const result = await this.pondUserDao.insertPondUser({
 			username,

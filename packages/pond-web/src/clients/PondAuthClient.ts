@@ -1,6 +1,10 @@
 import {
   GuestLoginResponse,
+  LoginRequest,
+  LoginResponse,
   LogoutResponse,
+  RegisterRequest,
+  RegisterResponse,
   StatusResponse,
 } from "../../../shared/types/AuthTypes";
 
@@ -39,6 +43,30 @@ export class PondAuthClient {
     });
     return response.json();
   }
+  
+  async login(req: LoginRequest): Promise<LoginResponse> {
+    const response = await fetch(`${this.apiUrl}/${API_PATH}/login`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json", // Indicates the content
+      },
+      credentials: "include",
+      body: JSON.stringify(req),
+    });
+    return response.json();
+  }
+
+  async register(req: RegisterRequest): Promise<RegisterResponse> {
+    const response = await fetch(`${this.apiUrl}/${API_PATH}/register`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json", // Indicates the content
+      },
+      credentials: "include",
+      body: JSON.stringify(req),
+    });
+    return response.json();
+  }
 
   async setAuthCookie(): Promise<{}> {
     const response = await fetch(`${this.apiUrl}/${API_PATH}/set-cookie`, {
@@ -47,4 +75,5 @@ export class PondAuthClient {
     });
     return await response.json();
   }
+
 }
