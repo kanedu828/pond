@@ -1,45 +1,45 @@
-import express, { Application } from 'express';
-import http from 'http';
-import { Server } from 'socket.io';
-import passport from 'passport';
-import cors from 'cors';
-import knex from 'knex';
-import session from 'express-session';
-import KnexSessionStore from 'connect-session-knex';
-import fishingSocket from './sockets/fishing';
-import getAuthenticationRouter from './routers/authentication';
-import { isLoggedIn, setupAuth } from './util/middleware';
-import PondUserController from './controller/pondUserController';
-import FishingController from './controller/fishingController';
-import PondUserDao from './dao/pondUserDao';
-import FishDao from './dao/fishDao';
-import { getUserRouter } from './routers/user';
-import { pondUserLogger } from './util/logger';
-import cookieParser from 'cookie-parser';
+import express, { Application } from "express";
+import http from "http";
+import { Server } from "socket.io";
+import passport from "passport";
+import cors from "cors";
+import knex from "knex";
+import session from "express-session";
+import KnexSessionStore from "connect-session-knex";
+import fishingSocket from "./sockets/fishing";
+import getAuthenticationRouter from "./routers/authentication";
+import { isLoggedIn, setupAuth } from "./util/middleware";
+import PondUserController from "./controller/pondUserController";
+import FishingController from "./controller/fishingController";
+import PondUserDao from "./dao/pondUserDao";
+import FishDao from "./dao/fishDao";
+import { getUserRouter } from "./routers/user";
+import { pondUserLogger } from "./util/logger";
+import cookieParser from "cookie-parser";
 
 // ----------- Env Variables ----------------
-const POND_WEB_URL: string = process.env.POND_WEB_URL ?? '';
-const POND_SERVICE_PORT: string = process.env.POND_SERVICE_PORT ?? '';
-const SESSION_SECRET: string = process.env.SESSION_SECRET ?? '';
+const POND_WEB_URL: string = process.env.POND_WEB_URL ?? "";
+const POND_SERVICE_PORT: string = process.env.POND_SERVICE_PORT ?? "";
+const SESSION_SECRET: string = process.env.SESSION_SECRET ?? "";
 
 const app: Application = express();
 app.use(
   cors({
     origin: POND_WEB_URL,
     credentials: true,
-  })
+  }),
 );
 
 // CORS Headers
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', POND_WEB_URL);
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader("Access-Control-Allow-Origin", POND_WEB_URL);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
 });
 
 // -------DB Initialization-------
 const db = knex({
-  client: 'pg',
+  client: "pg",
   connection: {
     connectionString: process.env.PSQL_CONNECTION_STRING,
   },
@@ -62,10 +62,10 @@ const sessionConfig = {
   store: sessionStorage,
 };
 
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1); // trust first proxy
+if (app.get("env") === "production") {
+  app.set("trust proxy", 1); // trust first proxy
   sessionConfig.cookie.secure = true; // serve secure cookies
-  pondUserLogger.info('Pond Service Start Env: Production');
+  pondUserLogger.info("Pond Service Start Env: Production");
 }
 
 const sessionMiddleware = session(sessionConfig);
@@ -90,7 +90,7 @@ const io = new Server(server, {
   cors: {
     origin: POND_WEB_URL,
     credentials: true,
-    methods: ['GET', 'POST'],
+    methods: ["GET", "POST"],
   },
 });
 
@@ -105,9 +105,9 @@ io.use(wrap(isLoggedIn));
 
 fishingSocket(io, fishingController);
 
-app.use('/auth', getAuthenticationRouter(pondUserController));
-app.use('/user', getUserRouter(pondUserController));
+app.use("/auth", getAuthenticationRouter(pondUserController));
+app.use("/user", getUserRouter(pondUserController));
 
-server.listen(POND_SERVICE_PORT, () => console.log('Server Running'));
+server.listen(POND_SERVICE_PORT, () => console.log("Server Running"));
 
-pondUserLogger.info('Pond Service Start');
+pondUserLogger.info("Pond Service Start");
