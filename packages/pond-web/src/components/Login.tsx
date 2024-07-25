@@ -39,6 +39,8 @@ export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoginMode, setIsLoginMode] = useState(true);
+const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     if (status?.authenticated) {
@@ -47,13 +49,17 @@ export const Login = () => {
   }, [status, navigate]);
 
   const handleRegister = async () => {
-		const res: RegisterResponse = await register({username, password});
-		if (!res.success) {
-			setError(res.message);
-		} else {
-			handleLogin();
-		}
-  } 
+	if (password !== confirmPassword) {
+	  setError("Passwords do not match");
+	  return;
+	}
+	const res: RegisterResponse = await register({username, password});
+	if (!res.success) {
+	  setError(res.message);
+	} else {
+	  handleLogin();
+	}
+  }
 
   const handleLogin = async () => {
 	  const res: LoginResponse = await login({ username, password });
@@ -99,42 +105,49 @@ export const Login = () => {
 			/>}
 			
       
-              <TextInput
-                label={
-                  <Text fw={700} c="pondTeal.9">
-                    Username
-                  </Text>
-                }
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                mb="sm"
-                radius="md"
-              />
-              <PasswordInput
-                label={
-                  <Text fw={700} c="pondTeal.9">
-                    Password
-                  </Text>
-                }
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                mb="md"
-                radius="md"
-              />
-              <Group grow mb="md">
-                <Button color="pondTeal.9" radius="md" onClick={handleLogin}>
-                  Log In
-                </Button>
-                <Button
-                  type="button"
-                  color="pondTeal.9"
-                  variant="outline"
-                  radius="md"
-                  onClick={handleRegister}
-                >
-                  Register
-                </Button>
-              </Group>
+			<TextInput
+    label={<Text fw={700} c="pondTeal.9">Username</Text>}
+    value={username}
+    onChange={(e) => setUsername(e.target.value)}
+    mb="sm"
+    radius="md"
+  />
+  <PasswordInput
+    label={<Text fw={700} c="pondTeal.9">Password</Text>}
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    mb="md"
+    radius="md"
+  />
+  {!isLoginMode && (
+    <PasswordInput
+      label={<Text fw={700} c="pondTeal.9">Confirm Password</Text>}
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+      mb="md"
+      radius="md"
+    />
+  )}
+  <Group grow mb="md">
+    <Button 
+      color="pondTeal.9" 
+      radius="md" 
+      onClick={isLoginMode ? handleLogin : handleRegister}
+    >
+      {isLoginMode ? "Log In" : "Register"}
+    </Button>
+  </Group>
+  <Text ta="center" size="sm">
+    {isLoginMode ? "Don't have an account?" : "Already have an account?"}
+    <Button 
+      variant="subtle" 
+      color="pondTeal.9" 
+      size='compact-sm' 
+      onClick={() => setIsLoginMode(!isLoginMode)}
+    >
+      {isLoginMode ? "Register" : "Log In"}
+    </Button>
+  </Text>
             </Box>
             <Divider
               w="50%"
