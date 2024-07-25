@@ -1,30 +1,30 @@
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
 export default class FishingSocketSingleton {
-	private static instance: FishingSocketSingleton;
-	private socket: Socket;
+  private static instance: FishingSocketSingleton;
+  private socket: Socket;
 
-	private constructor() {
-		const url = import.meta.env.VITE_POND_FISHING_WS_URL;
-		if (!url) {
-			throw new Error('Could not find pond web fishing websocket url');
-		}
-		this.socket = io(url, {
-			withCredentials: true,
-			secure: true,
-			transports: ['websocket', 'polling'],
-			// rejectUnauthorized: false
-		});
-	}
+  private constructor() {
+    const url = import.meta.env.VITE_POND_FISHING_WS_URL;
+    if (!url) {
+      throw new Error("Could not find pond web fishing websocket url");
+    }
+    this.socket = io(url, {
+      withCredentials: true,
+      secure: true,
+      transports: ["websocket", "polling"],
+      // rejectUnauthorized: false
+    });
+  }
 
-	public static getInstance(): FishingSocketSingleton {
-		if (!FishingSocketSingleton.instance) {
-			FishingSocketSingleton.instance = new FishingSocketSingleton();
-		}
-		return FishingSocketSingleton.instance;
-	}
+  public static getInstance(): FishingSocketSingleton {
+    if (!FishingSocketSingleton.instance) {
+      FishingSocketSingleton.instance = new FishingSocketSingleton();
+    }
+    return FishingSocketSingleton.instance;
+  }
 
-	public getSocket(): Socket {
-		return this.socket;
-	}
+  public getSocket(): Socket {
+    return this.socket;
+  }
 }

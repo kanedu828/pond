@@ -8,7 +8,7 @@ export interface RegisterRequest {
 }
 
 export interface RegisterResponse {
-  success: boolean,
+  success: boolean;
   message: string;
 }
 
