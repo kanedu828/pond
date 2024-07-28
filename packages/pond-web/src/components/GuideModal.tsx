@@ -1,6 +1,7 @@
-import { Modal, Stack, Title, Text, Image } from "@mantine/core";
+import { Stack, Text, Image } from "@mantine/core";
 import IdleAnimation from "../assets/FishingAnimations/idle.gif";
 import IdleWithFishAnimation from "../assets/FishingAnimations/idle_with_fish.gif";
+import { ModalContainer } from "./ModalContainer";
 
 interface GuideModalProps {
   isOpen: any;
@@ -9,15 +10,8 @@ interface GuideModalProps {
 
 export const GuideModal = (props: GuideModalProps) => {
   return (
-    <Modal
-      opened={props.isOpen}
-      onClose={props.close}
-      radius={30}
-      transitionProps={{ transition: "fade", duration: 500 }}
-      size="70%"
-      centered
-    >
-      <Stack
+    <ModalContainer isOpen={props.isOpen} close={props.close} isLoading={false} title="Guide">
+<Stack
         justify="space-between"
         align="center"
         style={{
@@ -26,9 +20,6 @@ export const GuideModal = (props: GuideModalProps) => {
           paddingRight: "20rem",
         }}
       >
-        <Title order={2} c="pondTeal.9">
-          Guide
-        </Title>
         <Text size="xl" c="pondTeal.8">
           Welcome to Pond! Leave this site open while working, studying, gaming,
           or even lounging around. Be sure to enable sound permissions so you
@@ -47,6 +38,9 @@ export const GuideModal = (props: GuideModalProps) => {
           away. Rarer fish may escape quickly!
         </Text>
       </Stack>
-    </Modal>
+    </ModalContainer>
+   
+        
+
   );
 };

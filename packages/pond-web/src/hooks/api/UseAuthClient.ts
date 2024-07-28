@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  BindGuestRequest,
   LoginRequest,
   RegisterRequest,
 } from "../../../../shared/types/AuthTypes";
@@ -74,3 +75,16 @@ export const useRegister = () => {
     },
   });
 };
+
+export const useBindGuest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (req: BindGuestRequest) => {
+      return await pondAuthClient.bindGuest(req);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["auth", "status"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+}

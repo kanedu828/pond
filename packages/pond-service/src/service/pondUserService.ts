@@ -106,6 +106,17 @@ class PondUserService {
     return this.transformToPondUser(result);
   }
 
+  async bindGuestUser(id: number, username: string, password: string): Promise<PondUser> {
+    const passwordHash = await bcrypt.hash(password, 10);
+    const result = await this.pondUserDao.updatePondUser({ id }, {
+      username,
+      password_hash: passwordHash,
+      is_account: true,
+      cookie: null
+    });
+    return this.transformToPondUser(result);
+  }
+
   async getPondUserByCookie(cookie: string): Promise<Express.User | null> {
     const result = await this.pondUserDao.getPondUser({ cookie });
     return result ? this.transformToPondUser(result) : null;

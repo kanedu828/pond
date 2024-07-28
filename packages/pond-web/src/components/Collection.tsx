@@ -1,16 +1,13 @@
 import {
   Group,
-  LoadingOverlay,
-  Modal,
   Select,
-  Stack,
   TextInput,
-  Title,
 } from "@mantine/core";
 import { useState } from "react";
 import { useGetUserFish } from "../hooks/api/UseUserClient";
 import { sortComparator } from "../util/util";
 import { FishCard } from "./FishCard";
+import { ModalContainer } from "./ModalContainer";
 
 interface CollectionProps {
   isOpen: boolean;
@@ -29,35 +26,8 @@ export const Collection = (props: CollectionProps) => {
     });
 
   return (
-    <Modal
-      opened={props.isOpen}
-      onClose={() => {
-        props.close();
-        setSearchInput("");
-      }}
-      radius={30}
-      size={"70%"}
-      transitionProps={{ transition: "fade", duration: 500 }}
-    >
-      <LoadingOverlay
-        visible={isLoading}
-        zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2 }}
-      />
-      <Stack
-        justify="center"
-        align="center"
-        gap="xl"
-        style={{
-          paddingBottom: "90px",
-          paddingLeft: "1px",
-          paddingRight: "1px",
-        }}
-      >
-        <Title order={2} c="pondTeal.9">
-          Collection
-        </Title>
-        <Group justify={"center"}>
+    <ModalContainer isOpen={props.isOpen} close={props.close} isLoading={isLoading} title="Collection">
+<Group justify={"center"}>
           <TextInput
             placeholder="Search by Name"
             onChange={(event: any) => setSearchInput(event.currentTarget.value)}
@@ -82,7 +52,9 @@ export const Collection = (props: CollectionProps) => {
             />
           ))}
         </Group>
-      </Stack>
-    </Modal>
+    </ModalContainer>
+    
+        
+
   );
 };

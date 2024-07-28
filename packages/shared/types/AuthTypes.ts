@@ -12,6 +12,17 @@ export interface RegisterResponse {
   message: string;
 }
 
+export interface BindGuestRequest {
+  id: number;
+  username: string;
+  password: string;
+}
+
+export interface BindGuestResponse {
+  success: boolean;
+  message: string;
+}
+
 export interface LoginRequest {
   username: string;
   password: string;

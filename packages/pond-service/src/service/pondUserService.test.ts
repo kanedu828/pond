@@ -291,3 +291,44 @@ describe("getAuthenticatedPondUser", () => {
     expect(result).toBeNull();
   });
 });
+
+describe("bindGuestUser", () => {
+  it("binds guest user to a regular account", async () => {
+    const id = 1;
+    const username = "newUser";
+    const password = "password123";
+    const hashedPassword = "hashedPassword123";
+
+    (bcrypt.hash as jest.Mock).mockResolvedValue(hashedPassword);
+
+    const updatedUser = {
+      id: 1,
+      username: "newUser",
+      exp: 100,
+      location: "pond",
+      is_account: true,
+    };
+
+    mockPondUserDao.updatePondUser.mockResolvedValue(updatedUser);
+
+    const result = await pondUserService.bindGuestUser(id, username, password);
+
+    expect(bcrypt.hash).toHaveBeenCalledWith(password, 10);
+    expect(mockPondUserDao.updatePondUser).toHaveBeenCalledWith(
+      { id },
+      {
+        username,
+        password_hash: hashedPassword,
+        is_account: true,
+        cookie: null,
+      }
+    );
+    expect(result).toEqual({
+      id: 1,
+      username: "newUser",
+      exp: 100,
+      location: "pond",
+      isAccount: true,
+    });
+  });
+});

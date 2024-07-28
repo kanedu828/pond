@@ -10,6 +10,8 @@ import {
   UpdateUsernameResponse,
 } from "../../../shared/types/UserTypes";
 import {
+  BindGuestRequest,
+  BindGuestResponse,
   RegisterRequest,
   RegisterResponse,
 } from "../../../shared/types/AuthTypes";
@@ -86,6 +88,56 @@ export default class PondUserController {
     return null;
   }
 
+  async bindGuestUser(req: Request, res: Response): Promise<void> {
+    const requestBody: BindGuestRequest = req.body;
+    if (requestBody.username.length < 3) {
+      const response: BindGuestResponse = {
+        success: false,
+        message: "Your username must be atleast 3 characters long.",
+      };
+      res.status(400).json(response);
+      return;
+    }
+
+    if (requestBody.username.length > 24) {
+      const response: RegisterResponse = {
+        success: false,
+        message: "Your username must be less than 25 characters long.",
+      };
+      res.status(400).json(response);
+      return;
+    }
+
+    if (requestBody.password.length < 8) {
+      const response: BindGuestResponse = {
+        success: false,
+        message: "Your password must be atleast 8 characters long.",
+      };
+      res.status(400).json(response);
+      return;
+    }
+
+    try {
+      await this.pondUserService.bindGuestUser(
+        requestBody.id,
+        requestBody.username,
+        requestBody.password,
+      );
+      const response: BindGuestResponse = {
+        success: true,
+        message: "",
+      };
+      res.status(200).json(response);
+    } catch (err: any) {
+      pondUserLogger.error(err.message);
+      const response: BindGuestResponse = {
+        success: false,
+        message: "This username is taken!",
+      };
+      res.status(400).json(response);
+    }
+  }
+
   /**
    * @param req
    * @param res
@@ -96,6 +148,15 @@ export default class PondUserController {
       const response: RegisterResponse = {
         success: false,
         message: "Your username must be atleast 3 characters long.",
+      };
+      res.status(400).json(response);
+      return;
+    }
+
+    if (requestBody.username.length > 24) {
+      const response: RegisterResponse = {
+        success: false,
+        message: "Your username must be less than 25 characters long.",
       };
       res.status(400).json(response);
       return;

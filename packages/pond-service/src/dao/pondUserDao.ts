@@ -5,7 +5,7 @@ interface PondUserColumns {
   username?: string;
   exp?: number;
   location?: string;
-  cookie?: string;
+  cookie?: string | null;
   password_hash?: string;
   is_account?: boolean;
 }

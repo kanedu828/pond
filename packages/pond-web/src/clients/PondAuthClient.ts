@@ -1,4 +1,6 @@
 import {
+  BindGuestRequest,
+  BindGuestResponse,
   GuestLoginResponse,
   LoginRequest,
   LoginResponse,
@@ -58,6 +60,18 @@ export class PondAuthClient {
 
   async register(req: RegisterRequest): Promise<RegisterResponse> {
     const response = await fetch(`${this.apiUrl}/${API_PATH}/register`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json", // Indicates the content
+      },
+      credentials: "include",
+      body: JSON.stringify(req),
+    });
+    return response.json();
+  }
+
+  async bindGuest(req: BindGuestRequest): Promise<BindGuestResponse> {
+    const response = await fetch(`${this.apiUrl}/${API_PATH}/bind-guest`, {
       method: "post",
       headers: {
         "Content-Type": "application/json", // Indicates the content
