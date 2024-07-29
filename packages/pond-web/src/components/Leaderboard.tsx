@@ -1,6 +1,6 @@
-import { useGetTopHundredUsersByExp } from "../hooks/api/UseUserClient";
-import { LeaderboardTable } from "./LeaderboardTable";
-import { ModalContainer } from "./ModalContainer";
+import { useGetTopHundredUsersByExp } from '../hooks/api/UseUserClient';
+import { LeaderboardTable } from './LeaderboardTable';
+import { ModalContainer } from './ModalContainer';
 
 interface LeaderboardProps {
   isOpen: boolean;
@@ -8,16 +8,16 @@ interface LeaderboardProps {
 }
 
 export const Leaderboard = (props: LeaderboardProps) => {
-  const { data, isLoading } = useGetTopHundredUsersByExp();
+	const { data, isLoading } = useGetTopHundredUsersByExp();
 
-  return (
-    <ModalContainer
-      isOpen={props.isOpen}
-      close={props.close}
-      isLoading={isLoading}
-      title="Leaderboard"
-    >
-      <LeaderboardTable users={data ?? []} />
-    </ModalContainer>
-  );
+	return (
+		<ModalContainer
+			isOpen={props.isOpen}
+			close={props.close}
+			isLoading={isLoading}
+			title="Leaderboard"
+		>
+			<LeaderboardTable users={data ?? []} />
+		</ModalContainer>
+	);
 };
