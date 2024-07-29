@@ -29,7 +29,7 @@ class PondUserService {
 
   private async createRandomUsername(): Promise<string> {
     let randomUsername: string;
-    let userExists: boolean;
+    let userExists: PondUser;
 
     // Loop until a unique username is found
     do {
@@ -66,14 +66,7 @@ class PondUserService {
         is_account: true,
       });
     }
-    const pondUser: PondUser = {
-      id: result.id,
-      username: result.username,
-      exp: result.exp,
-      location: result.location,
-      isAccount: result.is_account,
-    };
-    return pondUser;
+    return this.transformToPondUser(result);
   }
 
   async getPondUserByUsername(username: string): Promise<Express.User | null> {
@@ -106,14 +99,21 @@ class PondUserService {
     return this.transformToPondUser(result);
   }
 
-  async bindGuestUser(id: number, username: string, password: string): Promise<PondUser> {
+  async bindGuestUser(
+    id: number,
+    username: string,
+    password: string,
+  ): Promise<PondUser> {
     const passwordHash = await bcrypt.hash(password, 10);
-    const result = await this.pondUserDao.updatePondUser({ id }, {
-      username,
-      password_hash: passwordHash,
-      is_account: true,
-      cookie: null
-    });
+    const result = await this.pondUserDao.updatePondUser(
+      { id },
+      {
+        username,
+        password_hash: passwordHash,
+        is_account: true,
+        cookie: null,
+      },
+    );
     return this.transformToPondUser(result);
   }
 
@@ -148,7 +148,7 @@ class PondUserService {
    */
   async getPondUser(id: number): Promise<Express.User> {
     const result = await this.pondUserDao.getPondUser({ id });
-    return result;
+    return this.transformToPondUser(result);
   }
 
   /**

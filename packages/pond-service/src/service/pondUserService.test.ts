@@ -14,6 +14,14 @@ const mockUser = {
   is_account: true,
 };
 
+const mockTransformedUser = {
+  id: 123,
+  username: "test-user",
+  exp: 1,
+  location: "default",
+  isAccount: true,
+};
+
 jest.mock("../dao/pondUserDao");
 
 jest.mock("bcrypt", () => ({
@@ -44,7 +52,7 @@ describe(" Test getPondUser", () => {
   it("user id exists", async () => {
     mockPondUserDao.getPondUser.mockResolvedValueOnce(mockUser);
     const results = await pondUserService.getPondUser(123);
-    expect(results).toBe(mockUser);
+    expect(results).toStrictEqual(mockTransformedUser);
   });
 });
 
@@ -321,7 +329,7 @@ describe("bindGuestUser", () => {
         password_hash: hashedPassword,
         is_account: true,
         cookie: null,
-      }
+      },
     );
     expect(result).toEqual({
       id: 1,

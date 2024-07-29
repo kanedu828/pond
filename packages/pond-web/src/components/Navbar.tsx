@@ -19,7 +19,8 @@ export const Navbar = () => {
   const [isGuideOpen, { open: openGuide, close: closeGuide }] =
     useDisclosure(false);
 
-  const [isProfileOpen, { open: openProfile, close: closeProfile }] = useDisclosure(false);
+  const [isProfileOpen, { open: openProfile, close: closeProfile }] =
+    useDisclosure(false);
 
   const navigate = useNavigate();
 

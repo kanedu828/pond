@@ -10,8 +10,13 @@ interface GuideModalProps {
 
 export const GuideModal = (props: GuideModalProps) => {
   return (
-    <ModalContainer isOpen={props.isOpen} close={props.close} isLoading={false} title="Guide">
-<Stack
+    <ModalContainer
+      isOpen={props.isOpen}
+      close={props.close}
+      isLoading={false}
+      title="Guide"
+    >
+      <Stack
         justify="space-between"
         align="center"
         style={{
@@ -39,8 +44,5 @@ export const GuideModal = (props: GuideModalProps) => {
         </Text>
       </Stack>
     </ModalContainer>
-   
-        
-
   );
 };

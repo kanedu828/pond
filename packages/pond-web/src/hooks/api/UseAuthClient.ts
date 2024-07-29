@@ -87,4 +87,4 @@ export const useBindGuest = () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
-}
+};

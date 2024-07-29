@@ -72,7 +72,10 @@ const getAuthenticationRouter = (pondUserController: PondUserController) => {
     pondUserController.registerUserLocal.bind(pondUserController),
   );
 
-  router.post('/bind-guest', pondUserController.bindGuestUser.bind(pondUserController));
+  router.post(
+    "/bind-guest",
+    pondUserController.bindGuestUser.bind(pondUserController),
+  );
 
   router.get("/set-cookie", (req: Request, res: Response) => {
     const name = "pondAuthToken";
