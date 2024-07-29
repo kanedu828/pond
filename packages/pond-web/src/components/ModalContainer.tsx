@@ -6,6 +6,7 @@ interface ModalContainerProps {
   isLoading: boolean;
   title: string;
   children: React.ReactNode;
+  size?: string;
 }
 
 export const ModalContainer = (props: ModalContainerProps) => {
@@ -16,8 +17,9 @@ export const ModalContainer = (props: ModalContainerProps) => {
 				props.close();
 			}}
 			radius={30}
-			size={'70%'}
-			transitionProps={{ transition: 'fade', duration: 500 }}
+			size={props.size || '70%'}
+			transitionProps={{ transition: 'slide-down', duration: 250 }}
+            centered
 		>
 			<LoadingOverlay
 				visible={props.isLoading}

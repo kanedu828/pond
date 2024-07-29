@@ -6,6 +6,7 @@ import {
 	Group,
 	PasswordInput,
 	Paper,
+    Title,
 } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -49,6 +50,7 @@ export const Profile = (props: ProfileProps) => {
 			close={props.close}
 			isLoading={isLoading}
 			title="Profile"
+            size='30%'
 		>
 			<TextInput
 				disabled
@@ -60,10 +62,10 @@ export const Profile = (props: ProfileProps) => {
 				placeholder={user?.username}
 			/>
 			{!user?.isAccount && (
-				<Paper w="30%" shadow="xs" radius="md" p="xl">
-					<Text size="xl" fw={700} c="pondTeal.9">
+				<Paper w="80%" shadow="xs" radius="md" p="xl">
+					<Title order={4} c="pondTeal.9">
             Link guest account
-					</Text>
+					</Title>
 					{error !== '' && (
 						<Alert
 							variant="light"
