@@ -5,7 +5,6 @@ import {
   getRandomInt,
   getRandomRarity,
   randomNormal,
-  sleep,
 } from "../util/util";
 import fishJson from "../data/fish.json";
 import pondJson from "../data/ponds.json";
@@ -63,44 +62,6 @@ export default class FishingService {
       expirationDate,
     };
     return fishInstance;
-  }
-
-  /**
-   * This function is deprecated.
-   * @param userId The user id to poll a fish for
-   * @param low The lower bound for possible due date for a fish in seconds
-   * @param high The higher bound for possible due date for a fish in seconds
-   * @returns null or fish instance
-   */
-  async getFish(
-    userId: number,
-    socketId: number,
-    low: number,
-    high: number,
-  ): Promise<FishInstance | null> {
-    const secondsUntilNextFish = getRandomInt(low, high);
-    await sleep(secondsUntilNextFish * 1000);
-    const currentFish = this.getCurrentFish(userId);
-    if (!currentFish) {
-      const user = await this.pondUserDao.getPondUser({
-        id: userId,
-      });
-      let { location } = user;
-
-      if (!(location in fishJson)) {
-        // If user does not have a valid location, reset to the deafult location
-        this.pondUserDao.updatePondUser({ id: userId }, { location: "Pond" });
-        location = "Pond";
-      }
-      const fishInstance = FishingService.generateFish(location);
-      // This is needed because extra sessions are still active even after logging out/disconnecting
-      // This causes client to recieve fish earlier by refreshing page.
-      if (socketId === this.getConnectSocketId(userId)) {
-        this.userCurrentFish.set(userId, fishInstance);
-      }
-      return fishInstance;
-    }
-    return currentFish;
   }
 
   /**

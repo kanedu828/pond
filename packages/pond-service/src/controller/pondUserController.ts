@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
 import { Profile } from "passport-google-oauth20";
-import FishDao from "../dao/fishDao";
-import PondUserDao from "../dao/pondUserDao";
-import PondUser from "../models/pondUserModel";
 import PondUserService from "../service/pondUserService";
 import { pondUserLogger } from "../util/logger";
 import {
@@ -15,12 +12,13 @@ import {
   RegisterRequest,
   RegisterResponse,
 } from "../../../shared/types/AuthTypes";
+import { PondUser } from "../../../shared/types/types";
 
 export default class PondUserController {
   pondUserService: PondUserService;
 
-  constructor(pondUserDao: PondUserDao, fishDao: FishDao) {
-    this.pondUserService = new PondUserService(pondUserDao, fishDao);
+  constructor(pondUserService: PondUserService) {
+    this.pondUserService = pondUserService;
   }
 
   /**
@@ -43,23 +41,6 @@ export default class PondUserController {
         );
         return pondUser;
       }
-    } catch (err: any) {
-      pondUserLogger.error(err.message);
-    }
-    return null;
-  }
-
-  /**
-   *
-   * @param req
-   * @param profile
-   * @returns pondUser
-   */
-  async getPondUserByUsername(username: string): Promise<Express.User | null> {
-    try {
-      const pondUser =
-        await this.pondUserService.getPondUserByUsername(username);
-      return pondUser;
     } catch (err: any) {
       pondUserLogger.error(err.message);
     }
@@ -190,37 +171,6 @@ export default class PondUserController {
       res.status(400).json(response);
     }
   }
-  /**
-   *
-   * @param req
-   * @param profile
-   * @returns pondUser
-   */
-  async getPondUserByCookie(cookie: string): Promise<Express.User | null> {
-    try {
-      const pondUser = await this.pondUserService.getPondUserByCookie(cookie);
-      return pondUser;
-    } catch (err: any) {
-      pondUserLogger.error(err.message);
-    }
-    return null;
-  }
-
-  /**
-   *
-   * @param req
-   * @param profile
-   * @returns pondUser
-   */
-  async createCookiePondUser(cookie: string): Promise<Express.User | null> {
-    try {
-      const pondUser = await this.pondUserService.createCookiePondUser(cookie);
-      return pondUser;
-    } catch (err: any) {
-      pondUserLogger.error(err.message);
-    }
-    return null;
-  }
 
   async getOrCreateCookiePondUser(
     cookie: string,
@@ -233,21 +183,6 @@ export default class PondUserController {
       pondUserLogger.error(err.message);
     }
     return null;
-  }
-
-  /**
-   *
-   * @param req
-   * @param res
-   */
-  async getPondUser(req: Request, res: Response): Promise<void> {
-    try {
-      const pondUser = await this.pondUserService.getPondUser(req.body.id);
-      res.status(200).json(pondUser);
-    } catch (err: any) {
-      pondUserLogger.error(err.message);
-      res.status(400).json(err);
-    }
   }
 
   /**

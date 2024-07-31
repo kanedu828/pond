@@ -1,5 +1,3 @@
-import FishDao from "../dao/fishDao";
-import PondUserDao from "../dao/pondUserDao";
 import FishingService from "../service/fishingService";
 import { fishingLogger } from "../util/logger";
 import { sleep } from "../util/util";
@@ -7,25 +5,8 @@ import { sleep } from "../util/util";
 class FishingController {
   fishingService: FishingService;
 
-  constructor(pondUserDao: PondUserDao, fishDao: FishDao) {
-    this.fishingService = new FishingService(pondUserDao, fishDao);
-  }
-
-  /**
-   * This method is no longer used becasue of unreliablity with
-   * retrieving fish.
-   * @param userId
-   * @param low
-   * @param high
-   * @returns
-   */
-  async getFish(userId: number, socketId: number) {
-    try {
-      return await this.fishingService.getFish(userId, socketId, 10, 30);
-    } catch (err: any) {
-      fishingLogger.error(err.message);
-    }
-    return null;
+  constructor(fishingService: FishingService) {
+    this.fishingService = fishingService;
   }
 
   /**

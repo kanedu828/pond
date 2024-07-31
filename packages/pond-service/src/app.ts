@@ -6,7 +6,7 @@ import cors from "cors";
 import knex from "knex";
 import session from "express-session";
 import KnexSessionStore from "connect-session-knex";
-import fishingSocket from "./sockets/fishing";
+import registerFishingSocket from "./sockets/fishing";
 import getAuthenticationRouter from "./routers/authentication";
 import { isLoggedIn, setupAuth } from "./util/middleware";
 import PondUserController from "./controller/pondUserController";
@@ -16,6 +16,8 @@ import FishDao from "./dao/fishDao";
 import { getUserRouter } from "./routers/user";
 import { pondUserLogger } from "./util/logger";
 import cookieParser from "cookie-parser";
+import FishingService from "./service/fishingService";
+import PondUserService from "./service/pondUserService";
 
 // ----------- Env Variables ----------------
 const POND_WEB_URL: string = process.env.POND_WEB_URL ?? "";
@@ -31,7 +33,7 @@ app.use(
 );
 
 // CORS Headers
-app.use((req, res, next) => {
+app.use((_req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", POND_WEB_URL);
   res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
@@ -77,14 +79,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
 
-// ----------- Dao and controller setup ---------------
+// ----------- Dao setup ---------------
 const pondUserDao = new PondUserDao(db);
 const fishDao = new FishDao(db);
-const pondUserController = new PondUserController(pondUserDao, fishDao);
-const fishingController = new FishingController(pondUserDao, fishDao);
 
+// ----------- Service Setup --------------------------
+const fishingService = new FishingService(pondUserDao, fishDao);
+const pondUserService = new PondUserService(pondUserDao, fishDao);
+
+// ----------- Controller Setup --------------------------
+const pondUserController = new PondUserController(pondUserService);
+const fishingController = new FishingController(fishingService);
+
+// ----------- Setup passport auth ----------------------
 setupAuth(pondUserController);
 
+// ----------- Init Server -----------------------------
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -103,11 +113,15 @@ io.use(wrap(passport.initialize()));
 io.use(wrap(passport.session()));
 io.use(wrap(isLoggedIn));
 
-fishingSocket(io, fishingController);
+// ---------Init fishing socket ---------------
+registerFishingSocket(io, fishingController);
 
+// --------- Register Routers -----------------
 app.use("/auth", getAuthenticationRouter(pondUserController));
 app.use("/user", getUserRouter(pondUserController));
 
+// --------- Start Server --------------------
 server.listen(POND_SERVICE_PORT, () => console.log("Server Running"));
 
+// ----------- Logging -----------------------
 pondUserLogger.info("Pond Service Start");

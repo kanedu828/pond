@@ -1,6 +1,9 @@
 import FishingController from "../controller/fishingController";
 
-const fishingSocket = (io: any, fishingController: FishingController) => {
+const registerFishingSocket = (
+  io: any,
+  fishingController: FishingController,
+) => {
   io.on("connection", async (socket: any) => {
     const lastConnectedSocketId =
       fishingController.updateConnectedSocketId(socket);
@@ -16,10 +19,18 @@ const fishingSocket = (io: any, fishingController: FishingController) => {
       await fishingController.collectFish(socket);
     });
 
-    while (socket.id === fishingController.getConnectedSocketId(socket)) {
-      await fishingController.pollFish(socket);
-    }
+    const pollInterval = setInterval(async () => {
+      if (socket.id === fishingController.getConnectedSocketId(socket)) {
+        await fishingController.pollFish(socket);
+      } else {
+        clearInterval(pollInterval);
+      }
+    }, 10000);
+
+    socket.on("disconnect", () => {
+      clearInterval(pollInterval);
+    });
   });
 };
 
-export default fishingSocket;
+export default registerFishingSocket;

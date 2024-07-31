@@ -1,264 +1,458 @@
 import { Request, Response } from "express";
-import PondUserController from "./pondUserController"; // Adjust the import path as needed
-import PondUserService from "../service/pondUserService"; // Adjust the import path as needed
-import {
-  BindGuestRequest,
-  RegisterRequest,
-} from "../../../shared/types/AuthTypes"; // Adjust the import path as needed
-import { PondUser } from "../../../shared/types/types";
+import { Profile } from "passport-google-oauth20";
+import PondUserController from "./pondUserController";
+import PondUserService from "../service/pondUserService";
+import { PondUser, UserFish } from "../../../shared/types/types";
+import PondUserDao from "../dao/pondUserDao";
+import FishDao from "../dao/fishDao";
 
-describe("PondUserController - registerUserLocal", () => {
+// Mock PondUserService
+jest.mock("../service/pondUserService");
+
+describe("PondUserController", () => {
   let pondUserController: PondUserController;
   let mockPondUserService: jest.Mocked<PondUserService>;
-  let mockRequest: Partial<Request>;
-  let mockResponse: Partial<Response>;
-  let responseObject: any;
+  let mockPondUserDao: jest.Mocked<PondUserDao>;
+  let mockFishDao: jest.Mocked<FishDao>;
 
   beforeEach(() => {
-    mockPondUserService = {
-      createPondUser: jest.fn(),
-    } as any;
-
-    pondUserController = new PondUserController({} as any, {} as any);
-    pondUserController.pondUserService = mockPondUserService;
-
-    mockRequest = {
-      body: {} as RegisterRequest,
-    };
-
-    mockResponse = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn().mockImplementation((result) => {
-        responseObject = result;
-      }),
-    };
+    mockPondUserService = new PondUserService(
+      mockPondUserDao,
+      mockFishDao,
+    ) as jest.Mocked<PondUserService>;
+    pondUserController = new PondUserController(mockPondUserService);
   });
 
-  it("should return error if username is less than 3 characters", async () => {
-    mockRequest.body = {
-      username: "ab",
-      password: "validpassword",
-    };
+  describe("getOrCreateGooglePondUser", () => {
+    it("should return a pond user when given a valid Google profile", async () => {
+      const mockProfile: Profile = {
+        id: "123",
+        emails: [{ value: "test@example.com" }],
+      } as Profile;
 
-    await pondUserController.registerUserLocal(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
+      const mockPondUser: Express.User = {
+        id: 1,
+        username: "testuser",
+      } as Express.User;
+      mockPondUserService.getOrCreateGooglePondUser.mockResolvedValue(
+        mockPondUser,
+      );
 
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(responseObject).toEqual({
-      success: false,
-      message: "Your username must be atleast 3 characters long.",
+      const result =
+        await pondUserController.getOrCreateGooglePondUser(mockProfile);
+      expect(result).toEqual(mockPondUser);
+      expect(
+        mockPondUserService.getOrCreateGooglePondUser,
+      ).toHaveBeenCalledWith("123", "test@example.com");
+    });
+
+    it("should return null when the Google profile has no email", async () => {
+      const mockProfile: Profile = {
+        id: "123",
+        emails: [],
+      } as unknown as Profile;
+
+      const result =
+        await pondUserController.getOrCreateGooglePondUser(mockProfile);
+      expect(result).toBeNull();
     });
   });
 
-  it("should return error if username is greater than 24 characters", async () => {
-    mockRequest.body = {
-      username: "aaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      password: "validpassword",
-    };
+  describe("getAuthenticatedPondUser", () => {
+    it("should return a pond user when given valid credentials", async () => {
+      const mockPondUser: Express.User = {
+        id: 1,
+        username: "testuser",
+      } as Express.User;
+      mockPondUserService.getAuthenticatedPondUser.mockResolvedValue(
+        mockPondUser,
+      );
 
-    await pondUserController.registerUserLocal(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
+      const result = await pondUserController.getAuthenticatedPondUser(
+        "testuser",
+        "password",
+      );
+      expect(result).toEqual(mockPondUser);
+      expect(mockPondUserService.getAuthenticatedPondUser).toHaveBeenCalledWith(
+        "testuser",
+        "password",
+      );
+    });
 
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(responseObject).toEqual({
-      success: false,
-      message: "Your username must be less than 25 characters long.",
+    it("should return null when authentication fails", async () => {
+      mockPondUserService.getAuthenticatedPondUser.mockRejectedValue(
+        new Error("Authentication failed"),
+      );
+
+      const result = await pondUserController.getAuthenticatedPondUser(
+        "testuser",
+        "wrongpassword",
+      );
+      expect(result).toBeNull();
     });
   });
 
-  it("should return error if password is less than 8 characters", async () => {
-    mockRequest.body = {
-      username: "validuser",
-      password: "short",
-    };
+  describe("bindGuestUser", () => {
+    let mockRequest: Partial<Request>;
+    let mockResponse: Partial<Response>;
 
-    await pondUserController.registerUserLocal(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
+    beforeEach(() => {
+      mockRequest = {
+        body: {
+          id: 1,
+          username: "testuser",
+          password: "password123",
+        },
+      };
+      mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    });
 
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(responseObject).toEqual({
-      success: false,
-      message: "Your password must be atleast 8 characters long.",
+    it("should bind a guest user successfully", async () => {
+      mockPondUserService.bindGuestUser.mockResolvedValue(
+        undefined as unknown as PondUser,
+      );
+
+      await pondUserController.bindGuestUser(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        success: true,
+        message: "",
+      });
+    });
+
+    it("should return an error if username is too short", async () => {
+      mockRequest.body.username = "ab";
+
+      await pondUserController.bindGuestUser(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        success: false,
+        message: "Your username must be atleast 3 characters long.",
+      });
     });
   });
 
-  it("should successfully register a user with valid input", async () => {
-    mockRequest.body = {
-      username: "validuser",
-      password: "validpassword",
-    };
+  describe("registerUserLocal", () => {
+    let mockRequest: Partial<Request>;
+    let mockResponse: Partial<Response>;
 
-    mockPondUserService.createPondUser.mockResolvedValue({} as PondUser);
+    beforeEach(() => {
+      mockRequest = {
+        body: {
+          username: "newuser",
+          password: "password123",
+        },
+      };
+      mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    });
 
-    await pondUserController.registerUserLocal(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
+    it("should register a new user successfully", async () => {
+      mockPondUserService.createPondUser.mockResolvedValue(
+        undefined as unknown as PondUser,
+      );
 
-    expect(mockPondUserService.createPondUser).toHaveBeenCalledWith(
-      "validuser",
-      "validpassword",
-    );
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(responseObject).toEqual({
-      success: true,
-      message: "",
+      await pondUserController.registerUserLocal(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        success: true,
+        message: "",
+      });
+    });
+
+    it("should return an error if username is too short", async () => {
+      mockRequest.body.username = "ab";
+
+      await pondUserController.registerUserLocal(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        success: false,
+        message: "Your username must be atleast 3 characters long.",
+      });
+    });
+
+    it("should return an error if password is too short", async () => {
+      mockRequest.body.password = "short";
+
+      await pondUserController.registerUserLocal(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        success: false,
+        message: "Your password must be atleast 8 characters long.",
+      });
     });
   });
 
-  it("should return error if username is already taken", async () => {
-    mockRequest.body = {
-      username: "existinguser",
-      password: "validpassword",
-    };
+  describe("getOrCreateCookiePondUser", () => {
+    it("should return a pond user when given a valid cookie", async () => {
+      const mockPondUser: Express.User = {
+        id: 1,
+        username: "testuser",
+      } as Express.User;
+      mockPondUserService.getOrCreateCookiePondUser.mockResolvedValue(
+        mockPondUser,
+      );
 
-    mockPondUserService.createPondUser.mockRejectedValue(
-      new Error("Username taken"),
-    );
-
-    await pondUserController.registerUserLocal(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
-
-    expect(mockPondUserService.createPondUser).toHaveBeenCalledWith(
-      "existinguser",
-      "validpassword",
-    );
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(responseObject).toEqual({
-      success: false,
-      message: "This username is taken!",
+      const result =
+        await pondUserController.getOrCreateCookiePondUser("valid-cookie");
+      expect(result).toEqual(mockPondUser);
+      expect(
+        mockPondUserService.getOrCreateCookiePondUser,
+      ).toHaveBeenCalledWith("valid-cookie");
     });
-  });
-});
 
-describe("PondUserController - bindGuestUser", () => {
-  let pondUserController: PondUserController;
-  let mockPondUserService: jest.Mocked<PondUserService>;
-  let mockRequest: Partial<Request>;
-  let mockResponse: Partial<Response>;
-  let responseObject: any;
+    it("should return null when an error occurs", async () => {
+      mockPondUserService.getOrCreateCookiePondUser.mockRejectedValue(
+        new Error("Cookie error"),
+      );
 
-  beforeEach(() => {
-    mockPondUserService = {
-      bindGuestUser: jest.fn(),
-    } as any;
-    pondUserController = new PondUserController({} as any, {} as any);
-    pondUserController.pondUserService = mockPondUserService;
-    mockRequest = {
-      body: {} as BindGuestRequest,
-    };
-    mockResponse = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn().mockImplementation((result) => {
-        responseObject = result;
-      }),
-    };
-  });
-
-  it("should return error if username is less than 3 characters", async () => {
-    mockRequest.body = {
-      id: 1,
-      username: "ab",
-      password: "validpassword",
-    };
-    await pondUserController.bindGuestUser(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(responseObject).toEqual({
-      success: false,
-      message: "Your username must be atleast 3 characters long.",
+      const result =
+        await pondUserController.getOrCreateCookiePondUser("invalid-cookie");
+      expect(result).toBeNull();
     });
   });
 
-  it("should return error if username is greater than 24 characters", async () => {
-    mockRequest.body = {
-      id: 1,
-      username: "aaaaaaaaaaaaaaaaaaaaaaaaaa",
-      password: "validpassword",
-    };
-    await pondUserController.bindGuestUser(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(responseObject).toEqual({
-      success: false,
-      message: "Your username must be less than 25 characters long.",
+  describe("getPondUserById", () => {
+    it("should return a pond user when given a valid id", async () => {
+      const mockPondUser: Express.User = {
+        id: 1,
+        username: "testuser",
+      } as Express.User;
+      mockPondUserService.getPondUser.mockResolvedValue(mockPondUser);
+
+      const result = await pondUserController.getPondUserById(1);
+      expect(result).toEqual(mockPondUser);
+      expect(mockPondUserService.getPondUser).toHaveBeenCalledWith(1);
+    });
+
+    it("should return null when an error occurs", async () => {
+      mockPondUserService.getPondUser.mockRejectedValue(
+        new Error("User not found"),
+      );
+
+      const result = await pondUserController.getPondUserById(999);
+      expect(result).toBeNull();
     });
   });
 
-  it("should return error if password is less than 8 characters", async () => {
-    mockRequest.body = {
-      id: 1,
-      username: "validuser",
-      password: "short",
-    };
-    await pondUserController.bindGuestUser(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(responseObject).toEqual({
-      success: false,
-      message: "Your password must be atleast 8 characters long.",
+  describe("updateUserLocation", () => {
+    let mockRequest: Partial<Request>;
+    let mockResponse: Partial<Response>;
+
+    beforeEach(() => {
+      mockRequest = {
+        user: { id: 1 } as PondUser,
+        params: { location: "New Location" },
+      };
+      mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    });
+
+    it("should update user location successfully", async () => {
+      const updatedUser = {
+        id: 1,
+        location: "New Location",
+      } as unknown as PondUser;
+      mockPondUserService.updateUserLocation.mockResolvedValue(updatedUser);
+
+      await pondUserController.updateUserLocation(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(201);
+      expect(mockResponse.json).toHaveBeenCalledWith(updatedUser);
+    });
+
+    it("should return an error if location is not provided", async () => {
+      mockRequest.params = {};
+
+      await pondUserController.updateUserLocation(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith(
+        new Error("No location paramter in request"),
+      );
     });
   });
 
-  it("should successfully bind a guest user with valid input", async () => {
-    mockRequest.body = {
-      id: 1,
-      username: "validuser",
-      password: "validpassword",
-    };
-    mockPondUserService.bindGuestUser.mockResolvedValue({} as PondUser);
-    await pondUserController.bindGuestUser(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
-    expect(mockPondUserService.bindGuestUser).toHaveBeenCalledWith(
-      1,
-      "validuser",
-      "validpassword",
-    );
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(responseObject).toEqual({
-      success: true,
-      message: "",
+  describe("updateUsername", () => {
+    let mockRequest: Partial<Request>;
+    let mockResponse: Partial<Response>;
+
+    beforeEach(() => {
+      mockRequest = {
+        user: { id: 1 } as PondUser,
+        body: { newUsername: "newusername" },
+      };
+      mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    });
+
+    it("should update username successfully", async () => {
+      mockPondUserService.updateUsername.mockResolvedValue(
+        undefined as unknown as PondUser,
+      );
+
+      await pondUserController.updateUsername(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(201);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        updated: true,
+        error: "",
+      });
+    });
+
+    it("should return an error if new username is too short", async () => {
+      mockRequest.body.newUsername = "ab";
+
+      await pondUserController.updateUsername(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        updated: false,
+        error: "Username length must be between 3 and 20",
+      });
+    });
+
+    it('should return an error if new username starts with "guest-"', async () => {
+      mockRequest.body.newUsername = "guest-user";
+
+      await pondUserController.updateUsername(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        updated: false,
+        error: 'Username cannot begin with "guest-"',
+      });
     });
   });
 
-  it("should return error if username is already taken", async () => {
-    mockRequest.body = {
-      id: 1,
-      username: "existinguser",
-      password: "validpassword",
-    };
-    mockPondUserService.bindGuestUser.mockRejectedValue(
-      new Error("Username taken"),
-    );
-    await pondUserController.bindGuestUser(
-      mockRequest as Request,
-      mockResponse as Response,
-    );
-    expect(mockPondUserService.bindGuestUser).toHaveBeenCalledWith(
-      1,
-      "existinguser",
-      "validpassword",
-    );
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(responseObject).toEqual({
-      success: false,
-      message: "This username is taken!",
+  describe("getUserFish", () => {
+    let mockRequest: Partial<Request>;
+    let mockResponse: Partial<Response>;
+
+    beforeEach(() => {
+      mockRequest = {
+        user: { id: 1 } as PondUser,
+      };
+      mockResponse = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      };
+    });
+
+    it("should return user fish successfully", async () => {
+      const mockUserFish = [{ id: 1, name: "Nemo" }];
+      mockPondUserService.getUserFish.mockResolvedValue(
+        mockUserFish as unknown as UserFish[],
+      );
+
+      await pondUserController.getUserFish(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.json).toHaveBeenCalledWith(mockUserFish);
+    });
+
+    it("should return an error if user is not authenticated", async () => {
+      mockRequest.user = undefined;
+
+      await pondUserController.getUserFish(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(401);
+    });
+  });
+
+  describe("getTopHundredPondUsersByExp", () => {
+    let mockRequest: Partial<Request>;
+    let mockResponse: Partial<Response>;
+
+    beforeEach(() => {
+      mockRequest = {};
+      mockResponse = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      };
+    });
+
+    it("should return top hundred pond users successfully", async () => {
+      const mockTopUsers = [
+        { id: 1, username: "top1", exp: 1000 },
+        { id: 2, username: "top2", exp: 900 },
+      ] as unknown as PondUser[];
+      mockPondUserService.getTopPondUsers.mockResolvedValue(mockTopUsers);
+
+      await pondUserController.getTopHundredPondUsersByExp(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith(mockTopUsers);
+      expect(mockPondUserService.getTopPondUsers).toHaveBeenCalledWith(
+        "exp",
+        "desc",
+        100,
+      );
+    });
+
+    it("should return an error if fetching top users fails", async () => {
+      const mockError = new Error("Failed to fetch top users");
+      mockPondUserService.getTopPondUsers.mockRejectedValue(mockError);
+
+      await pondUserController.getTopHundredPondUsersByExp(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith(mockError);
     });
   });
 });

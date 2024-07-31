@@ -3,9 +3,9 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as CookieStrategy } from "passport-cookie";
 import passport from "passport";
-import PondUser from "../models/pondUserModel";
 import PondUserController from "../controller/pondUserController";
 import { pondUserLogger } from "./logger";
+import { PondUser } from "../../../shared/types/types";
 
 export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
   if (req.user) {

@@ -89,45 +89,6 @@ describe("Test pollFish", () => {
   });
 });
 
-describe("Test getFish", () => {
-  it("user does not have current fish", async () => {
-    const expectedResult = {
-      fish: mockFish,
-      expirationDate: 1000,
-      length: 2,
-    };
-    const fish = await fishingService.getFish(1, 1, 1, 2);
-    expect(fish).toStrictEqual(expectedResult);
-  });
-
-  it("user does have current fish", async () => {
-    const mockFishInstance = {
-      fish: mockFish,
-      length: 2,
-      expirationDate: 1000,
-    };
-    fishingService.userCurrentFish.set(1, mockFishInstance);
-    const fish = await fishingService.getFish(1, 1, 1, 2);
-    expect(fish).toBe(fishingService.userCurrentFish.get(1));
-  });
-
-  it("user has invalid location", async () => {
-    mockPondUserDao.getPondUser = jest.fn().mockResolvedValueOnce({
-      id: 1,
-      username: "test-user",
-      exp: 1,
-      location: "asdfasdf",
-    });
-    const expectedResult = {
-      fish: mockFish,
-      expirationDate: 1000,
-      length: 2,
-    };
-    const fish = await fishingService.getFish(1, 1, 1, 2);
-    expect(fish).toStrictEqual(expectedResult);
-  });
-});
-
 describe("Test collectFish", () => {
   it("user has current fish but no collected fish", async () => {
     mockFishDao.getFish = jest.fn().mockResolvedValueOnce([]);

@@ -1,9 +1,8 @@
 import { randomBytes } from "crypto";
 import FishDao from "../dao/fishDao";
 import PondUserDao from "../dao/pondUserDao";
-import PondUser from "../models/pondUserModel";
 import fishJson from "../data/fish.json";
-import { Fish, UserFish } from "../../../shared/types/types";
+import { Fish, PondUser, UserFish } from "../../../shared/types/types";
 import { binarySearch } from "../util/util";
 import bcrypt from "bcrypt";
 
